@@ -22,7 +22,7 @@ public class PetConfig {
 	}
 
 	@Bean
-	@Qualifier("cheetah")
+	@Qualifier("cheetah1")
 	public Animal getCheetah1() {
 		return new Cheetah();
 	}
