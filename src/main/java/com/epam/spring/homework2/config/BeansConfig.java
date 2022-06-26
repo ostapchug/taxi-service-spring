@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Import;
 
 import com.epam.spring.homework2.beans.BeanB;
 import com.epam.spring.homework2.beans.BeanC;
@@ -15,7 +14,6 @@ import com.epam.spring.homework2.beans.MyBeanFactoryPostProcessor;
 import com.epam.spring.homework2.beans.MyBeanPostProcessor;
 
 @Configuration
-@Import(OtherConfig.class)
 public class BeansConfig {
 	
 	@Bean
