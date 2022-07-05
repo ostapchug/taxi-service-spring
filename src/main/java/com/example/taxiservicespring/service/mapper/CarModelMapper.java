@@ -8,9 +8,7 @@ import com.example.taxiservicespring.service.model.CarModel;
 
 @Mapper
 public interface CarModelMapper {
-	
-	CarModelMapper INSTANCE = Mappers.getMapper(CarModelMapper.class);
-	
-	CarModelDto mapCarModelDto(CarModel carModel);
+    CarModelMapper INSTANCE = Mappers.getMapper(CarModelMapper.class);
 
+    CarModelDto mapCarModelDto(CarModel carModel);
 }

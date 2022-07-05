@@ -9,14 +9,12 @@ import lombok.Data;
 @Data
 @Builder
 public class Trip {
-	
-	private long id;
-	private long personId;
-	private long originId;
-	private long destinationId;
-	private BigDecimal distance;
-	private Timestamp date;
-	private BigDecimal bill;
-	private int statusId;
-
+    private long id;
+    private long personId;
+    private long originId;
+    private long destinationId;
+    private BigDecimal distance;
+    private Timestamp date;
+    private BigDecimal bill;
+    private int statusId;
 }

@@ -10,15 +10,14 @@ import lombok.Data;
 
 @Data
 public class TripDto {
-	
-	@JsonProperty(access = Access.READ_ONLY)
-	private long id; 
-	private long personId;
-	private long originId;
-	private long destinationId;
-	private BigDecimal distance;
-	private Timestamp date;
-	private BigDecimal bill;
-	private String status;
 
+    @JsonProperty(access = Access.READ_ONLY)
+    private long id;
+    private long personId;
+    private long originId;
+    private long destinationId;
+    private BigDecimal distance;
+    private Timestamp date;
+    private BigDecimal bill;
+    private String status;
 }

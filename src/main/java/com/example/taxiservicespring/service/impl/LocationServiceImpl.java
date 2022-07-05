@@ -17,28 +17,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LocationServiceImpl  implements LocationService{
-	
-	private final LocationRepository locationRepository;
+public class LocationServiceImpl implements LocationService {
+    private final LocationRepository locationRepository;
 
-	@Override
-	public LocationDto find(long id) {
-		
-		log.info("get location by id {}", id);
-		Location location = locationRepository.find(id);
-		
-		return LocationMapper.INSTANCE.mapLocationDto(location);
-	}
+    @Override
+    public LocationDto find(long id) {
+	log.info("get location by id {}", id);
+	Location location = locationRepository.find(id);
+	return LocationMapper.INSTANCE.mapLocationDto(location);
+    }
 
-	@Override
-	public List<LocationDto> getAll() {
-		
-		log.info("get all locations");
-		
-		return locationRepository.getAll()
-				.stream()
-				.map(location -> LocationMapper.INSTANCE.mapLocationDto(location))
-				.collect(Collectors.toList());
-	}	
-
+    @Override
+    public List<LocationDto> getAll() {
+	log.info("get all locations");
+	return locationRepository.getAll()
+		.stream()
+		.map(location -> LocationMapper.INSTANCE.mapLocationDto(location))
+		.collect(Collectors.toList());
+    }
 }

@@ -23,63 +23,47 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 public class PersonController {
-	
-	private final PersonService personService;
-	
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/person/id/{id}")
-	public PersonDto find(@PathVariable long id) {
-		
-		log.info("request person with id {}", id);
-		
-		return personService.find(id);		
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/person/phone/{phone}")
-	public PersonDto find(@PathVariable String phone) {
-		
-		log.info("request person with phone {}", phone);
-		
-		return personService.find(phone);		
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/person")
-	public List<PersonDto> getAll() {
-		
-		log.info("request list of all persons");
-		
-		return personService.getAll();
-	}
-	
-	@ResponseStatus(HttpStatus.CREATED)
-	@PostMapping(value = "/person")
-	public PersonDto create(@RequestBody PersonDto personDto) {
-		
-		log.info("request create new person");
-		
-		return personService.create(personDto);
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@PutMapping(value = "/person/{phone}")
-	public PersonDto update(@PathVariable String phone, @RequestBody PersonDto personDto) {
-		
-		log.info("request update person with phone {}", phone);
-		
-		return personService.update(phone, personDto);
-	}
-	
-	@DeleteMapping(value = "/person/{phone}")
-	public ResponseEntity<Void> delete(@PathVariable String phone) {
-		
-		log.info("request delete person with phone {}", phone);
-		personService.delete(phone);
-		
-		return ResponseEntity.noContent().build();
-	}
-	
-	
+    private final PersonService personService;
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/person/id/{id}")
+    public PersonDto find(@PathVariable long id) {
+	log.info("request person with id {}", id);
+	return personService.find(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/person/phone/{phone}")
+    public PersonDto find(@PathVariable String phone) {
+	log.info("request person with phone {}", phone);
+	return personService.find(phone);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/person")
+    public List<PersonDto> getAll() {
+	log.info("request list of all persons");
+	return personService.getAll();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = "/person")
+    public PersonDto create(@RequestBody PersonDto personDto) {
+	log.info("request create new person");
+	return personService.create(personDto);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping(value = "/person/{phone}")
+    public PersonDto update(@PathVariable String phone, @RequestBody PersonDto personDto) {
+	log.info("request update person with phone {}", phone);
+	return personService.update(phone, personDto);
+    }
+
+    @DeleteMapping(value = "/person/{phone}")
+    public ResponseEntity<Void> delete(@PathVariable String phone) {
+	log.info("request delete person with phone {}", phone);
+	personService.delete(phone);
+	return ResponseEntity.noContent().build();
+    }
 }

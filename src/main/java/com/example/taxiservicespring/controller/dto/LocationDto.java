@@ -7,9 +7,9 @@ import lombok.Data;
 
 @Data
 public class LocationDto {
-	
-	@JsonProperty(access = Access.READ_ONLY)
-	private long id;
-	private String streetName;
-	private String streetNumber;
+
+    @JsonProperty(access = Access.READ_ONLY)
+    private long id;
+    private String streetName;
+    private String streetNumber;
 }

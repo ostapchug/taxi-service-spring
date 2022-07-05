@@ -13,47 +13,41 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class CategoryRepositoryImpl implements CategoryRepository{
-	
-	private final List<Category> categories = new ArrayList<>();
-	
-	CategoryRepositoryImpl(){
-		Category category = new Category();
-		category.setId(1);
-		category.setName("Economy");
-		category.setPrice(new BigDecimal(25));
-		categories.add(category);
-		
-		category = new Category();
-		category.setId(2);
-		category.setName("Standard");
-		category.setPrice(new BigDecimal(40));
-		categories.add(category);
-		
-		category = new Category();
-		category.setId(3);
-		category.setName("Comfort");
-		category.setPrice(new BigDecimal(50));
-		categories.add(category);
-	}
+public class CategoryRepositoryImpl implements CategoryRepository {
+    private final List<Category> categories = new ArrayList<>();
 
-	@Override
-	public Category find(int id) {
-		
-		log.info("find category by id {}", id);
-		
-		return categories.stream()
-				.filter(category -> category.getId() == id)
-				.findFirst()
-				.orElseThrow(() -> new RuntimeException("Category is not found!"));
-	}
+    CategoryRepositoryImpl() {
+	Category category = new Category();
+	category.setId(1);
+	category.setName("Economy");
+	category.setPrice(new BigDecimal(25));
+	categories.add(category);
 
-	@Override
-	public List<Category> getAll() {
-		
-		log.info("find all categories");
-		
-		return new ArrayList<>(categories);
-	}
+	category = new Category();
+	category.setId(2);
+	category.setName("Standard");
+	category.setPrice(new BigDecimal(40));
+	categories.add(category);
 
+	category = new Category();
+	category.setId(3);
+	category.setName("Comfort");
+	category.setPrice(new BigDecimal(50));
+	categories.add(category);
+    }
+
+    @Override
+    public Category find(int id) {
+	log.info("find category by id {}", id);
+	return categories.stream()
+		.filter(category -> category.getId() == id)
+		.findFirst()
+		.orElseThrow(() -> new RuntimeException("Category is not found!"));
+    }
+
+    @Override
+    public List<Category> getAll() {
+	log.info("find all categories");
+	return new ArrayList<>(categories);
+    }
 }

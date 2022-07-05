@@ -20,43 +20,33 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 public class CarController {
-	
-	private final CarService carService;
-	
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/car/id/{id}")
-	public CarDto getById(@PathVariable long id){
-		
-		log.info("request car with id {}", id);
-		
-		return carService.find(id);
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/car/category/id/{id}")
-	public CategoryDto getCategoryById(@PathVariable int id){
-		
-		log.info("request car category with id {}", id);
-		
-		return carService.findCategory(id);
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/car/category")
-	public List<CategoryDto> getAllCategories(){
-		
-		log.info("request list of all car categories");
-		
-		return carService.findAllCategories();
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/car/car-model/id/{id}")
-	public CarModelDto getCarModelById(@PathVariable long id){
-		
-		log.info("request car model with id {}", id);
-		
-		return carService.findCarModel(id);
-	}
+    private final CarService carService;
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/car/id/{id}")
+    public CarDto getById(@PathVariable long id) {
+	log.info("request car with id {}", id);
+	return carService.find(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/car/category/id/{id}")
+    public CategoryDto getCategoryById(@PathVariable int id) {
+	log.info("request car category with id {}", id);
+	return carService.findCategory(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/car/category")
+    public List<CategoryDto> getAllCategories() {
+	log.info("request list of all car categories");
+	return carService.findAllCategories();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/car/car-model/id/{id}")
+    public CarModelDto getCarModelById(@PathVariable long id) {
+	log.info("request car model with id {}", id);
+	return carService.findCarModel(id);
+    }
 }

@@ -8,9 +8,7 @@ import com.example.taxiservicespring.service.model.Location;
 
 @Mapper
 public interface LocationMapper {
-	
-	LocationMapper INSTANCE = Mappers.getMapper(LocationMapper.class);
-	
-	LocationDto mapLocationDto(Location location);
+    LocationMapper INSTANCE = Mappers.getMapper(LocationMapper.class);
 
+    LocationDto mapLocationDto(Location location);
 }

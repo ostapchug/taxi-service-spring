@@ -7,13 +7,12 @@ import com.example.taxiservicespring.controller.dto.CarModelDto;
 import com.example.taxiservicespring.controller.dto.CategoryDto;
 
 public interface CarService {
-	
-	CarDto find(long id);
-	
-	CategoryDto findCategory(int id);
-	
-	List<CategoryDto> findAllCategories();
-	
-	CarModelDto findCarModel(long id);	
 
+    CarDto find(long id);
+
+    CategoryDto findCategory(int id);
+
+    List<CategoryDto> findAllCategories();
+
+    CarModelDto findCarModel(long id);
 }

@@ -8,9 +8,7 @@ import com.example.taxiservicespring.service.model.Category;
 
 @Mapper
 public interface CategoryMapper {
-	
-	CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
-	
-	CategoryDto mapCategoryDto(Category category);
+    CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
+    CategoryDto mapCategoryDto(Category category);
 }

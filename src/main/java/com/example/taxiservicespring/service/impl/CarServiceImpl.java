@@ -25,49 +25,38 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CarServiceImpl implements CarService{
-	
-	private final CategoryRepository categoryRepository;
-	private final CarRepository carRepository;
-	private final CarModelRepository carModelRepository;
-	
+public class CarServiceImpl implements CarService {
+    private final CategoryRepository categoryRepository;
+    private final CarRepository carRepository;
+    private final CarModelRepository carModelRepository;
 
-	@Override
-	public CarDto find(long id) {
-		
-		log.info("get car by id {}", id);
-		Car car = carRepository.find(id);
-		
-		return CarMapper.INSTANCE.mapCarDto(car);
-	}
+    @Override
+    public CarDto find(long id) {
+	log.info("get car by id {}", id);
+	Car car = carRepository.find(id);
+	return CarMapper.INSTANCE.mapCarDto(car);
+    }
 
-	@Override
-	public CategoryDto findCategory(int id) {
-		
-		log.info("get category by id {}", id);
-		Category category = categoryRepository.find(id);
-		
-		return CategoryMapper.INSTANCE.mapCategoryDto(category);
-	}
+    @Override
+    public CategoryDto findCategory(int id) {
+	log.info("get category by id {}", id);
+	Category category = categoryRepository.find(id);
+	return CategoryMapper.INSTANCE.mapCategoryDto(category);
+    }
 
-	@Override
-	public List<CategoryDto> findAllCategories() {
-		
-		log.info("get all categories");
-		
-		return categoryRepository.getAll()
-				.stream()
-				.map(category -> CategoryMapper.INSTANCE.mapCategoryDto(category))
-				.collect(Collectors.toList());
-	}
+    @Override
+    public List<CategoryDto> findAllCategories() {
+	log.info("get all categories");
+	return categoryRepository.getAll()
+		.stream()
+		.map(category -> CategoryMapper.INSTANCE.mapCategoryDto(category))
+		.collect(Collectors.toList());
+    }
 
-	@Override
-	public CarModelDto findCarModel(long id) {
-		
-		log.info("get car model by id {}", id);
-		CarModel carModel = carModelRepository.find(id);
-		
-		return CarModelMapper.INSTANCE.mapCarModelDto(carModel);
-	}
-
+    @Override
+    public CarModelDto findCarModel(long id) {
+	log.info("get car model by id {}", id);
+	CarModel carModel = carModelRepository.find(id);
+	return CarModelMapper.INSTANCE.mapCarModelDto(carModel);
+    }
 }

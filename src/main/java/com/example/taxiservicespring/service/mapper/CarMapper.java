@@ -11,15 +11,13 @@ import com.example.taxiservicespring.service.model.CarStatus;
 
 @Mapper
 public interface CarMapper {
-	
-	CarMapper INSTANCE = Mappers.getMapper(CarMapper.class);
-	
-	@Mapping(source = "statusId", target = "status", qualifiedByName = "idToName")
-	CarDto mapCarDto(Car car);
-	
-	@Named("idToName")
-	static String idToName(int id) {
-		return CarStatus.getName(id);
-	}
+    CarMapper INSTANCE = Mappers.getMapper(CarMapper.class);
 
+    @Mapping(source = "statusId", target = "status", qualifiedByName = "idToName")
+    CarDto mapCarDto(Car car);
+
+    @Named("idToName")
+    static String idToName(int id) {
+	return CarStatus.getName(id);
+    }
 }

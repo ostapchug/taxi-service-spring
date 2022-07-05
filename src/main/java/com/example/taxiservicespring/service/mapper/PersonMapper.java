@@ -11,19 +11,17 @@ import com.example.taxiservicespring.service.model.Role;
 
 @Mapper
 public interface PersonMapper {
-	
-	PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
-	
-	@Mapping(target = "password", ignore = true)
-	@Mapping(source = "roleId", target = "role", qualifiedByName = "idToName")
-	PersonDto mapPersoDto(Person person);
-	
-	@Mapping(target = "roleId", ignore = true)
-	Person mapPerson(PersonDto personDto);
-	
-	@Named("idToName")
-	static String idToName(int id) {
-		return Role.getName(id);
-	}
+    PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
 
+    @Mapping(target = "password", ignore = true)
+    @Mapping(source = "roleId", target = "role", qualifiedByName = "idToName")
+    PersonDto mapPersoDto(Person person);
+
+    @Mapping(target = "roleId", ignore = true)
+    Person mapPerson(PersonDto personDto);
+
+    @Named("idToName")
+    static String idToName(int id) {
+	return Role.getName(id);
+    }
 }

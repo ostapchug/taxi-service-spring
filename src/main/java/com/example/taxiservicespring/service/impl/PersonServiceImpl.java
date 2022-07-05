@@ -17,65 +17,51 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PersonServiceImpl implements PersonService{
-	
-	private final PersonRepository personRepository;
-	
-	@Override
-	public PersonDto find(long id) {
-		
-		log.info("get person by id {}", id);
-		Person person = personRepository.find(id);
-		
-		return PersonMapper.INSTANCE.mapPersoDto(person);
-	}
+public class PersonServiceImpl implements PersonService {
+    private final PersonRepository personRepository;
 
+    @Override
+    public PersonDto find(long id) {
+	log.info("get person by id {}", id);
+	Person person = personRepository.find(id);
+	return PersonMapper.INSTANCE.mapPersoDto(person);
+    }
 
-	@Override
-	public PersonDto find(String phone) {
-		
-		log.info("get person by phone {}", phone);
-		Person person = personRepository.find(phone);
-		
-		return PersonMapper.INSTANCE.mapPersoDto(person);
-	}
+    @Override
+    public PersonDto find(String phone) {
+	log.info("get person by phone {}", phone);
+	Person person = personRepository.find(phone);
+	return PersonMapper.INSTANCE.mapPersoDto(person);
+    }
 
-	@Override
-	public List<PersonDto> getAll() {
-		
-		log.info("get all persons");
-		
-		return personRepository.getAll()
-				.stream()
-				.map(person -> PersonMapper.INSTANCE.mapPersoDto(person))
-				.collect(Collectors.toList());
-	}
+    @Override
+    public List<PersonDto> getAll() {
+	log.info("get all persons");
+	return personRepository.getAll()
+		.stream()
+		.map(person -> PersonMapper.INSTANCE.mapPersoDto(person))
+		.collect(Collectors.toList());
+    }
 
-	@Override
-	public PersonDto create(PersonDto personDto) {
-		
-		log.info("create person with phone {}", personDto.getPhone());
-		Person person = PersonMapper.INSTANCE.mapPerson(personDto);
-		person = personRepository.create(person);
-		
-		return PersonMapper.INSTANCE.mapPersoDto(person);
-	}
+    @Override
+    public PersonDto create(PersonDto personDto) {
+	log.info("create person with phone {}", personDto.getPhone());
+	Person person = PersonMapper.INSTANCE.mapPerson(personDto);
+	person = personRepository.create(person);
+	return PersonMapper.INSTANCE.mapPersoDto(person);
+    }
 
-	@Override
-	public PersonDto update(String phone, PersonDto personDto) {
-		
-		log.info("update person with phone {}", phone);
-		Person person = PersonMapper.INSTANCE.mapPerson(personDto);
-		person = personRepository.update(phone, person);
-		
-		return PersonMapper.INSTANCE.mapPersoDto(person);
-	}
+    @Override
+    public PersonDto update(String phone, PersonDto personDto) {
+	log.info("update person with phone {}", phone);
+	Person person = PersonMapper.INSTANCE.mapPerson(personDto);
+	person = personRepository.update(phone, person);
+	return PersonMapper.INSTANCE.mapPersoDto(person);
+    }
 
-	@Override
-	public void delete(String phone) {
-		log.info("delete person with phone {}", phone);
-		personRepository.delete(phone);
-		
-	}
-
+    @Override
+    public void delete(String phone) {
+	log.info("delete person with phone {}", phone);
+	personRepository.delete(phone);
+    }
 }

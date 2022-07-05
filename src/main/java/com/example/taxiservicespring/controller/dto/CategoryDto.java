@@ -7,9 +7,8 @@ import lombok.Data;
 
 @Data
 public class CategoryDto {
-	
-	@JsonProperty(access = Access.READ_ONLY)
-	private int id;
-	private String name;
 
+    @JsonProperty(access = Access.READ_ONLY)
+    private int id;
+    private String name;
 }
