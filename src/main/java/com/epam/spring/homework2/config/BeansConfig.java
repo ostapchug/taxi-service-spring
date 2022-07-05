@@ -15,35 +15,34 @@ import com.epam.spring.homework2.beans.MyBeanPostProcessor;
 
 @Configuration
 public class BeansConfig {
-	
-	@Bean
-	public BeanFactoryPostProcessor getMyBeanFactoryPostProcessor() {
-		return new MyBeanFactoryPostProcessor();
-	}
-	
-	@Bean
-	public BeanPostProcessor getMyBeanPostProcessor() {
-		return new MyBeanPostProcessor();
-	}
-	
-	@Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
-	@ConfigurationProperties(prefix = "bean-b")
-	@DependsOn("getBeanD")
-	public BeanB getBeanB() {
-		return new BeanB();
-	}
-	
-	@Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
-	@ConfigurationProperties(prefix = "bean-c")
-	@DependsOn("getBeanB")
-	public BeanC getBeanC() {
-		return new BeanC();
-	}
-	
-	@Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
-	@ConfigurationProperties(prefix = "bean-d")
-	public BeanD getBeanD() {
-		return new BeanD();
-	}
 
+    @Bean
+    public BeanFactoryPostProcessor getMyBeanFactoryPostProcessor() {
+	return new MyBeanFactoryPostProcessor();
+    }
+
+    @Bean
+    public BeanPostProcessor getMyBeanPostProcessor() {
+	return new MyBeanPostProcessor();
+    }
+
+    @Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
+    @ConfigurationProperties(prefix = "bean-b")
+    @DependsOn("getBeanD")
+    public BeanB getBeanB() {
+	return new BeanB();
+    }
+
+    @Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
+    @ConfigurationProperties(prefix = "bean-c")
+    @DependsOn("getBeanB")
+    public BeanC getBeanC() {
+	return new BeanC();
+    }
+
+    @Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
+    @ConfigurationProperties(prefix = "bean-d")
+    public BeanD getBeanD() {
+	return new BeanD();
+    }
 }

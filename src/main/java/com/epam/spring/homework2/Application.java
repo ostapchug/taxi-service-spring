@@ -9,22 +9,18 @@ import com.epam.spring.homework2.beans.Bean;
 @SpringBootApplication
 public class Application {
 
-	public static void main(String[] args) {
-		ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
-		
-		String [] beanNames = applicationContext.getBeanDefinitionNames();
-		
-		for(String beanName : beanNames) {
-			System.out.println(beanName);
-		}
-		
-		String [] myBeanNames = applicationContext.getBeanNamesForType(Bean.class);
-		
-		for(String myBeanName : myBeanNames) {
-			System.out.println(applicationContext.getBean(myBeanName));
-		}
-		
-	
+    public static void main(String[] args) {
+	ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
+	String[] beanNames = applicationContext.getBeanDefinitionNames();
+
+	for (String beanName : beanNames) {
+	    System.out.println(beanName);
 	}
 
+	String[] myBeanNames = applicationContext.getBeanNamesForType(Bean.class);
+
+	for (String myBeanName : myBeanNames) {
+	    System.out.println(applicationContext.getBean(myBeanName));
+	}
+    }
 }
