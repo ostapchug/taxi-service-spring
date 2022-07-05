@@ -12,19 +12,20 @@ import com.epam.spring.homework1.pet.Cheetah;
 import com.epam.spring.homework1.pet.Spider;
 
 @Configuration
-@ComponentScan(basePackages = "com.epam.spring.homework1.pet", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = Spider.class))
+@ComponentScan(
+	basePackages = "com.epam.spring.homework1.pet", 
+	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = Spider.class))
 public class PetConfig {
 
-	@Bean
-	@Primary
-	public Animal getCheetah() {
-		return new Cheetah();
-	}
+    @Bean
+    @Primary
+    public Animal getCheetah() {
+	return new Cheetah();
+    }
 
-	@Bean
-	@Qualifier("cheetah1")
-	public Animal getCheetah1() {
-		return new Cheetah();
-	}
-
+    @Bean
+    @Qualifier("cheetah1")
+    public Animal getCheetah1() {
+	return new Cheetah();
+    }
 }

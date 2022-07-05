@@ -6,17 +6,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Pet {
-	
-	private List<Animal> pets;
-	
-	public Pet(List<Animal> pets) {
-		this.pets = pets;
-	}
 
-	public void printPets() {
-		for (Animal pet : pets) {
-			System.out.println(pet.getName());
-		}
-	}
+    private List<Animal> pets;
 
+    public Pet(List<Animal> pets) {
+	this.pets = pets;
+    }
+
+    public void printPets() {
+	pets.forEach(pet -> System.out.println(pet.getName()));
+    }
 }

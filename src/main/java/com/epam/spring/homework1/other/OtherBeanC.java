@@ -7,12 +7,11 @@ import com.epam.spring.homework1.beans.BeanC;
 
 @Component
 public class OtherBeanC {
-	
-	@Autowired
-	private BeanC beanC;
-	
-	OtherBeanC(){
-		System.out.println(beanC);
-	}
 
+    @Autowired
+    private BeanC beanC;
+
+    OtherBeanC() {
+	System.out.println(beanC);
+    }
 }
