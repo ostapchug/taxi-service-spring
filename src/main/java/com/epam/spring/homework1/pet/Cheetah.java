@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class Cheetah implements Animal {
 
     public String getName() {
-	return this.getClass().getSimpleName();
+        return this.getClass().getSimpleName();
     }
 }

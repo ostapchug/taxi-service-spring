@@ -10,10 +10,10 @@ public class Pet {
     private List<Animal> pets;
 
     public Pet(List<Animal> pets) {
-	this.pets = pets;
+        this.pets = pets;
     }
 
     public void printPets() {
-	pets.forEach(pet -> System.out.println(pet.getName()));
+        pets.forEach(pet -> System.out.println(pet.getName()));
     }
 }

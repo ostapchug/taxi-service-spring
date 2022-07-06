@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class BeanC {
 
     BeanC() {
-	System.out.println(this.getClass().getSimpleName());
+        System.out.println(this.getClass().getSimpleName());
     }
 }

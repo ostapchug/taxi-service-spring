@@ -12,6 +12,6 @@ public class OtherBeanC {
     private BeanC beanC;
 
     OtherBeanC() {
-	System.out.println(beanC);
+        System.out.println(beanC);
     }
 }
