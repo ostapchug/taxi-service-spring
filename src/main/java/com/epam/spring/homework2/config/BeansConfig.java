@@ -18,31 +18,31 @@ public class BeansConfig {
 
     @Bean
     public BeanFactoryPostProcessor getMyBeanFactoryPostProcessor() {
-	return new MyBeanFactoryPostProcessor();
+        return new MyBeanFactoryPostProcessor();
     }
 
     @Bean
     public BeanPostProcessor getMyBeanPostProcessor() {
-	return new MyBeanPostProcessor();
+        return new MyBeanPostProcessor();
     }
 
     @Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
     @ConfigurationProperties(prefix = "bean-b")
     @DependsOn("getBeanD")
     public BeanB getBeanB() {
-	return new BeanB();
+        return new BeanB();
     }
 
     @Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
     @ConfigurationProperties(prefix = "bean-c")
     @DependsOn("getBeanB")
     public BeanC getBeanC() {
-	return new BeanC();
+        return new BeanC();
     }
 
     @Bean(initMethod = "customInitMethod", destroyMethod = "customDestroyMethod")
     @ConfigurationProperties(prefix = "bean-d")
     public BeanD getBeanD() {
-	return new BeanD();
+        return new BeanD();
     }
 }
