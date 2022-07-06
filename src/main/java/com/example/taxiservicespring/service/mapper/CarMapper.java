@@ -18,6 +18,6 @@ public interface CarMapper {
 
     @Named("idToName")
     static String idToName(int id) {
-	return CarStatus.getName(id);
+        return CarStatus.getName(id);
     }
 }

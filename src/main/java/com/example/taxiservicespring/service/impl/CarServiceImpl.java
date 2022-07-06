@@ -32,31 +32,31 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarDto find(long id) {
-	log.info("get car by id {}", id);
-	Car car = carRepository.find(id);
-	return CarMapper.INSTANCE.mapCarDto(car);
+        log.info("get car by id {}", id);
+        Car car = carRepository.find(id);
+        return CarMapper.INSTANCE.mapCarDto(car);
     }
 
     @Override
     public CategoryDto findCategory(int id) {
-	log.info("get category by id {}", id);
-	Category category = categoryRepository.find(id);
-	return CategoryMapper.INSTANCE.mapCategoryDto(category);
+        log.info("get category by id {}", id);
+        Category category = categoryRepository.find(id);
+        return CategoryMapper.INSTANCE.mapCategoryDto(category);
     }
 
     @Override
     public List<CategoryDto> findAllCategories() {
-	log.info("get all categories");
-	return categoryRepository.getAll()
-		.stream()
-		.map(category -> CategoryMapper.INSTANCE.mapCategoryDto(category))
-		.collect(Collectors.toList());
+        log.info("get all categories");
+        return categoryRepository.getAll()
+                .stream()
+                .map(category -> CategoryMapper.INSTANCE.mapCategoryDto(category))
+                .collect(Collectors.toList());
     }
 
     @Override
     public CarModelDto findCarModel(long id) {
-	log.info("get car model by id {}", id);
-	CarModel carModel = carModelRepository.find(id);
-	return CarModelMapper.INSTANCE.mapCarModelDto(carModel);
+        log.info("get car model by id {}", id);
+        CarModel carModel = carModelRepository.find(id);
+        return CarModelMapper.INSTANCE.mapCarModelDto(carModel);
     }
 }

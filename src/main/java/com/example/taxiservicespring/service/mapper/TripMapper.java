@@ -18,6 +18,6 @@ public interface TripMapper {
 
     @Named("idToName")
     static String idToName(int id) {
-	return TripStatus.getName(id);
+        return TripStatus.getName(id);
     }
 }

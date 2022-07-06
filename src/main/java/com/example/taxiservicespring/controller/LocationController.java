@@ -23,14 +23,14 @@ public class LocationController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/location/id/{id}")
     public LocationDto getById(@PathVariable long id) {
-	log.info("request location with id {}", id);
-	return locationService.find(id);
+        log.info("request location with id {}", id);
+        return locationService.find(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/location")
     public List<LocationDto> getAll() {
-	log.info("request list of all locations");
-	return locationService.getAll();
+        log.info("request list of all locations");
+        return locationService.getAll();
     }
 }

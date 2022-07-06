@@ -22,17 +22,17 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationDto find(long id) {
-	log.info("get location by id {}", id);
-	Location location = locationRepository.find(id);
-	return LocationMapper.INSTANCE.mapLocationDto(location);
+        log.info("get location by id {}", id);
+        Location location = locationRepository.find(id);
+        return LocationMapper.INSTANCE.mapLocationDto(location);
     }
 
     @Override
     public List<LocationDto> getAll() {
-	log.info("get all locations");
-	return locationRepository.getAll()
-		.stream()
-		.map(location -> LocationMapper.INSTANCE.mapLocationDto(location))
-		.collect(Collectors.toList());
+        log.info("get all locations");
+        return locationRepository.getAll()
+                .stream()
+                .map(location -> LocationMapper.INSTANCE.mapLocationDto(location))
+                .collect(Collectors.toList());
     }
 }
