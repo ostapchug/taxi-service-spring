@@ -5,5 +5,4 @@ public enum ErrorType {
 	PROCESSING_ERROR,
 	DATABASE_ERROR,
 	FATAL_ERROR
-
 }
