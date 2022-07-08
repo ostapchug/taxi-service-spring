@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.model.Category;
 import com.example.taxiservicespring.service.repository.CategoryRepository;
 
@@ -42,7 +43,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         return categories.stream()
                 .filter(category -> category.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Category is not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Category is not found!"));
     }
 
     @Override

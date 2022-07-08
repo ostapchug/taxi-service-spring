@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.model.CarModel;
 import com.example.taxiservicespring.service.repository.CarModelRepository;
 
@@ -50,6 +51,6 @@ public class CarModelRepositoryImpl implements CarModelRepository {
         return carModels.stream()
                 .filter(carModel -> carModel.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("CarModel is not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("CarModel is not found!"));
     }
 }

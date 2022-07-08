@@ -18,6 +18,7 @@ import com.example.taxiservicespring.controller.dto.TripConfirmDto;
 import com.example.taxiservicespring.controller.dto.TripCreateDto;
 import com.example.taxiservicespring.controller.dto.TripDto;
 import com.example.taxiservicespring.service.TripService;
+import com.example.taxiservicespring.service.exception.DataProcessingException;
 import com.example.taxiservicespring.service.mapper.CarMapper;
 import com.example.taxiservicespring.service.mapper.TripMapper;
 import com.example.taxiservicespring.service.model.Car;
@@ -164,7 +165,8 @@ public class TripServiceImpl implements TripService {
         for (Car car : cars) {
             Car dbCar = carRepository.find(car.getId());
             if (tripConfirmDto.getCategoryId() != dbCar.getCategoryId()) {
-                throw new RuntimeException("Can't create trip");
+                log.error("DataProcessingException: message car doesn't belong to category");
+                throw new DataProcessingException("Car doesn't belong to category");
             }
         }
 
@@ -298,7 +300,7 @@ public class TripServiceImpl implements TripService {
             end = new SimpleDateFormat("dd.MM.yy").parse(range[1]);
         } catch (ParseException e) {
             log.error("ParseException: message {}", e.getMessage(), e);
-            throw new RuntimeException("Date format is not valid!");
+            throw new DataProcessingException("Date format is not valid!");
         }
 
         result[0] = new Timestamp(start.getTime());

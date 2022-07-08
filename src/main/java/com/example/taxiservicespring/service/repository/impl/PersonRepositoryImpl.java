@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Component;
 
+import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.model.Person;
 import com.example.taxiservicespring.service.repository.PersonRepository;
 
@@ -34,7 +35,7 @@ public class PersonRepositoryImpl implements PersonRepository {
         return persons.stream()
                 .filter(person -> person.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Person is not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
     }
 
     @Override
@@ -43,7 +44,7 @@ public class PersonRepositoryImpl implements PersonRepository {
         return persons.stream()
                 .filter(person -> person.getPhone().equals(phone))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Person is not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
     }
 
     @Override
