@@ -19,21 +19,25 @@ import lombok.extern.slf4j.Slf4j;
 public class CarController implements CarApi {
     private final CarService carService;
 
+    @Override
     public CarDto getById(long id) {
         log.info("request car with id {}", id);
         return carService.find(id);
     }
 
+    @Override
     public CategoryDto getCategoryById(int id) {
         log.info("request car category with id {}", id);
         return carService.findCategory(id);
     }
 
+    @Override
     public List<CategoryDto> getAllCategories() {
         log.info("request list of all car categories");
         return carService.findAllCategories();
     }
 
+    @Override
     public CarModelDto getCarModelById(long id) {
         log.info("request car model with id {}", id);
         return carService.findCarModel(id);

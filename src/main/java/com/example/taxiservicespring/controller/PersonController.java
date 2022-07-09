@@ -18,32 +18,38 @@ import lombok.extern.slf4j.Slf4j;
 public class PersonController implements PersonApi{
     private final PersonService personService;
     
+    @Override
     public PersonDto getById(long id) {
         log.info("request person with id {}", id);
         return personService.find(id);
     }
 
+    @Override
     public PersonDto getByPhone(String phone) {
         log.info("request person with phone {}", phone);
         return personService.find(phone);
     }
 
+    @Override
     public List<PersonDto> getAll() {
         log.info("request list of all persons");
         return personService.getAll();
     }
 
+    @Override
     public PersonDto create(PersonDto personDto) {
         log.info("request create new person");
         return personService.create(personDto);
     }
 
+    @Override
     public PersonDto update(String phone, PersonDto personDto) {
         log.info("request update person with phone {}", phone);
         PersonDto personDtoDb = personService.update(phone, personDto);
         return personDtoDb;
     }
 
+    @Override
     public ResponseEntity<Void> delete(String phone) {
         log.info("request delete person with phone {}", phone);
         personService.delete(phone);
