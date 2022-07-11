@@ -3,6 +3,7 @@ package com.epam.spring.homework1;
 import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
 import com.epam.spring.homework1.config.BeansConfig;
 import com.epam.spring.homework1.pet.Animal;
@@ -27,5 +28,7 @@ public class Application {
 
         Animal animalByQualifier = BeanFactoryAnnotationUtils
                 .qualifiedBeanOfType(applicationContext.getAutowireCapableBeanFactory(), Cheetah.class, "cheetah1");
+        
+        ((AbstractApplicationContext) applicationContext).close();
     }
 }
