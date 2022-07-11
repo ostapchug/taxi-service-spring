@@ -8,8 +8,8 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         System.out.println("inside MyBeanPostProcessor.postProcessBeforeInitialization() for :" + beanName);
 
-        if (bean instanceof Bean) {
-            ((Bean) bean).validate();
+        if (bean instanceof AbstractBean) {
+            ((AbstractBean) bean).validate();
         }
         return bean;
     }

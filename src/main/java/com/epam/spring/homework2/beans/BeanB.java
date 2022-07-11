@@ -1,25 +1,12 @@
 package com.epam.spring.homework2.beans;
 
-public class BeanB implements Bean {
-
-    private String name;
-    private int value;
+public class BeanB extends AbstractBean {
 
     public BeanB() {
-        System.out.println("inside BeanB Constructor()");
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return "BeanB [name=" + name + ", value=" + value + "]";
+    public BeanB(String name, int value) {
+        super(name, value);
     }
 
     private void customInitMethod() {
@@ -32,11 +19,5 @@ public class BeanB implements Bean {
 
     private void customDestroyMethod() {
         System.out.println("inside BeanB.customDestroyMethod()");
-    }
-
-    public void validate() {
-        if (name == null || value < 1) {
-            System.out.println(this.getClass().getSimpleName() + " is not valid");
-        }
     }
 }

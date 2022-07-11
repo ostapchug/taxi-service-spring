@@ -3,18 +3,13 @@ package com.epam.spring.homework2.beans;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-public class BeanE implements Bean {
-
-    private String name;
-    private int value;
+public class BeanE extends AbstractBean {
 
     public BeanE() {
-        System.out.println("inside BeanE Constructor()");
     }
 
-    @Override
-    public String toString() {
-        return "BeanE [name=" + name + ", value=" + value + "]";
+    public BeanE(String name, int value) {
+        super(name, value);
     }
 
     @PostConstruct
@@ -25,11 +20,5 @@ public class BeanE implements Bean {
     @PreDestroy
     public void preDestroy() {
         System.out.println("inside BeanE.preDestroy()");
-    }
-
-    public void validate() {
-        if (name == null || value < 1) {
-            System.out.println(this.getClass().getSimpleName() + " is not valid");
-        }
     }
 }
