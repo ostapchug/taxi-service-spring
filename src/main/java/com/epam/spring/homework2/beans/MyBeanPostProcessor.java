@@ -9,7 +9,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
         System.out.println("inside MyBeanPostProcessor.postProcessBeforeInitialization() for :" + beanName);
 
         if (bean instanceof Validate) {
-            ((AbstractBean) bean).validate();
+            ((Validate) bean).validate();
         }
         return bean;
     }

@@ -1,14 +1,14 @@
 package com.epam.spring.homework2.beans;
 
-public abstract class AbstractBean implements Validate {
+public class Bean implements Validate {
     private String name;
     private int value;
 
-    public AbstractBean() {
+    public Bean() {
         System.out.println("inside " + this.getClass().getSimpleName() + " Constructor()");
     }
 
-    public AbstractBean(String name, int value) {
+    public Bean(String name, int value) {
         this.name = name;
         this.value = value;
         System.out.println("inside " + this.getClass().getSimpleName() + " parameterized Constructor()");

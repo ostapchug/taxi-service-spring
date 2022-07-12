@@ -1,6 +1,6 @@
 package com.epam.spring.homework2.beans;
 
-public class BeanF extends AbstractBean {
+public class BeanF extends Bean {
 
     public BeanF() {
     }
