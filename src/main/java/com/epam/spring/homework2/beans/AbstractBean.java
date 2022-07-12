@@ -1,6 +1,6 @@
 package com.epam.spring.homework2.beans;
 
-public abstract class AbstractBean {
+public abstract class AbstractBean implements Validate {
     private String name;
     private int value;
 
@@ -19,6 +19,7 @@ public abstract class AbstractBean {
         return this.getClass().getSimpleName() + "[name=" + name + ", value=" + value + "]";
     }
 
+    @Override
     public void validate() {
         if (name == null || value < 1) {
             System.out.println(this.getClass().getSimpleName() + " is not valid");
