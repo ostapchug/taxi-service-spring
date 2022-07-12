@@ -3,8 +3,8 @@ package com.epam.spring.homework2.beans;
 public abstract class AbstractBean {
     private String name;
     private int value;
-    
-    public AbstractBean(){
+
+    public AbstractBean() {
         System.out.println("inside " + this.getClass().getSimpleName() + " Constructor()");
     }
 
@@ -18,7 +18,7 @@ public abstract class AbstractBean {
     public String toString() {
         return this.getClass().getSimpleName() + "[name=" + name + ", value=" + value + "]";
     }
-    
+
     public void validate() {
         if (name == null || value < 1) {
             System.out.println(this.getClass().getSimpleName() + " is not valid");
