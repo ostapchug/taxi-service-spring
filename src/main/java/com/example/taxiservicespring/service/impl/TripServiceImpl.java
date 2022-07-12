@@ -74,9 +74,10 @@ public class TripServiceImpl implements TripService {
                 carDistance.add(locationRepository.findDistance(tripCreateDto.getOriginId(), car.getLocationId()));
             }
 
-            BigDecimal minCarDistance = carDistance.stream().min(Comparator.naturalOrder()).orElse(new BigDecimal(0));
+            BigDecimal minCarDistance = carDistance.stream()
+                    .min(Comparator.naturalOrder())
+                    .orElse(BigDecimal.ZERO);
             waitTime = getWaitTime(minCarDistance);
-
         } else if (tripCreateDto.isIgnoreCategory()) {
             Car car = carRepository.findByCapacity(tripCreateDto.getCapacity());
             category = categoryRepository.find(car.getCategoryId());
@@ -219,7 +220,7 @@ public class TripServiceImpl implements TripService {
         BigDecimal totalBill = tripRepository.getTotalBill(personId);
 
         if (totalBill == null) {
-            totalBill = new BigDecimal(0);
+            totalBill = BigDecimal.ZERO;
         }
 
         if (totalBill.compareTo(new BigDecimal(100)) >= 0) {
@@ -229,7 +230,7 @@ public class TripServiceImpl implements TripService {
         } else if (totalBill.compareTo(new BigDecimal(1000)) >= 0) {
             result = bill.multiply(new BigDecimal(0.10));
         } else {
-            result = new BigDecimal(0);
+            result = BigDecimal.ZERO;
         }
         return result.setScale(SCALE, RoundingMode.HALF_UP);
     }
