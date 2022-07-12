@@ -66,6 +66,8 @@ public class PersonRepositoryImpl implements PersonRepository {
         log.info("update person with phone {}", phone);
         Person oldPerson = find(phone);
         person.setId(oldPerson.getId());
+        person.setPhone(oldPerson.getPhone());
+        person.setPassword(oldPerson.getPassword());
         persons.remove(oldPerson);
         persons.add(person);
         return person;

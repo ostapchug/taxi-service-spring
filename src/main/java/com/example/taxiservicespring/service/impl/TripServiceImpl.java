@@ -62,22 +62,73 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripConfirmDto create(TripCreateDto tripCreateDto) {
         log.info("create new trip");
-        TripConfirmDto result = null;
+        BigDecimal distance = getDistance(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
+        Category category = categoryRepository.find(tripCreateDto.getCategoryId());
+        List<Car> cars = new ArrayList<Car>();
+        int waitTime = 0;
 
         if (tripCreateDto.isMultipleCars()) {
-            result = setTripConfirmDtoMultipleCars(tripCreateDto);
+            cars = carRepository.findCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());
+            List<BigDecimal> carDistance = new ArrayList<>();
+
+            for (Car car : cars) {
+                carDistance.add(locationRepository.findDistance(tripCreateDto.getOriginId(), car.getLocationId()));
+            }
+
+            BigDecimal minCarDistance = carDistance.stream()
+                    .min(Comparator.naturalOrder())
+                    .orElse(BigDecimal.ZERO);
+            waitTime = getWaitTime(minCarDistance);
         } else if (tripCreateDto.isIgnoreCategory()) {
-            result = setTripConfirmDtoIgnoreCategory(tripCreateDto);
+            Car car = carRepository.findByCapacity(tripCreateDto.getCapacity());
+            category = categoryRepository.find(car.getCategoryId());
+            cars.add(car);
+            waitTime = getWaitTime(locationRepository.findDistance(tripCreateDto.getOriginId(), car.getLocationId()));
         } else {
-            result = setTripConfirmDto(tripCreateDto);
+            Car car = carRepository.find(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());
+            cars.add(car);
+            waitTime = getWaitTime(locationRepository.findDistance(tripCreateDto.getOriginId(), car.getLocationId()));
         }
-        return result;
+        
+        BigDecimal price = getPrice(category.getPrice(), distance).multiply(new BigDecimal(cars.size()));
+        BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
+        BigDecimal total = price.subtract(discount);
+        return TripConfirmDto.builder()
+                .personId(tripCreateDto.getPersonId())
+                .originId(tripCreateDto.getOriginId())
+                .destinationId(tripCreateDto.getDestinationId())
+                .categoryId(category.getId())
+                .distance(distance)
+                .price(price).discount(discount)
+                .total(total)
+                .waitTime(waitTime)
+                .cars(cars)
+                .build();
     }
 
     @Override
     public TripDto confirm(TripConfirmDto tripConfirmDto) {
         log.info("confirm new trip");
-        Trip trip = setTrip(tripConfirmDto);
+        BigDecimal distance = getDistance(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
+        Category category = categoryRepository.find(tripConfirmDto.getCategoryId());
+        List<Car> cars = tripConfirmDto.getCars();
+
+        for (Car car : cars) {
+            Car dbCar = carRepository.find(car.getId());
+            if (tripConfirmDto.getCategoryId() != dbCar.getCategoryId()) {
+                throw new RuntimeException("Can't create trip");
+            }
+        }
+
+        BigDecimal price = getPrice(category.getPrice(), distance).multiply(new BigDecimal(cars.size()));
+        BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
+        BigDecimal total = price.subtract(discount);
+        Trip trip = Trip.builder()
+                .personId(tripConfirmDto.getPersonId())
+                .originId(tripConfirmDto.getOriginId())
+                .destinationId(tripConfirmDto.getDestinationId())
+                .distance(distance).bill(total)
+                .build();
         trip = tripRepository.create(trip, tripConfirmDto.getCars());
         return TripMapper.INSTANCE.mapTripDto(trip);
     }
@@ -157,106 +208,6 @@ public class TripServiceImpl implements TripService {
         return TripMapper.INSTANCE.mapTripDto(trip);
     }
 
-    private Trip setTrip(TripConfirmDto tripConfirmDto) {
-        BigDecimal distance = getDistance(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
-        Category category = categoryRepository.find(tripConfirmDto.getCategoryId());
-        List<Car> cars = tripConfirmDto.getCars();
-
-        for (Car car : cars) {
-            Car dbCar = carRepository.find(car.getId());
-            if (tripConfirmDto.getCategoryId() != dbCar.getCategoryId()) {
-                log.error("DataProcessingException: message car doesn't belong to category");
-                throw new DataProcessingException("Car doesn't belong to category");
-            }
-        }
-
-        BigDecimal price = getPrice(category.getPrice(), distance).multiply(new BigDecimal(cars.size()));
-        BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
-        BigDecimal total = price.subtract(discount);
-        return Trip.builder()
-                .personId(tripConfirmDto.getPersonId())
-                .originId(tripConfirmDto.getOriginId())
-                .destinationId(tripConfirmDto.getDestinationId())
-                .distance(distance).bill(total)
-                .build();
-    }
-
-    private TripConfirmDto setTripConfirmDto(TripCreateDto tripCreateDto) {
-        BigDecimal distance = getDistance(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
-        Category category = categoryRepository.find(tripCreateDto.getCategoryId());
-        Car car = carRepository.find(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());
-
-        BigDecimal price = getPrice(category.getPrice(), distance);
-        BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
-        BigDecimal total = price.subtract(discount);
-
-        int waitTime = getWaitTime(locationRepository.findDistance(tripCreateDto.getOriginId(), car.getLocationId()));
-        return TripConfirmDto.builder()
-                .personId(tripCreateDto.getPersonId())
-                .originId(tripCreateDto.getOriginId())
-                .destinationId(tripCreateDto.getDestinationId())
-                .categoryId(category.getId())
-                .distance(distance)
-                .price(price).discount(discount)
-                .total(total)
-                .waitTime(waitTime)
-                .cars(new ArrayList<>(List.of(car)))
-                .build();
-    }
-
-    private TripConfirmDto setTripConfirmDtoMultipleCars(TripCreateDto tripCreateDto) {
-        BigDecimal distance = getDistance(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
-        Category category = categoryRepository.find(tripCreateDto.getCategoryId());
-        List<Car> cars = carRepository.findCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());
-
-        BigDecimal price = getPrice(category.getPrice(), distance).multiply(new BigDecimal(cars.size()));
-        BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
-        BigDecimal total = price.subtract(discount);
-        List<BigDecimal> carDistance = new ArrayList<>();
-
-        for (Car car : cars) {
-            carDistance.add(locationRepository.findDistance(tripCreateDto.getOriginId(), car.getLocationId()));
-        }
-
-        BigDecimal minCarDistance = carDistance.stream().min(Comparator.naturalOrder()).orElse(new BigDecimal(0));
-        int waitTime = getWaitTime(minCarDistance);
-        return TripConfirmDto.builder()
-                .personId(tripCreateDto.getPersonId())
-                .originId(tripCreateDto.getOriginId())
-                .destinationId(tripCreateDto.getDestinationId())
-                .categoryId(category.getId())
-                .distance(distance)
-                .price(price).discount(discount)
-                .total(total)
-                .waitTime(waitTime)
-                .cars(cars)
-                .build();
-    }
-
-    private TripConfirmDto setTripConfirmDtoIgnoreCategory(TripCreateDto tripCreateDto) {
-        BigDecimal distance = getDistance(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
-        Car car = carRepository.findByCapacity(tripCreateDto.getCapacity());
-        Category category = categoryRepository.find(car.getCategoryId());
-
-        BigDecimal price = getPrice(category.getPrice(), distance);
-        BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
-        BigDecimal total = price.subtract(discount);
-
-        int waitTime = getWaitTime(locationRepository.findDistance(tripCreateDto.getOriginId(), car.getLocationId()));
-        return TripConfirmDto.builder()
-                .personId(tripCreateDto.getPersonId())
-                .originId(tripCreateDto.getOriginId())
-                .destinationId(tripCreateDto.getDestinationId())
-                .categoryId(category.getId())
-                .distance(distance)
-                .price(price)
-                .discount(discount)
-                .total(total)
-                .waitTime(waitTime)
-                .cars(new ArrayList<>(List.of(car)))
-                .build();
-    }
-
     private BigDecimal getDistance(long originId, long destinationId) {
         return locationRepository.findDistance(originId, destinationId).setScale(SCALE, RoundingMode.HALF_UP);
     }
@@ -270,7 +221,7 @@ public class TripServiceImpl implements TripService {
         BigDecimal totalBill = tripRepository.getTotalBill(personId);
 
         if (totalBill == null) {
-            totalBill = new BigDecimal(0);
+            totalBill = BigDecimal.ZERO;
         }
 
         if (totalBill.compareTo(new BigDecimal(100)) >= 0) {
@@ -280,7 +231,7 @@ public class TripServiceImpl implements TripService {
         } else if (totalBill.compareTo(new BigDecimal(1000)) >= 0) {
             result = bill.multiply(new BigDecimal(0.10));
         } else {
-            result = new BigDecimal(0);
+            result = BigDecimal.ZERO;
         }
         return result.setScale(SCALE, RoundingMode.HALF_UP);
     }
