@@ -1,14 +1,12 @@
 package com.example.taxiservicespring.service.repository.impl;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.model.Car;
 import com.example.taxiservicespring.service.model.Trip;
+import com.example.taxiservicespring.service.model.TripStatus;
 import com.example.taxiservicespring.service.repository.TripRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TripRepositoryImpl implements TripRepository {
     private final List<Trip> trips = new ArrayList<>();
     private final Map<Long, List<Car>> m2mTripCar = new HashMap<>();
-    private AtomicLong uid = new AtomicLong(0);
+    private long uid = 0;
 
     @Override
     public Trip find(long id) {
@@ -39,8 +38,8 @@ public class TripRepositoryImpl implements TripRepository {
     @Override
     public Trip create(Trip trip, List<Car> cars) {
         log.info("create trip");
-        trip.setId(uid.incrementAndGet());
-        trip.setDate(Timestamp.from(Instant.now()));
+        trip.setId(++uid);
+        trip.setDate(LocalDateTime.now());
         m2mTripCar.put(trip.getId(), cars);
         trips.add(trip);
         return trip;
@@ -63,21 +62,21 @@ public class TripRepositoryImpl implements TripRepository {
     }
 
     @Override
-    public List<Trip> findAllByDate(Timestamp[] dateRange, int offset, int count, String sorting) {
+    public List<Trip> findAllByDate(LocalDateTime[] dateRange, int offset, int count, String sorting) {
         log.info("find trips filtered by date {}", Arrays.toString(dateRange));
         List<Trip> result = sort(sorting).stream()
-                .filter(trip -> trip.getDate().after(dateRange[0]) && trip.getDate().before(dateRange[1]))
+                .filter(trip -> trip.getDate().isAfter(dateRange[0]) && trip.getDate().isBefore(dateRange[1]))
                 .collect(Collectors.toList());
         return getSubList(offset, count, result);
     }
 
     @Override
-    public List<Trip> findAllByPersonIdAndDate(long personId, Timestamp[] dateRange, int offset, int count,
+    public List<Trip> findAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange, int offset, int count,
             String sorting) {
         log.info("find trips filtered by person id {} and date {}", personId, Arrays.toString(dateRange));
         List<Trip> result = sort(sorting).stream()
                 .filter(t -> t.getPersonId() == personId)
-                .filter(trip -> trip.getDate().after(dateRange[0]) && trip.getDate().before(dateRange[1]))
+                .filter(trip -> trip.getDate().isAfter(dateRange[0]) && trip.getDate().isBefore(dateRange[1]))
                 .collect(Collectors.toList());
         return getSubList(offset, count, result);
     }
@@ -89,41 +88,10 @@ public class TripRepositoryImpl implements TripRepository {
     }
 
     @Override
-    public long getCount() {
-        log.info("find count of all trips");
-        return trips.size();
-    }
-
-    @Override
-    public long getCountByPersonId(long personId) {
-        log.info("find count of trips filtered by person id {}", personId);
-        return trips.stream()
-                .filter(trip -> trip.getPersonId() == personId)
-                .count();
-    }
-
-    @Override
-    public long getCountByDate(Timestamp[] dateRange) {
-        log.info("find count of trips filtered by date {}", Arrays.toString(dateRange));
-        return trips.stream()
-                .filter(trip -> trip.getDate().after(dateRange[0]) && trip.getDate().before(dateRange[1]))
-                .count();
-    }
-
-    @Override
-    public long getCountByPersonIdAndDate(long personId, Timestamp[] dateRange) {
-        log.info("find count of trips filtered by person id {} and date {}", personId, Arrays.toString(dateRange));
-        return trips.stream()
-                .filter(t -> t.getPersonId() == personId)
-                .filter(t -> t.getDate().after(dateRange[0]) && t.getDate().before(dateRange[1]))
-                .count();
-    }
-
-    @Override
-    public Trip updateStatus(long tripId, int statusId) {
-        log.info("update status id to {} for trip with id {}", statusId, tripId);
+    public Trip updateStatus(long tripId, TripStatus status) {
+        log.info("update status to {} for trip with id {}", status, tripId);
         Trip trip = find(tripId);
-        trip.setStatusId(statusId);
+        trip.setStatus(status);
         return trip;
     }
 

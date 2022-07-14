@@ -1,6 +1,7 @@
 package com.example.taxiservicespring.controller.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.validation.constraints.Min;
@@ -44,9 +45,8 @@ public class TripConfirmDto {
     @Positive
     private BigDecimal total;
     
-    @PositiveOrZero
-    private int waitTime;
-    
+    private LocalTime waitTime;
+
     @NotNull
     @Size(min = 1)
     private List<Car> cars;

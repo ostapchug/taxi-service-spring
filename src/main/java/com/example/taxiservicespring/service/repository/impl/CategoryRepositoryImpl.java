@@ -21,19 +21,19 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         Category category = new Category();
         category.setId(1);
         category.setName("Economy");
-        category.setPrice(new BigDecimal(25));
+        category.setPrice(BigDecimal.valueOf(25));
         categories.add(category);
 
         category = new Category();
         category.setId(2);
         category.setName("Standard");
-        category.setPrice(new BigDecimal(40));
+        category.setPrice(BigDecimal.valueOf(40));
         categories.add(category);
 
         category = new Category();
         category.setId(3);
         category.setName("Comfort");
-        category.setPrice(new BigDecimal(50));
+        category.setPrice(BigDecimal.valueOf(50));
         categories.add(category);
     }
 

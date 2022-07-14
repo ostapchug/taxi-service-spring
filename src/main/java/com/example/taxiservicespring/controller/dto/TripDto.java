@@ -1,23 +1,20 @@
 package com.example.taxiservicespring.controller.dto;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.example.taxiservicespring.service.model.TripStatus;
 
 import lombok.Data;
 
 @Data
 public class TripDto {
-
-    @JsonProperty(access = Access.READ_ONLY)
     private long id;
     private long personId;
     private long originId;
     private long destinationId;
     private BigDecimal distance;
-    private Timestamp date;
+    private LocalDateTime date;
     private BigDecimal bill;
-    private String status;
+    private TripStatus status;
 }

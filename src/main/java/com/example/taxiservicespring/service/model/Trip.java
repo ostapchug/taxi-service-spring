@@ -1,7 +1,7 @@
 package com.example.taxiservicespring.service.model;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,9 @@ public class Trip {
     private long originId;
     private long destinationId;
     private BigDecimal distance;
-    private Timestamp date;
+    private LocalDateTime date;
     private BigDecimal bill;
-    private int statusId;
+    
+    @Builder.Default
+    private TripStatus status = TripStatus.NEW;
 }

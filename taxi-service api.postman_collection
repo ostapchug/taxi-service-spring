@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "fcce9392-b873-438b-852b-9011678585f4",
-		"name": "taxi-service api",
+		"_postman_id": "af263366-1fd2-42cf-b9dd-c04586fce6ba",
+		"name": "taxi-service api Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -381,28 +381,6 @@
 					"response": []
 				},
 				{
-					"name": "get all trips count",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/count",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"trip",
-								"count"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "get all  trips by person id",
 					"request": {
 						"method": "GET",
@@ -421,30 +399,6 @@
 								"1",
 								"2",
 								"date-desc",
-								"person-id",
-								"0"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get trips count filter by person id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/count/person-id/0",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"trip",
-								"count",
 								"person-id",
 								"0"
 							]
@@ -479,30 +433,6 @@
 					"response": []
 				},
 				{
-					"name": "get trips count filter by date",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/count/date/01.07.22-30.07.22",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"trip",
-								"count",
-								"date",
-								"01.07.22-30.07.22"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "get all  trips by person id and date",
 					"request": {
 						"method": "GET",
@@ -521,30 +451,6 @@
 								"1",
 								"2",
 								"date-desc",
-								"0",
-								"01.07.22-30.07.22"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get trips count filter by person id and date",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/count/0/01.07.22-30.07.22",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"trip",
-								"count",
 								"0",
 								"01.07.22-30.07.22"
 							]

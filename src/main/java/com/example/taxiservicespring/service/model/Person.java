@@ -9,5 +9,5 @@ public class Person {
     private String password;
     private String name;
     private String surname;
-    private int roleId;
+    private Role role = Role.CLIENT;
 }

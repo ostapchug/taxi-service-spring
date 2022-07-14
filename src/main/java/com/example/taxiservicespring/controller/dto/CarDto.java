@@ -1,5 +1,7 @@
 package com.example.taxiservicespring.controller.dto;
 
+import com.example.taxiservicespring.service.model.CarStatus;
+
 import lombok.Data;
 
 @Data
@@ -9,5 +11,5 @@ public class CarDto {
     private long modelId;
     private int categoryId;
     private long locationId;
-    private String status;
+    private CarStatus status;
 }

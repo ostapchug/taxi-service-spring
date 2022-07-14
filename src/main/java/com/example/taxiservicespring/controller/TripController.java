@@ -39,21 +39,9 @@ public class TripController implements TripApi{
     }
 
     @Override
-    public long getCount() {
-        log.info("request count of all trips");
-        return tripService.getCount();
-    }
-
-    @Override
     public List<TripDto> getAllByPersonId(int page, int count, String sorting, int personId) {
         log.info("request list of trips filtered by person id {}", personId);
         return tripService.getAllByPersonId(personId, page, count, sorting);
-    }
-
-    @Override
-    public long getCountByPesonId(long personId) {
-        log.info("request count of trips filtered by person id {}", personId);
-        return tripService.getCountByPersonId(personId);
     }
 
     @Override
@@ -63,21 +51,9 @@ public class TripController implements TripApi{
     }
 
     @Override
-    public long getCountByDate(String dateRange) {
-        log.info("request count of trips filtered by date {}", dateRange);
-        return tripService.getCountByDate(dateRange);
-    }
-
-    @Override
     public List<TripDto> getAllByPersonIdAndDate(int page, int count, String sorting, int personId, String dateRange) {
         log.info("request list of trips filtered by person id {} and date {}", personId, dateRange);
         return tripService.getAllByPersonIdAndDate(personId, dateRange, page, count, sorting);
-    }
-
-    @Override
-    public long getCountByPersonIdAndDate(long personId, String dateRange) {
-        log.info("request count of trips filtered by person id {} and date {}", personId, dateRange);
-        return tripService.getCountByPersonIdAndDate(personId, dateRange);
     }
 
     @Override

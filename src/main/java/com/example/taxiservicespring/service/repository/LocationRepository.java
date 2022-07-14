@@ -10,6 +10,6 @@ public interface LocationRepository {
     Location find(long id);
 
     List<Location> getAll();
-
+    
     BigDecimal findDistance(long originId, long destinationId);
 }
