@@ -351,27 +351,7 @@
 					"response": []
 				},
 				{
-					"name": "get all trips count",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/trip/count",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"trip",
-								"count"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all  trips by person id",
+					"name": "get all trips by person id",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -395,34 +375,12 @@
 					"response": []
 				},
 				{
-					"name": "get trips count filter by person id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/trip/count/person-id/0",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"trip",
-								"count",
-								"person-id",
-								"0"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "get all  trips by date",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/trip/1/2/date-desc/date/01.07.22-07.07.22",
+							"raw": "http://localhost:8080/trip/1/2/date-desc/date/01.07.22-30.07.22",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -433,28 +391,6 @@
 								"1",
 								"2",
 								"date-desc",
-								"date",
-								"01.07.22-07.07.22"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get trips count filter by date",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/trip/count/date/01.07.22-30.07.22",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"trip",
-								"count",
 								"date",
 								"01.07.22-30.07.22"
 							]
@@ -487,35 +423,13 @@
 					"response": []
 				},
 				{
-					"name": "get trips count filter by person id and date",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/trip/count/0/01.07.22-30.07.22",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"trip",
-								"count",
-								"0",
-								"01.07.22-30.07.22"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "create trip",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": \"0\",\r\n    \"originId\": \"1\",\r\n    \"destinationId\": \"2\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": true,\r\n    \"ignoreCategory\": false\r\n}",
+							"raw": "{\r\n    \"personId\": \"0\",\r\n    \"originId\": \"2\",\r\n    \"destinationId\": \"3\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -543,7 +457,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": 0,\r\n    \"originId\": 2,\r\n    \"destinationId\": 3,\r\n    \"categoryId\": 1,\r\n    \"distance\": 2.07,\r\n    \"price\": 51.75,\r\n    \"discount\": 1.04,\r\n    \"total\": 50.71,\r\n    \"waitTime\": 3,\r\n    \"cars\": [\r\n        {\r\n            \"id\": 0,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"statusId\": 0\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"personId\": 0,\r\n    \"originId\": 2,\r\n    \"destinationId\": 3,\r\n    \"categoryId\": 1,\r\n    \"distance\": 2.07,\r\n    \"price\": 51.75,\r\n    \"discount\": 0.00,\r\n    \"total\": 51.75,\r\n    \"waitTime\": \"00:03:00\",\r\n    \"cars\": [\r\n        {\r\n            \"id\": 0,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"status\": \"READY\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

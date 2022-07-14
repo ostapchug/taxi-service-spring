@@ -2,11 +2,11 @@ package com.example.taxiservicespring.service.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Component;
 
 import com.example.taxiservicespring.service.model.Person;
+import com.example.taxiservicespring.service.model.Role;
 import com.example.taxiservicespring.service.repository.PersonRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class PersonRepositoryImpl implements PersonRepository {
     private final List<Person> persons = new ArrayList<>();
-    private AtomicLong uid = new AtomicLong(0);
+    private long uid = 0;
 
     PersonRepositoryImpl() {
         Person person = new Person();
@@ -24,7 +24,7 @@ public class PersonRepositoryImpl implements PersonRepository {
         person.setPassword("Admin#0");
         person.setName("John");
         person.setSurname("Doe");
-        person.setRoleId(1);
+        person.setRole(Role.ADMIN);
         persons.add(person);
     }
 
@@ -55,7 +55,7 @@ public class PersonRepositoryImpl implements PersonRepository {
     @Override
     public Person create(Person person) {
         log.info("create person");
-        person.setId(uid.incrementAndGet());
+        person.setId(++uid);
         persons.add(person);
         return person;
     }

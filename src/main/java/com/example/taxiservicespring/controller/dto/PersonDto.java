@@ -1,5 +1,6 @@
 package com.example.taxiservicespring.controller.dto;
 
+import com.example.taxiservicespring.service.model.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -13,5 +14,5 @@ public class PersonDto {
     private String password;
     private String name;
     private String surname;
-    private String role;
+    private Role role;
 }

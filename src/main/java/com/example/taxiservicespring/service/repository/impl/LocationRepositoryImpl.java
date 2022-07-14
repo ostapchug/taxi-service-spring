@@ -22,40 +22,40 @@ public class LocationRepositoryImpl implements LocationRepository {
         location.setId(1L);
         location.setStreetName("Molodizhna");
         location.setStreetNumber("36");
-        location.setLatitude(new BigDecimal(48.925541084296924));
-        location.setLongitude(new BigDecimal(24.737374909778257));
+        location.setLatitude(BigDecimal.valueOf(48.925541084296924));
+        location.setLongitude(BigDecimal.valueOf(24.737374909778257));
         locations.add(location);
 
         location = new Location();
         location.setId(2L);
         location.setStreetName("Nezalezhnosti");
         location.setStreetNumber("168");
-        location.setLatitude(new BigDecimal(48.91574609793521));
-        location.setLongitude(new BigDecimal(24.73589966428934));
+        location.setLatitude(BigDecimal.valueOf(48.91574609793521));
+        location.setLongitude(BigDecimal.valueOf(24.73589966428934));
         locations.add(location);
 
         location = new Location();
         location.setId(3L);
         location.setStreetName("Halytska");
         location.setStreetNumber("11");
-        location.setLatitude(new BigDecimal(48.922336888655614));
-        location.setLongitude(new BigDecimal(24.709438734753363));
+        location.setLatitude(BigDecimal.valueOf(48.922336888655614));
+        location.setLongitude(BigDecimal.valueOf(24.709438734753363));
         locations.add(location);
 
         location = new Location();
         location.setId(4L);
         location.setStreetName("Vovchynetska");
         location.setStreetNumber("225");
-        location.setLatitude(new BigDecimal(48.94107697890707));
-        location.setLongitude(new BigDecimal(24.73865635966828));
+        location.setLatitude(BigDecimal.valueOf(48.94107697890707));
+        location.setLongitude(BigDecimal.valueOf(24.73865635966828));
         locations.add(location);
 
         location = new Location();
         location.setId(5L);
         location.setStreetName("Pasichna");
         location.setStreetNumber("21");
-        location.setLatitude(new BigDecimal(48.939417866685424));
-        location.setLongitude(new BigDecimal(24.695695996555884));
+        location.setLatitude(BigDecimal.valueOf(48.939417866685424));
+        location.setLongitude(BigDecimal.valueOf(24.695695996555884));
         locations.add(location);
     }
 

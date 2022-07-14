@@ -26,12 +26,4 @@ public interface TripService {
     List<TripDto> getAllByDate(String dateRange, int page, int count, String sorting);
 
     List<TripDto> getAllByPersonIdAndDate(long personId, String dateRange, int page, int count, String sorting);
-
-    long getCount();
-
-    long getCountByPersonId(long personId);
-
-    long getCountByDate(String dateRange);
-
-    long getCountByPersonIdAndDate(long personId, String dateRange);
 }

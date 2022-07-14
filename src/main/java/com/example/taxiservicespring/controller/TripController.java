@@ -48,25 +48,11 @@ public class TripController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/trip/count")
-    public long getCount() {
-        log.info("request count of all trips");
-        return tripService.getCount();
-    }
-
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/trip/{page}/{count}/{sorting}/person-id/{personId}")
     public List<TripDto> getAllByPersonId(@PathVariable int page, @PathVariable int count, @PathVariable String sorting,
             @PathVariable int personId) {
         log.info("request list of trips filtered by person id {}", personId);
         return tripService.getAllByPersonId(personId, page, count, sorting);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/trip/count/person-id/{personId}")
-    public long getCountByPesonId(@PathVariable long personId) {
-        log.info("request count of trips filtered by person id {}", personId);
-        return tripService.getCountByPersonId(personId);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -78,25 +64,11 @@ public class TripController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/trip/count/date/{dateRange}")
-    public long getCountByDate(@PathVariable String dateRange) {
-        log.info("request count of trips filtered by date {}", dateRange);
-        return tripService.getCountByDate(dateRange);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/trip/{page}/{count}/{sorting}/{personId}/{dateRange}")
     public List<TripDto> getAllByPersonIdAndDate(@PathVariable int page, @PathVariable int count,
             @PathVariable String sorting, @PathVariable int personId, @PathVariable String dateRange) {
         log.info("request list of trips filtered by person id {} and date {}", personId, dateRange);
         return tripService.getAllByPersonIdAndDate(personId, dateRange, page, count, sorting);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/trip/count/{personId}/{dateRange}")
-    public long getCountByPersonIdAndDate(@PathVariable long personId, @PathVariable String dateRange) {
-        log.info("request count of trips filtered by person id {} and date {}", personId, dateRange);
-        return tripService.getCountByPersonIdAndDate(personId, dateRange);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

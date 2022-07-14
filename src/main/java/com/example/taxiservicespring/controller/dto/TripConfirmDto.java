@@ -1,6 +1,7 @@
 package com.example.taxiservicespring.controller.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.List;
 
 import com.example.taxiservicespring.service.model.Car;
@@ -19,6 +20,6 @@ public class TripConfirmDto {
     private BigDecimal price;
     private BigDecimal discount;
     private BigDecimal total;
-    private int waitTime;
+    private LocalTime waitTime;
     private List<Car> cars;
 }

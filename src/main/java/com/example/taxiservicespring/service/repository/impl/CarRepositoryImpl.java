@@ -27,7 +27,7 @@ public class CarRepositoryImpl implements CarRepository {
         car.setModelId(1L);
         car.setCategoryId(1);
         car.setLocationId(1L);
-        car.setStatusId(0);
+        car.setStatus(CarStatus.READY);
         cars.add(car);
 
         car = new Car();
@@ -36,7 +36,7 @@ public class CarRepositoryImpl implements CarRepository {
         car.setModelId(1L);
         car.setCategoryId(1);
         car.setLocationId(3L);
-        car.setStatusId(0);
+        car.setStatus(CarStatus.READY);
         cars.add(car);
 
         car = new Car();
@@ -45,7 +45,7 @@ public class CarRepositoryImpl implements CarRepository {
         car.setModelId(2L);
         car.setCategoryId(2);
         car.setLocationId(3L);
-        car.setStatusId(0);
+        car.setStatus(CarStatus.READY);
         cars.add(car);
 
         car = new Car();
@@ -54,7 +54,7 @@ public class CarRepositoryImpl implements CarRepository {
         car.setModelId(3L);
         car.setCategoryId(3);
         car.setLocationId(5L);
-        car.setStatusId(0);
+        car.setStatus(CarStatus.READY);
         cars.add(car);
     }
 
@@ -73,7 +73,7 @@ public class CarRepositoryImpl implements CarRepository {
         return cars.stream()
                 .filter(car -> car.getCategoryId() == categoryId
                         && carModelRepository.find(car.getModelId()).getSeatCount() >= capacity
-                        && CarStatus.getName(car.getStatusId()).equals("ready"))
+                        && car.getStatus().equals(CarStatus.READY))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Car is not found!"));
     }
@@ -83,7 +83,7 @@ public class CarRepositoryImpl implements CarRepository {
         log.info("find car by capacity {}", capacity);
         return cars.stream()
                 .filter(car -> carModelRepository.find(car.getModelId()).getSeatCount() >= capacity
-                        && CarStatus.getName(car.getStatusId()).equals("ready"))
+                        && car.getStatus().equals(CarStatus.READY))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Car is not found!"));
     }
@@ -95,7 +95,7 @@ public class CarRepositoryImpl implements CarRepository {
         int currentCapacity = 0;
         
         for (Car car : cars) {
-            if (car.getCategoryId() == categoryId && CarStatus.getName(car.getStatusId()).equals("ready")) {
+            if (car.getCategoryId() == categoryId && car.getStatus().equals(CarStatus.READY)) {
                 if (currentCapacity >= capacity) {
                     break;
                 }

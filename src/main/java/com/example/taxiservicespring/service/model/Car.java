@@ -9,5 +9,5 @@ public class Car {
     private long modelId;
     private int categoryId;
     private long locationId;
-    private int statusId;
+    private CarStatus status;
 }
