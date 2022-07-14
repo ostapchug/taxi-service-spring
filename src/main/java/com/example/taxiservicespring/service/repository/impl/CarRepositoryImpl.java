@@ -27,7 +27,6 @@ public class CarRepositoryImpl implements CarRepository {
         car.setModelId(1L);
         car.setCategoryId(1);
         car.setLocationId(1L);
-        car.setStatus(CarStatus.READY);
         cars.add(car);
 
         car = new Car();
@@ -36,7 +35,6 @@ public class CarRepositoryImpl implements CarRepository {
         car.setModelId(1L);
         car.setCategoryId(1);
         car.setLocationId(3L);
-        car.setStatus(CarStatus.READY);
         cars.add(car);
 
         car = new Car();
@@ -45,7 +43,6 @@ public class CarRepositoryImpl implements CarRepository {
         car.setModelId(2L);
         car.setCategoryId(2);
         car.setLocationId(3L);
-        car.setStatus(CarStatus.READY);
         cars.add(car);
 
         car = new Car();
@@ -54,7 +51,6 @@ public class CarRepositoryImpl implements CarRepository {
         car.setModelId(3L);
         car.setCategoryId(3);
         car.setLocationId(5L);
-        car.setStatus(CarStatus.READY);
         cars.add(car);
     }
 

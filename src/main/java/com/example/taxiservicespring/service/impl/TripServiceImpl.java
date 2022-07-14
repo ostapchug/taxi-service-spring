@@ -79,7 +79,7 @@ public class TripServiceImpl implements TripService {
         }
         
         BigDecimal distance = getDistance(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
-        BigDecimal price = getPrice(category.getPrice(), distance).multiply(new BigDecimal(cars.size()));
+        BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
         BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
         LocalTime waitTime = getWaitTime(tripCreateDto.getOriginId(), cars);
@@ -119,7 +119,6 @@ public class TripServiceImpl implements TripService {
                 .destinationId(tripConfirmDto.getDestinationId())
                 .distance(distance)
                 .bill(total)
-                .status(TripStatus.NEW)
                 .build();
         trip = tripRepository.create(trip, tripConfirmDto.getCars());
         return TripMapper.INSTANCE.mapTripDto(trip);

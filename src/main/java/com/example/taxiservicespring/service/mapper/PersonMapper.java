@@ -14,5 +14,6 @@ public interface PersonMapper {
     @Mapping(target = "password", ignore = true)
     PersonDto mapPersoDto(Person person);
 
+    @Mapping(target = "role", ignore = true)
     Person mapPerson(PersonDto personDto);
 }

@@ -9,5 +9,5 @@ public class Car {
     private long modelId;
     private int categoryId;
     private long locationId;
-    private CarStatus status;
+    private CarStatus status = CarStatus.READY;
 }
