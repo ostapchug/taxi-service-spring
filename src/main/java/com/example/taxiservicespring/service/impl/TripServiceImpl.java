@@ -24,6 +24,7 @@ import com.example.taxiservicespring.service.mapper.CarMapper;
 import com.example.taxiservicespring.service.mapper.TripMapper;
 import com.example.taxiservicespring.service.model.Car;
 import com.example.taxiservicespring.service.model.Category;
+import com.example.taxiservicespring.service.model.Location;
 import com.example.taxiservicespring.service.model.Trip;
 import com.example.taxiservicespring.service.model.TripStatus;
 import com.example.taxiservicespring.service.repository.CarRepository;
@@ -111,7 +112,7 @@ public class TripServiceImpl implements TripService {
         
         Category category = categoryRepository.find(tripConfirmDto.getCategoryId());
         BigDecimal distance = getDistance(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
-        BigDecimal price = getPrice(category.getPrice(), distance).multiply(new BigDecimal(cars.size()));
+        BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
         BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
         Trip trip = Trip.builder()
@@ -174,8 +175,21 @@ public class TripServiceImpl implements TripService {
         return TripMapper.INSTANCE.mapTripDto(trip);
     }
 
-    private BigDecimal getDistance(long originId, long destinationId) {
-        BigDecimal distance = locationRepository.findDistance(originId, destinationId).setScale(SCALE, RoundingMode.HALF_UP);
+    private BigDecimal getDistance(long originId, long destinationId) {  
+        log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
+        Location origin = locationRepository.find(originId);
+        Location destination = locationRepository.find(destinationId);
+        double r = 6371;
+        double lat1 = Math.toRadians(origin.getLatitude().doubleValue());
+        double lat2 = Math.toRadians(destination.getLatitude().doubleValue());
+        double lon1 = Math.toRadians(origin.getLongitude().doubleValue());
+        double lon2 = Math.toRadians(destination.getLongitude().doubleValue());
+        
+        double dLat = lat2 - lat1;
+        double dLon = lon2 - lon1;
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dLon / 2), 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        BigDecimal distance = BigDecimal.valueOf(c * r).setScale(SCALE, RoundingMode.HALF_UP);
         
         if (distance.compareTo(MIN_DICTANCE) < 0) {
             throw new DataProcessingException("Distance is not enough!");
@@ -210,7 +224,7 @@ public class TripServiceImpl implements TripService {
     private LocalTime getWaitTime(long originId, List<Car> cars) {
         
         List<BigDecimal> distanceToCar = cars.stream()
-                .map(car -> locationRepository.findDistance(originId, car.getLocationId()))
+                .map(car -> getDistance(originId, car.getLocationId()))
                 .collect(Collectors.toList());       
         BigDecimal maxCarDistance = distanceToCar.stream()
                 .max(Comparator.naturalOrder())
