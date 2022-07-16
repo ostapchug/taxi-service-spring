@@ -1,7 +1,6 @@
 package com.example.taxiservicespring.service.repository.impl;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,23 +71,5 @@ public class LocationRepositoryImpl implements LocationRepository {
     public List<Location> getAll() {
         log.info("find all locations");
         return new ArrayList<>(locations);
-    }
-
-    @Override
-    public BigDecimal findDistance(long originId, long destinationId) {
-        log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
-        Location origin = find(originId);
-        Location destination = find(destinationId);
-        double r = 6371;
-        double lat1 = Math.toRadians(origin.getLatitude().doubleValue());
-        double lat2 = Math.toRadians(destination.getLatitude().doubleValue());
-        double lon1 = Math.toRadians(origin.getLongitude().doubleValue());
-        double lon2 = Math.toRadians(destination.getLongitude().doubleValue());
-        
-        double dLat = lat2 - lat1;
-        double dLon = lon2 - lon1;
-        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dLon / 2), 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return new BigDecimal(c * r).setScale(2, RoundingMode.HALF_UP);
     }
 }
