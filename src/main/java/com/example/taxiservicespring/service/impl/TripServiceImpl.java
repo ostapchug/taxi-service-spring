@@ -80,7 +80,7 @@ public class TripServiceImpl implements TripService {
             cars.add(car);
         }
         
-        BigDecimal distance = getDistance(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
+        BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
         BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
         BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
@@ -111,7 +111,7 @@ public class TripServiceImpl implements TripService {
         }
         
         Category category = categoryRepository.find(tripConfirmDto.getCategoryId());
-        BigDecimal distance = getDistance(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
+        BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
         BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
         BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
@@ -174,6 +174,16 @@ public class TripServiceImpl implements TripService {
         Trip trip = tripRepository.updateStatus(tripId, tripStatus);
         return TripMapper.INSTANCE.mapTripDto(trip);
     }
+    
+    private BigDecimal getDistanceForTrip(long originId, long destinationId) {
+        BigDecimal distance = getDistance(originId, destinationId);
+        
+        if (distance.compareTo(MIN_DICTANCE) < 0) {
+            throw new DataProcessingException("Distance is not enough!");
+
+        } 
+        return distance; 
+    }
 
     private BigDecimal getDistance(long originId, long destinationId) {  
         log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
@@ -189,12 +199,7 @@ public class TripServiceImpl implements TripService {
         double dLon = lon2 - lon1;
         double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dLon / 2), 2);
         double c = 2 * Math.asin(Math.sqrt(a));
-        BigDecimal distance = BigDecimal.valueOf(c * r).setScale(SCALE, RoundingMode.HALF_UP);
-        
-        if (distance.compareTo(MIN_DICTANCE) < 0) {
-            throw new DataProcessingException("Distance is not enough!");
-        }
-        return distance;
+        return BigDecimal.valueOf(c * r).setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     private BigDecimal getPrice(BigDecimal categoryPrice, BigDecimal distance) {
