@@ -10,8 +10,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.taxiservicespring.controller.dto.CarDto;
@@ -20,16 +28,21 @@ import com.example.taxiservicespring.controller.dto.TripCreateDto;
 import com.example.taxiservicespring.controller.dto.TripDto;
 import com.example.taxiservicespring.service.TripService;
 import com.example.taxiservicespring.service.exception.DataProcessingException;
+import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.mapper.CarMapper;
 import com.example.taxiservicespring.service.mapper.TripMapper;
 import com.example.taxiservicespring.service.model.Car;
+import com.example.taxiservicespring.service.model.CarStatus;
 import com.example.taxiservicespring.service.model.Category;
 import com.example.taxiservicespring.service.model.Location;
+
+import com.example.taxiservicespring.service.model.Person;
 import com.example.taxiservicespring.service.model.Trip;
 import com.example.taxiservicespring.service.model.TripStatus;
 import com.example.taxiservicespring.service.repository.CarRepository;
 import com.example.taxiservicespring.service.repository.CategoryRepository;
 import com.example.taxiservicespring.service.repository.LocationRepository;
+import com.example.taxiservicespring.service.repository.PersonRepository;
 import com.example.taxiservicespring.service.repository.TripRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -47,41 +60,38 @@ public class TripServiceImpl implements TripService {
     private final LocationRepository locationRepository;
     private final CategoryRepository categoryRepository;
     private final CarRepository carRepository;
+    private final PersonRepository personRepository;
+    private final TripMapper tripMapper;  
 
     @Override
     public TripDto find(long id) {
         log.info("get trip by id {}", id);
-        Trip trip = tripRepository.find(id);
-        return TripMapper.INSTANCE.mapTripDto(trip);
+        Trip trip = tripRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Trip is not found!"));
+        return tripMapper.mapTripDto(trip);
     }
-
-    @Override
-    public List<CarDto> findCarsByTripId(long tripId) {
-        List<Car> cars = tripRepository.findCarsByTripId(tripId);
-        return cars.stream()
-                .map(car -> CarMapper.INSTANCE.mapCarDto(car))
-                .collect(Collectors.toList());
-    }
-
+    
     @Override
     public TripConfirmDto create(TripCreateDto tripCreateDto) {
         log.info("create new trip");
-        Category category = categoryRepository.find(tripCreateDto.getCategoryId());
-        List<Car> cars = new ArrayList<>();
-
+        Category category = categoryRepository.getReferenceById(tripCreateDto.getCategoryId());
+        List<CarDto> cars = new ArrayList<>();
         if (tripCreateDto.isMultipleCars()) {
-            cars = carRepository.findCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());      
+            cars = getMultipleCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());      
         } else if (tripCreateDto.isIgnoreCategory()) {
-            Car car = carRepository.findByCapacity(tripCreateDto.getCapacity());
-            category = categoryRepository.find(car.getCategoryId());
-            cars.add(car);
+            Car car = carRepository.findByStatusAndCapacity(CarStatus.READY, tripCreateDto.getCapacity())
+                    .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
+            category = categoryRepository.getReferenceById(car.getCategory().getId());
+            cars.add(CarMapper.INSTANCE.mapCarDto(car));
         } else {
-            Car car = carRepository.find(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());
-            cars.add(car);
+            Car car = carRepository.findByCategoryIdAndStatusAndCapacity(
+                    tripCreateDto.getCategoryId(), CarStatus.READY, tripCreateDto.getCapacity())
+                    .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
+            cars.add(CarMapper.INSTANCE.mapCarDto(car));
         }
         
         BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
-        BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
+        BigDecimal price = getPrice(category.getId(), distance).multiply(BigDecimal.valueOf(cars.size()));
         BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
         LocalTime waitTime = getWaitTime(tripCreateDto.getOriginId(), cars);
@@ -91,88 +101,57 @@ public class TripServiceImpl implements TripService {
                 .destinationId(tripCreateDto.getDestinationId())
                 .categoryId(category.getId())
                 .distance(distance)
-                .price(price).discount(discount)
+                .price(price)
+                .discount(discount)
                 .total(total)
                 .waitTime(waitTime)
                 .cars(cars)
                 .build();
     }
 
+    @Transactional
     @Override
     public TripDto confirm(TripConfirmDto tripConfirmDto) {
         log.info("confirm new trip");
-        List<Car> cars = tripConfirmDto.getCars();
+        List<CarDto> carDtoList = tripConfirmDto.getCars();
+        List<Car> cars = new ArrayList<>();
 
-        for (Car car : cars) {
-            Car dbCar = carRepository.find(car.getId());
-            if (tripConfirmDto.getCategoryId() != dbCar.getCategoryId()) {
-                throw new RuntimeException("Can't create trip");
+        for (CarDto carDto : carDtoList) {
+            Car car = carRepository.findByIdForUpdate(carDto.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
+            if (tripConfirmDto.getCategoryId() != car.getCategory().getId()) {
+                log.error("DataProcessingException: message car doesn't belong to category");
+                throw new DataProcessingException("Car doesn't belong to category");
             }
+            
+            if(!car.getStatus().equals(CarStatus.READY)) {
+                log.error("DataProcessingException: message can't create new trip, car is busy");
+                throw new DataProcessingException("Can't create new trip, car is busy");
+            }
+            
+            car.setStatus(CarStatus.BUSY);
+            cars.add(car);
         }
         
-        Category category = categoryRepository.find(tripConfirmDto.getCategoryId());
-        BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
-        BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
+        Person person = personRepository.getReferenceById(tripConfirmDto.getPersonId());
+        Location origin = locationRepository.getReferenceById(tripConfirmDto.getOriginId());
+        Location destination = locationRepository.getReferenceById(tripConfirmDto.getDestinationId());
+        Category category = categoryRepository.getReferenceById(tripConfirmDto.getCategoryId());
+        BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());        
+        BigDecimal price = getPrice(category.getId(), distance).multiply(BigDecimal.valueOf(cars.size()));
         BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
         Trip trip = Trip.builder()
-                .personId(tripConfirmDto.getPersonId())
-                .originId(tripConfirmDto.getOriginId())
-                .destinationId(tripConfirmDto.getDestinationId())
+                .person(person)
+                .origin(origin)
+                .destination(destination)
                 .distance(distance)
                 .bill(total)
+                .date(LocalDateTime.now())
                 .build();
-        trip = tripRepository.create(trip, tripConfirmDto.getCars());
-        return TripMapper.INSTANCE.mapTripDto(trip);
-    }
-
-    @Override
-    public List<TripDto> getAll(int page, int count, String sorting) {
-        log.info("get all trips");
-        int offset = (page - 1) * count;
-        return tripRepository.findAll(offset, count, sorting)
-                .stream().map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TripDto> getAllByPersonId(long personId, int page, int count, String sorting) {
-        log.info("get list of trips filtered by person id {}", personId);
-        int offset = (page - 1) * count;
-        return tripRepository.findAllByPersonId(personId, offset, count, sorting)
-                .stream()
-                .map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TripDto> getAllByDate(String dateRange, int page, int count, String sorting) {
-        log.info("get list of trips filtered by date range {}", dateRange);
-        int offset = (page - 1) * count;
-        LocalDateTime[] date = getDateRange(dateRange);
-        return tripRepository.findAllByDate(date, offset, count, sorting)
-                .stream()
-                .map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TripDto> getAllByPersonIdAndDate(long personId, String dateRange, int page, int count, String sorting) {
-        log.info("get list of trips filtered by pereson id {} and date range {}", personId, dateRange);
-        int offset = (page - 1) * count;
-        LocalDateTime[] date = getDateRange(dateRange);
-        return tripRepository.findAllByPersonIdAndDate(personId, date, offset, count, sorting)
-                .stream()
-                .map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public TripDto updateStatus(long tripId, String status) {
-        log.info("update trip status to {} for trip with id {}", status, tripId);
-        TripStatus tripStatus = TripStatus.valueOf(status.toUpperCase()); 
-        Trip trip = tripRepository.updateStatus(tripId, tripStatus);
-        return TripMapper.INSTANCE.mapTripDto(trip);
+        trip.getCars().addAll(cars);
+        trip = tripRepository.save(trip);
+        return tripMapper.mapTripDto(trip);
     }
     
     private BigDecimal getDistanceForTrip(long originId, long destinationId) {
@@ -187,8 +166,10 @@ public class TripServiceImpl implements TripService {
 
     private BigDecimal getDistance(long originId, long destinationId) {  
         log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
-        Location origin = locationRepository.find(originId);
-        Location destination = locationRepository.find(destinationId);
+        Location origin = locationRepository.findById(originId)
+                .orElseThrow(() -> new EntityNotFoundException("Origin location is not found!"));
+        Location destination = locationRepository.findById(destinationId)
+                .orElseThrow(() -> new EntityNotFoundException("Destination location is not found!"));
         double r = 6371;
         double lat1 = Math.toRadians(origin.getLatitude().doubleValue());
         double lat2 = Math.toRadians(destination.getLatitude().doubleValue());
@@ -201,14 +182,119 @@ public class TripServiceImpl implements TripService {
         double c = 2 * Math.asin(Math.sqrt(a));
         return BigDecimal.valueOf(c * r).setScale(SCALE, RoundingMode.HALF_UP);
     }
+    
+    @Override
+    public Page<TripDto> getAll(int page, int count, String sorting) {
+        log.info("get all trips");
+        Pageable pageable = PageRequest.of(--page, count, getSorting(sorting));
+        Page<Trip> trips = tripRepository.findAll(pageable);
+        return new PageImpl<>(
+                trips.getContent()
+                .stream()
+                .map(trip -> tripMapper.mapTripDto(trip))
+                .collect(Collectors.toList()), pageable, trips.getTotalElements());
+    }
 
-    private BigDecimal getPrice(BigDecimal categoryPrice, BigDecimal distance) {
-        return categoryPrice.multiply(distance).setScale(SCALE, RoundingMode.HALF_UP);
+    @Override
+    public Page<TripDto> getAllByPersonId(long personId, int page, int count, String sorting) {
+        log.info("get list of trips filtered by person id {}", personId);
+        Pageable pageable = PageRequest.of(--page, count, getSorting(sorting));
+        Page<Trip> trips = tripRepository.findAllByPersonId(personId, pageable);
+        return new PageImpl<>(
+                trips.getContent()
+                .stream()
+                .map(trip -> tripMapper.mapTripDto(trip))
+                .collect(Collectors.toList()), pageable, trips.getTotalElements());
+    }
+
+    @Override
+    public Page<TripDto> getAllByDate(String dateRange, int page, int count, String sorting) {
+        log.info("get list of trips filtered by date range {}", dateRange);
+        LocalDateTime[] date = getDateRange(dateRange);
+        Pageable pageable = PageRequest.of(--page, count, getSorting(sorting));
+        Page<Trip> trips = tripRepository.findAllByDateBetween(date[0], date[1], pageable);
+        return new PageImpl<>(
+                trips.getContent()
+                .stream()
+                .map(trip -> tripMapper.mapTripDto(trip))
+                .collect(Collectors.toList()), pageable, trips.getTotalElements());
+    }
+
+    @Override
+    public Page<TripDto> getAllByPersonIdAndDate(long personId, String dateRange, int page, int count, String sorting) {
+        log.info("get list of trips filtered by pereson id {} and date range {}", personId, dateRange);
+        LocalDateTime[] date = getDateRange(dateRange);
+        Pageable pageable = PageRequest.of(--page, count, getSorting(sorting));
+        Page<Trip> trips = tripRepository.findAllByPersonIdAndDateBetween(personId, date[0], date[1], pageable);
+        return new PageImpl<>(
+                trips.getContent()
+                .stream()
+                .map(trip -> tripMapper.mapTripDto(trip))
+                .collect(Collectors.toList()), pageable, trips.getTotalElements());
+    }
+    
+    @Transactional
+    @Override
+    public TripDto updateStatus(long tripId, String status) {
+        log.info("update trip status for trip with id {}", tripId);
+        Trip trip = tripRepository.findByIdForUpdate(tripId)
+                .orElseThrow(() -> new EntityNotFoundException("Trip is not found!"));
+        TripStatus tripStatus = trip.getStatus();
+        TripStatus newTripStatus = TripStatus.valueOf(status.toUpperCase());
+        
+        if(tripStatus.equals(TripStatus.NEW) || tripStatus.equals(TripStatus.ACCEPTED)) {
+            trip.setStatus(newTripStatus);
+            
+            if(newTripStatus.equals(TripStatus.COMPLETED) || newTripStatus.equals(TripStatus.CANCELLED)) {
+                Set<Car> cars = trip.getCars();        
+                for(Car car : cars) {
+                    car.setStatus(CarStatus.READY);
+                }
+            }
+        }else {
+            log.error("DataProcessingException: message can't change status for trip that already done");
+            throw new DataProcessingException("Can't change status for trip that already done");
+        }
+        
+        trip = tripRepository.save(trip);
+        return tripMapper.mapTripDto(trip);
+    }
+    
+    private List<CarDto> getMultipleCars(int categoryId, int capacity){
+        List<Car> result = new ArrayList<>();
+        List<Car> cars = carRepository.findAllByCategoryIdAndStatus(categoryId, CarStatus.READY);
+        cars.sort((c1, c2) -> c2.getModel().getSeatCount() - c1.getModel().getSeatCount());
+        
+        int i = 3;
+        while(cars.size() != 0 && capacity > 0 && i > 0) {
+            for (int j = 0; j < cars.size(); j++) {
+                int currentCapacity = cars.get(j).getModel().getSeatCount();
+                if (capacity - currentCapacity >= -currentCapacity / i) {
+                    result.add(cars.remove(j));
+                    capacity -= currentCapacity;
+                }
+            }
+            i--;
+        }
+        
+        if (capacity > 0) {
+            log.error("DataProcessingException: message not enough cars in this category");
+            throw new DataProcessingException("Not enough cars in this category");
+        }
+        return result.stream()
+                .map(car -> CarMapper.INSTANCE.mapCarDto(car))
+                .collect(Collectors.toList());
+    }
+
+    private BigDecimal getPrice(int categoryId, BigDecimal distance) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Category is not found!"));
+        return category.getPrice().multiply(distance).setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     private BigDecimal getDiscount(long personId, BigDecimal bill) {
         BigDecimal result = null;
-        BigDecimal totalBill = tripRepository.getTotalBill(personId);
+        BigDecimal totalBill = tripRepository.getTotalBill(personId, TripStatus.COMPLETED);
 
         if (totalBill == null) {
             totalBill = BigDecimal.ZERO;
@@ -226,7 +312,7 @@ public class TripServiceImpl implements TripService {
         return result.setScale(SCALE, RoundingMode.HALF_UP);
     }
 
-    private LocalTime getWaitTime(long originId, List<Car> cars) {
+    private LocalTime getWaitTime(long originId, List<CarDto> cars) {
         
         List<BigDecimal> distanceToCar = cars.stream()
                 .map(car -> getDistance(originId, car.getLocationId()))
@@ -236,6 +322,26 @@ public class TripServiceImpl implements TripService {
                 .orElse(BigDecimal.ZERO);
         int waitTime = maxCarDistance.divide(AVG_SPEED, SCALE, RoundingMode.HALF_UP).intValue();
         return LocalTime.MIN.plus(Duration.ofMinutes(waitTime));
+    }
+    
+    private Sort getSorting(String sorting) {
+        Sort result = null;
+        
+        switch (sorting) {
+        case "date-asc":
+            result = Sort.by("date");
+            break;
+        case "bill-asc":
+            result = Sort.by("bill");
+            break;
+        case "bill-desc":
+            result = Sort.by("bill").descending();
+            break;
+        default:
+            result = Sort.by("date").descending();
+            break;
+        }  
+        return result;
     }
 
     private LocalDateTime[] getDateRange(String dateRange) {

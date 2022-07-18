@@ -11,4 +11,6 @@ public interface CarModelMapper {
     CarModelMapper INSTANCE = Mappers.getMapper(CarModelMapper.class);
 
     CarModelDto mapCarModelDto(CarModel carModel);
+    
+    CarModel mapCarModel(CarModelDto carModelDto);
 }

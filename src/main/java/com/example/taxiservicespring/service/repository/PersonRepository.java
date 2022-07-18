@@ -1,20 +1,14 @@
 package com.example.taxiservicespring.service.repository;
 
-import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.taxiservicespring.service.model.Person;
 
-public interface PersonRepository {
+@Repository
+public interface PersonRepository extends JpaRepository<Person, Long>{
 
-    Person find(long id);
-
-    Person find(String phone);
-
-    List<Person> getAll();
-
-    Person create(Person person);
-
-    Person update(String phone, Person person);
-
-    void delete(String phone);
+    Optional<Person> findByPhone(String phone);
 }

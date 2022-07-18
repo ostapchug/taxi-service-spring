@@ -10,6 +10,6 @@ public class CarDto {
     private String regNumber;
     private long modelId;
     private int categoryId;
-    private long locationId;
+    private int locationId;
     private CarStatus status;
 }

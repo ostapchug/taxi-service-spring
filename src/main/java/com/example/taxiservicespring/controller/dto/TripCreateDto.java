@@ -1,8 +1,6 @@
 package com.example.taxiservicespring.controller.dto;
 
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
-
 import com.example.taxiservicespring.controller.validation.Different;
 
 import lombok.Data;
@@ -11,16 +9,16 @@ import lombok.Data;
 @Different({"originId", "destinationId"})
 public class TripCreateDto {
     
-    @PositiveOrZero
+    @Positive
     private long personId;
     
-    @PositiveOrZero
+    @Positive
     private long originId;
     
-    @PositiveOrZero
+    @Positive
     private long destinationId;
     
-    @PositiveOrZero
+    @Positive
     private int categoryId;
     
     @Positive(message = "{car.capacity}")

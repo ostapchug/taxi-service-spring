@@ -11,7 +11,6 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 import com.example.taxiservicespring.controller.validation.Different;
-import com.example.taxiservicespring.service.model.Car;
 
 import lombok.Builder;
 import lombok.Data;
@@ -21,16 +20,16 @@ import lombok.Data;
 @Different({"originId", "destinationId"})
 public class TripConfirmDto {
     
-    @PositiveOrZero
+    @Positive
     private long personId;
     
-    @PositiveOrZero
+    @Positive
     private long originId;
     
-    @PositiveOrZero
+    @Positive
     private long destinationId;
     
-    @PositiveOrZero
+    @Positive
     private int categoryId;
     
     @Min(message = "{trip.distance}", value = 1)
@@ -49,5 +48,5 @@ public class TripConfirmDto {
 
     @NotNull
     @Size(min = 1)
-    private List<Car> cars;
+    private List<CarDto> cars;
 }

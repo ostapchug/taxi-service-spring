@@ -1,11 +1,9 @@
 package com.example.taxiservicespring.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.taxiservicespring.api.TripApi;
-import com.example.taxiservicespring.controller.dto.CarDto;
 import com.example.taxiservicespring.controller.dto.TripConfirmDto;
 import com.example.taxiservicespring.controller.dto.TripCreateDto;
 import com.example.taxiservicespring.controller.dto.TripDto;
@@ -27,31 +25,25 @@ public class TripController implements TripApi{
     }
 
     @Override
-    public List<CarDto> getCarsByTripId(long tripId) {
-        log.info("request cars by trip id {}", tripId);
-        return tripService.findCarsByTripId(tripId);
-    }
-
-    @Override
-    public List<TripDto> getAll(int page, int count, String sorting) {
+    public Page<TripDto> getAll(int page, int count, String sorting) {
         log.info("request list of all trips");
         return tripService.getAll(page, count, sorting);
     }
 
     @Override
-    public List<TripDto> getAllByPersonId(int page, int count, String sorting, int personId) {
+    public Page<TripDto> getAllByPersonId(int page, int count, String sorting, int personId) {
         log.info("request list of trips filtered by person id {}", personId);
         return tripService.getAllByPersonId(personId, page, count, sorting);
     }
 
     @Override
-    public List<TripDto> getAllByDate(int page, int count, String sorting, String dateRange) {
+    public Page<TripDto> getAllByDate(int page, int count, String sorting, String dateRange) {
         log.info("request list of trips filtered by date {}", dateRange);
         return tripService.getAllByDate(dateRange, page, count, sorting);
     }
 
     @Override
-    public List<TripDto> getAllByPersonIdAndDate(int page, int count, String sorting, int personId, String dateRange) {
+    public Page<TripDto> getAllByPersonIdAndDate(int page, int count, String sorting, int personId, String dateRange) {
         log.info("request list of trips filtered by person id {} and date {}", personId, dateRange);
         return tripService.getAllByPersonIdAndDate(personId, dateRange, page, count, sorting);
     }

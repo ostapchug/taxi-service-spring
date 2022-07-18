@@ -11,4 +11,6 @@ public interface LocationMapper {
     LocationMapper INSTANCE = Mappers.getMapper(LocationMapper.class);
 
     LocationDto mapLocationDto(Location location);
+    
+    Location mapLocation(LocationDto locationDto);
 }
