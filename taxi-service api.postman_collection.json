@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "af263366-1fd2-42cf-b9dd-c04586fce6ba",
-		"name": "taxi-service api Copy",
+		"_postman_id": "fcce9392-b873-438b-852b-9011678585f4",
+		"name": "taxi-service api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -229,7 +229,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"phone\":\"0123456781\",\r\n    \"password\":\"Client#1\",\r\n    \"name\":\"Jane\",\r\n    \"surname\": \"Doe\"\r\n}",
+							"raw": "{\r\n    \"phone\":\"0123456780\",\r\n    \"password\":\"Client#0\",\r\n    \"name\":\"Jane\",\r\n    \"surname\": \"Doe\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -259,7 +259,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"phone\":\"0123456781\",\r\n    \"password\":\"Client#0\",\r\n    \"name\":\"Jane\",\r\n    \"surname\":\"Smith\"\r\n}",
+							"raw": "{\r\n    \"phone\":\"0123456780\",\r\n    \"password\":\"Client#0\",\r\n    \"name\":\"Jane\",\r\n    \"surname\":\"Smith\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -267,7 +267,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/person/0123456781",
+							"raw": "http://localhost:8080/api/v1/person/0123456780",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -277,7 +277,7 @@
 								"api",
 								"v1",
 								"person",
-								"0123456781"
+								"0123456780"
 							]
 						}
 					},
@@ -334,29 +334,6 @@
 					"response": []
 				},
 				{
-					"name": "get cars by trip id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/car/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"trip",
-								"car",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "get all  trips",
 					"request": {
 						"method": "GET",
@@ -386,7 +363,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/person-id/0",
+							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/person-id/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -400,7 +377,7 @@
 								"2",
 								"date-desc",
 								"person-id",
-								"0"
+								"1"
 							]
 						}
 					},
@@ -438,7 +415,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/0/01.07.22-30.07.22",
+							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/1/01.07.22-30.07.22",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -451,7 +428,7 @@
 								"1",
 								"2",
 								"date-desc",
-								"0",
+								"1",
 								"01.07.22-30.07.22"
 							]
 						}
@@ -465,7 +442,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": \"0\",\r\n    \"originId\": \"1\",\r\n    \"destinationId\": \"2\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
+							"raw": "{\r\n    \"personId\": \"1\",\r\n    \"originId\": \"4\",\r\n    \"destinationId\": \"3\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -495,7 +472,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": 0,\r\n    \"originId\": 2,\r\n    \"destinationId\": 3,\r\n    \"categoryId\": 1,\r\n    \"distance\": 2.07,\r\n    \"price\": 51.75,\r\n    \"discount\": 1.04,\r\n    \"total\": 50.71,\r\n    \"waitTime\": 3,\r\n    \"cars\": [\r\n        {\r\n            \"id\": 0,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"statusId\": 0\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"personId\": 1,\r\n    \"originId\": 4,\r\n    \"destinationId\": 3,\r\n    \"categoryId\": 1,\r\n    \"distance\": 1.35,\r\n    \"price\": 33.75,\r\n    \"discount\": 0.68,\r\n    \"total\": 33.07,\r\n    \"waitTime\": \"00:05:00\",\r\n    \"cars\": [\r\n        {\r\n            \"id\": 1,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"status\": \"READY\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -525,7 +502,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/status/1/accepted",
+							"raw": "http://localhost:8080/api/v1/trip/status/1/cancelled",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -537,7 +514,7 @@
 								"trip",
 								"status",
 								"1",
-								"accepted"
+								"cancelled"
 							]
 						}
 					},
