@@ -12,8 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcCarModelRepository implements CarModelRepository{
-    
+public class JdbcCarModelRepository implements CarModelRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -29,9 +28,8 @@ public class JdbcCarModelRepository implements CarModelRepository{
                                 rs.getInt("year"),
                                 rs.getInt("seat_count")
                                 )
-                        ),
+                        ), 
                 id
                 );
     }
-
 }

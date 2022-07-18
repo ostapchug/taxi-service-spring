@@ -25,6 +25,5 @@ public class TripCreateDto {
     private int capacity;
     
     boolean multipleCars;
-    
     boolean ignoreCategory;
 }

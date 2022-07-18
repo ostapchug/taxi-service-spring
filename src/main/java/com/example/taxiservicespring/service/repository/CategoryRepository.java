@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.example.taxiservicespring.service.model.Category;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Integer>{
-    
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
+
     List<Category> findAllCategories();
 }

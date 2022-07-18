@@ -76,6 +76,7 @@ public class TripServiceImpl implements TripService {
         log.info("create new trip");
         Category category = categoryRepository.getReferenceById(tripCreateDto.getCategoryId());
         List<CarDto> cars = new ArrayList<>();
+        
         if (tripCreateDto.isMultipleCars()) {
             cars = getMultipleCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());      
         } else if (tripCreateDto.isIgnoreCategory()) {
@@ -128,7 +129,6 @@ public class TripServiceImpl implements TripService {
                 log.error("DataProcessingException: message can't create new trip, car is busy");
                 throw new DataProcessingException("Can't create new trip, car is busy");
             }
-            
             car.setStatus(CarStatus.BUSY);
             cars.add(car);
         }
@@ -260,7 +260,7 @@ public class TripServiceImpl implements TripService {
         return tripMapper.mapTripDto(trip);
     }
     
-    private List<CarDto> getMultipleCars(int categoryId, int capacity){
+    private List<CarDto> getMultipleCars(int categoryId, int capacity) {
         List<Car> result = new ArrayList<>();
         List<Car> cars = carRepository.findAllByCategoryIdAndStatus(categoryId, CarStatus.READY);
         cars.sort((c1, c2) -> c2.getModel().getSeatCount() - c1.getModel().getSeatCount());

@@ -18,18 +18,19 @@ import com.example.taxiservicespring.service.model.Trip;
 import com.example.taxiservicespring.service.model.TripStatus;
 
 @Repository
-public interface TripRepository extends JpaRepository<Trip, Long>{
-    
+public interface TripRepository extends JpaRepository<Trip, Long> {
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT t FROM Trip t WHERE t.id = ?1")
     Optional<Trip> findByIdForUpdate(long id);
-    
+
     Page<Trip> findAllByPersonId(long personId, Pageable pageable);
-    
+
     Page<Trip> findAllByDateBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
-    
-    Page<Trip> findAllByPersonIdAndDateBetween(long personId, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
-    
+
+    Page<Trip> findAllByPersonIdAndDateBetween(long personId, LocalDateTime startDate, LocalDateTime endDate,
+            Pageable pageable);
+
     @Query("SELECT SUM(t.bill) FROM Trip t WHERE t.person.id = :personId AND t.status = :status")
     BigDecimal getTotalBill(@Param("personId") long personId, @Param("status") TripStatus status);
 }
