@@ -26,5 +26,5 @@ public interface TripRepository {
 
     Trip updateStatus(long tripId, TripStatus status);
 
-    BigDecimal getTotalBill(long personId);
+    BigDecimal getTotalBill(long personId, TripStatus status);
 }

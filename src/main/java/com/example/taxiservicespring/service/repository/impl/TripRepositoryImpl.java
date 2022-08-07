@@ -95,10 +95,10 @@ public class TripRepositoryImpl implements TripRepository {
     }
 
     @Override
-    public BigDecimal getTotalBill(long personId) {
+    public BigDecimal getTotalBill(long personId, TripStatus status) {
         log.info("find total bill for person with id {}", personId);
         return trips.stream()
-                .filter(t -> t.getPersonId() == personId)
+                .filter(t -> t.getPersonId() == personId && t.getStatus().equals(status))
                 .map(t -> t.getBill())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
