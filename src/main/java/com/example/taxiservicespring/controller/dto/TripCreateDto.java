@@ -3,9 +3,11 @@ package com.example.taxiservicespring.controller.dto;
 import javax.validation.constraints.Positive;
 import com.example.taxiservicespring.controller.validation.Different;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @Different({"originId", "destinationId"})
 public class TripCreateDto {
     

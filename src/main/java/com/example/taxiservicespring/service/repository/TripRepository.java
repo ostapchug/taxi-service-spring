@@ -32,5 +32,5 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
             Pageable pageable);
 
     @Query("SELECT SUM(t.bill) FROM Trip t WHERE t.person.id = :personId AND t.status = :status")
-    BigDecimal getTotalBill(@Param("personId") long personId, @Param("status") TripStatus status);
+    Optional<BigDecimal> getTotalBill(@Param("personId") long personId, @Param("status") TripStatus status);
 }

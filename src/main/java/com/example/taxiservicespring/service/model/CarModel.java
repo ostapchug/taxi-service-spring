@@ -8,18 +8,20 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "brand", "name", "color", "year" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "brand", "name", "color", "`year`" }) })
 public class CarModel {
     
     @Id
@@ -35,6 +37,7 @@ public class CarModel {
     @Column(length = 50)
     private String color;
 
+    @Column(name = "`year`")
     private int year;
     private int seatCount;
     

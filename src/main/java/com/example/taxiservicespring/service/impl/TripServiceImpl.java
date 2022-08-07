@@ -10,11 +10,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -56,12 +58,14 @@ public class TripServiceImpl implements TripService {
     private static final BigDecimal MIN_DICTANCE = BigDecimal.valueOf(1);
     private static final BigDecimal AVG_SPEED = BigDecimal.valueOf(0.3); // car average speed in km/min
     private static final int SCALE = 2;
+    @Value("#{${discount}}")
+    private final Map<BigDecimal, BigDecimal> discounts;
     private final TripRepository tripRepository;
     private final LocationRepository locationRepository;
     private final CategoryRepository categoryRepository;
     private final CarRepository carRepository;
     private final PersonRepository personRepository;
-    private final TripMapper tripMapper;  
+    private final TripMapper tripMapper;
 
     @Override
     public TripDto find(long id) {
@@ -294,26 +298,22 @@ public class TripServiceImpl implements TripService {
 
     private BigDecimal getDiscount(long personId, BigDecimal bill) {
         BigDecimal result = null;
-        BigDecimal totalBill = tripRepository.getTotalBill(personId, TripStatus.COMPLETED);
+        BigDecimal discount = null;
+        BigDecimal totalBill = tripRepository.getTotalBill(personId, TripStatus.COMPLETED)
+                .orElse(BigDecimal.ZERO);
+        
+        discount = discounts.entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().compareTo(totalBill) <= 0)
+                .map(entry -> entry.getValue())
+                .max(Comparator.naturalOrder())
+                .orElse(BigDecimal.ZERO);
 
-        if (totalBill == null) {
-            totalBill = BigDecimal.ZERO;
-        }
-
-        if (totalBill.compareTo(BigDecimal.valueOf(100)) >= 0) {
-            result = bill.multiply(BigDecimal.valueOf(0.02));
-        } else if (totalBill.compareTo(BigDecimal.valueOf(500)) >= 0) {
-            result = bill.multiply(BigDecimal.valueOf(0.05));
-        } else if (totalBill.compareTo(BigDecimal.valueOf(1000)) >= 0) {
-            result = bill.multiply(BigDecimal.valueOf(0.10));
-        } else {
-            result = BigDecimal.ZERO;
-        }
-        return result.setScale(SCALE, RoundingMode.HALF_UP);
+        result = bill.multiply(discount).setScale(SCALE, RoundingMode.HALF_UP);
+        return result;
     }
 
     private LocalTime getWaitTime(long originId, List<CarDto> cars) {
-        
         List<BigDecimal> distanceToCar = cars.stream()
                 .map(car -> getDistance(originId, car.getLocationId()))
                 .collect(Collectors.toList());       

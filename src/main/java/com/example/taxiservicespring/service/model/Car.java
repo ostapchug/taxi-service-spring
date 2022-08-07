@@ -14,12 +14,14 @@ import javax.persistence.NamedNativeQuery;
 import org.hibernate.annotations.NaturalId;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @ToString
@@ -53,6 +55,7 @@ public class Car {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
     
+    @Builder.Default
     @Column(name = "status_id", nullable = false)
     private CarStatus status = CarStatus.READY;
 

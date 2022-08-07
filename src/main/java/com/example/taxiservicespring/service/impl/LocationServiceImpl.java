@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.taxiservicespring.controller.dto.LocationDto;
 import com.example.taxiservicespring.service.LocationService;
+import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.mapper.LocationMapper;
 import com.example.taxiservicespring.service.model.Location;
 import com.example.taxiservicespring.service.repository.LocationRepository;
@@ -24,7 +25,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationDto find(long id) {
         log.info("get location by id {}", id);
         Location location = locationRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Location is not found!"));
         return LocationMapper.INSTANCE.mapLocationDto(location);
     }
 

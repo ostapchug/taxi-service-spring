@@ -33,8 +33,7 @@ public class ErrorHandler {
     @ExceptionHandler(ServiceException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Error handleServiceException(ServiceException ex, HandlerMethod hm) {
-        log.error("handleServiceException: message {}, method {}", ex.getMessage(), ex.getMessage(),
-                hm.getMethod().getName(), ex);
+        log.error("handleServiceException: message {}, method {}", ex.getMessage(), hm.getMethod().getName(), ex);
         return new Error(ex.getMessage(), ex.getErrorType(), LocalDateTime.now());
 
     }
@@ -42,8 +41,7 @@ public class ErrorHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Error handleException(Exception ex, HandlerMethod hm) {
-        log.error("handleException: message {}, method {}", ex.getMessage(), ex.getMessage(), hm.getMethod().getName(),
-                ex);
+        log.error("handleException: message {}, method {}", ex.getMessage(), hm.getMethod().getName(), ex);
         return new Error(ex.getMessage(), ErrorType.FATAL_ERROR, LocalDateTime.now());
     }
 }
