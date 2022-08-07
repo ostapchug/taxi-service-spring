@@ -80,9 +80,10 @@ public class TripServiceImpl implements TripService {
         log.info("create new trip");
         Category category = categoryRepository.getReferenceById(tripCreateDto.getCategoryId());
         List<CarDto> cars = new ArrayList<>();
-        
+
         if (tripCreateDto.isMultipleCars()) {
             cars = getMultipleCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());      
+
         } else if (tripCreateDto.isIgnoreCategory()) {
             Car car = carRepository.findByStatusAndCapacity(CarStatus.READY, tripCreateDto.getCapacity())
                     .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
@@ -124,6 +125,7 @@ public class TripServiceImpl implements TripService {
         for (CarDto carDto : carDtoList) {
             Car car = carRepository.findByIdForUpdate(carDto.getId())
                     .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
+            
             if (tripConfirmDto.getCategoryId() != car.getCategory().getId()) {
                 log.error("DataProcessingException: message car doesn't belong to category");
                 throw new DataProcessingException("Car doesn't belong to category");

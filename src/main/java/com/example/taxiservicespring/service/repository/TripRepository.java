@@ -30,7 +30,7 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
     Page<Trip> findAllByPersonIdAndDateBetween(long personId, LocalDateTime startDate, LocalDateTime endDate,
             Pageable pageable);
-
+    
     @Query("SELECT SUM(t.bill) FROM Trip t WHERE t.person.id = :personId AND t.status = :status")
     Optional<BigDecimal> getTotalBill(@Param("personId") long personId, @Param("status") TripStatus status);
 }
