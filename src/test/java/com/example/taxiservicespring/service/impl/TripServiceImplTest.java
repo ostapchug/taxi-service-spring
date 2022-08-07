@@ -419,5 +419,4 @@ class TripServiceImplTest {
         
         assertThrows(DataProcessingException.class, () -> tripService.updateStatus(ID, TripStatus.ACCEPTED.name()));
     }
-
 }

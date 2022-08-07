@@ -80,7 +80,6 @@ class CarServiceImplTest {
                 hasProperty("id", equalTo(category.getId())),
                 hasProperty("name", equalTo(category.getName()))
                 ));
-        
     }
     
     @Test
