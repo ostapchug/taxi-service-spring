@@ -70,17 +70,20 @@ public class TripServiceImpl implements TripService {
     public TripConfirmDto create(TripCreateDto tripCreateDto) {
         log.info("create new trip");
         Category category = categoryRepository.find(tripCreateDto.getCategoryId());
-        List<Car> cars = new ArrayList<>();
+        List<CarDto> cars = new ArrayList<>();
 
         if (tripCreateDto.isMultipleCars()) {
-            cars = carRepository.findCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());      
+            cars = carRepository.findCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity())
+                    .stream()
+                    .map(car -> CarMapper.INSTANCE.mapCarDto(car))
+                    .collect(Collectors.toList());      
         } else if (tripCreateDto.isIgnoreCategory()) {
             Car car = carRepository.findByCapacity(tripCreateDto.getCapacity());
             category = categoryRepository.find(car.getCategoryId());
-            cars.add(car);
+            cars.add(CarMapper.INSTANCE.mapCarDto(car));
         } else {
             Car car = carRepository.find(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());
-            cars.add(car);
+            cars.add(CarMapper.INSTANCE.mapCarDto(car));
         }
         
         BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
@@ -104,13 +107,17 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripDto confirm(TripConfirmDto tripConfirmDto) {
         log.info("confirm new trip");
-        List<Car> cars = tripConfirmDto.getCars();
+        List<CarDto> carDtoList = tripConfirmDto.getCars();
+        List<Car> cars = new ArrayList<>();
 
-        for (Car car : cars) {
-            Car dbCar = carRepository.find(car.getId());
-            if (tripConfirmDto.getCategoryId() != dbCar.getCategoryId()) {
-                throw new RuntimeException("Can't create trip");
+        for (CarDto carDto : carDtoList) {
+            Car car = carRepository.find(carDto.getId());
+            
+            if (tripConfirmDto.getCategoryId() != car.getCategoryId()) {
+                throw new RuntimeException("Car doesn't belong to category!");
             }
+            
+            cars.add(car);
         }
         
         Category category = categoryRepository.find(tripConfirmDto.getCategoryId());
@@ -125,7 +132,7 @@ public class TripServiceImpl implements TripService {
                 .distance(distance)
                 .bill(total)
                 .build();
-        trip = tripRepository.create(trip, tripConfirmDto.getCars());
+        trip = tripRepository.create(trip, cars);
         return TripMapper.INSTANCE.mapTripDto(trip);
     }
 
@@ -225,7 +232,7 @@ public class TripServiceImpl implements TripService {
         return result;
     }
 
-    private LocalTime getWaitTime(long originId, List<Car> cars) {
+    private LocalTime getWaitTime(long originId, List<CarDto> cars) {
         List<BigDecimal> distanceToCar = cars.stream()
                 .map(car -> getDistance(originId, car.getLocationId()))
                 .collect(Collectors.toList());       
