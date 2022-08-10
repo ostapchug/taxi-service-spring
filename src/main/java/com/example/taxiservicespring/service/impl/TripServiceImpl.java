@@ -55,7 +55,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TripServiceImpl implements TripService {
     private static final String DATE_FORMAT = "dd.MM.yy";
-    private static final BigDecimal MIN_DICTANCE = BigDecimal.valueOf(1);
+    private static final BigDecimal MIN_DICTANCE = BigDecimal.ONE;
     private static final BigDecimal AVG_SPEED = BigDecimal.valueOf(0.3); // car average speed in km/min
     private static final int SCALE = 2;
     @Value("#{${discount}}")
@@ -165,8 +165,7 @@ public class TripServiceImpl implements TripService {
         
         if (distance.compareTo(MIN_DICTANCE) < 0) {
             throw new DataProcessingException("Distance is not enough!");
-
-        } 
+        }
         return distance; 
     }
 
@@ -271,22 +270,27 @@ public class TripServiceImpl implements TripService {
         List<Car> cars = carRepository.findAllByCategoryIdAndStatus(categoryId, CarStatus.READY);
         cars.sort((c1, c2) -> c2.getModel().getSeatCount() - c1.getModel().getSeatCount());
         
-        int i = 3;
-        while(cars.size() != 0 && capacity > 0 && i > 0) {
-            for (int j = 0; j < cars.size(); j++) {
-                int currentCapacity = cars.get(j).getModel().getSeatCount();
-                if (capacity - currentCapacity >= -currentCapacity / i) {
-                    result.add(cars.remove(j));
-                    capacity -= currentCapacity;
-                }
+        for (Car car : cars) {
+            int currentCapacity = car.getModel().getSeatCount();
+            log.info("capacity: {}, currentCapacity: {}", capacity, currentCapacity);
+            if (capacity >= currentCapacity) {
+                result.add(car);
+                capacity -= currentCapacity;
             }
-            i--;
+        }
+        
+        cars.removeAll(result);
+        
+        if(capacity > 0 && cars.size() > 0) {
+            capacity -= cars.get(cars.size() - 1).getModel().getSeatCount();
+            result.add(cars.get(cars.size() - 1));  
         }
         
         if (capacity > 0) {
             log.error("DataProcessingException: message not enough cars in this category");
             throw new DataProcessingException("Not enough cars in this category");
         }
+        
         return result.stream()
                 .map(car -> CarMapper.INSTANCE.mapCarDto(car))
                 .collect(Collectors.toList());

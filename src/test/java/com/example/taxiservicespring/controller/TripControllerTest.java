@@ -62,9 +62,9 @@ class TripControllerTest {
             .andExpect(jsonPath("$.personId").value(tripDto.getPersonId()))
             .andExpect(jsonPath("$.originId").value(tripDto.getOriginId()))
             .andExpect(jsonPath("$.destinationId").value(tripDto.getDestinationId()))
-            .andExpect(jsonPath("$.distance").value(tripDto.getDistance()))
+            .andExpect(jsonPath("$.distance").value(tripDto.getDistance().doubleValue()))
             .andExpect(jsonPath("$.date").value(tripDto.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
-            .andExpect(jsonPath("$.bill").value(tripDto.getBill()))
+            .andExpect(jsonPath("$.bill").value(tripDto.getBill().doubleValue()))
             .andExpect(jsonPath("$.status").value(tripDto.getStatus().name()))
             .andExpect(jsonPath("$.cars.length()").value(tripDto.getCars().size()));
     }
@@ -82,9 +82,9 @@ class TripControllerTest {
             .andExpect(jsonPath("$.content[0].personId").value(tripDto.getPersonId()))
             .andExpect(jsonPath("$.content[0].originId").value(tripDto.getOriginId()))
             .andExpect(jsonPath("$.content[0].destinationId").value(tripDto.getDestinationId()))
-            .andExpect(jsonPath("$.content[0].distance").value(tripDto.getDistance()))
+            .andExpect(jsonPath("$.content[0].distance").value(tripDto.getDistance().doubleValue()))
             .andExpect(jsonPath("$.content[0].date").value(tripDto.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
-            .andExpect(jsonPath("$.content[0].bill").value(tripDto.getBill()))
+            .andExpect(jsonPath("$.content[0].bill").value(tripDto.getBill().doubleValue()))
             .andExpect(jsonPath("$.content[0].status").value(tripDto.getStatus().name()))
             .andExpect(jsonPath("$.content[0].cars.length()").value(tripDto.getCars().size()));
     }
@@ -102,9 +102,9 @@ class TripControllerTest {
             .andExpect(jsonPath("$.content[0].personId").value(tripDto.getPersonId()))
             .andExpect(jsonPath("$.content[0].originId").value(tripDto.getOriginId()))
             .andExpect(jsonPath("$.content[0].destinationId").value(tripDto.getDestinationId()))
-            .andExpect(jsonPath("$.content[0].distance").value(tripDto.getDistance()))
+            .andExpect(jsonPath("$.content[0].distance").value(tripDto.getDistance().doubleValue()))
             .andExpect(jsonPath("$.content[0].date").value(tripDto.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
-            .andExpect(jsonPath("$.content[0].bill").value(tripDto.getBill()))
+            .andExpect(jsonPath("$.content[0].bill").value(tripDto.getBill().doubleValue()))
             .andExpect(jsonPath("$.content[0].status").value(tripDto.getStatus().name()))
             .andExpect(jsonPath("$.content[0].cars.length()").value(tripDto.getCars().size()));
     }
@@ -122,9 +122,9 @@ class TripControllerTest {
             .andExpect(jsonPath("$.content[0].personId").value(tripDto.getPersonId()))
             .andExpect(jsonPath("$.content[0].originId").value(tripDto.getOriginId()))
             .andExpect(jsonPath("$.content[0].destinationId").value(tripDto.getDestinationId()))
-            .andExpect(jsonPath("$.content[0].distance").value(tripDto.getDistance()))
+            .andExpect(jsonPath("$.content[0].distance").value(tripDto.getDistance().doubleValue()))
             .andExpect(jsonPath("$.content[0].date").value(tripDto.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
-            .andExpect(jsonPath("$.content[0].bill").value(tripDto.getBill()))
+            .andExpect(jsonPath("$.content[0].bill").value(tripDto.getBill().doubleValue()))
             .andExpect(jsonPath("$.content[0].status").value(tripDto.getStatus().name()))
             .andExpect(jsonPath("$.content[0].cars.length()").value(tripDto.getCars().size()));
     }
@@ -142,9 +142,9 @@ class TripControllerTest {
             .andExpect(jsonPath("$.content[0].personId").value(tripDto.getPersonId()))
             .andExpect(jsonPath("$.content[0].originId").value(tripDto.getOriginId()))
             .andExpect(jsonPath("$.content[0].destinationId").value(tripDto.getDestinationId()))
-            .andExpect(jsonPath("$.content[0].distance").value(tripDto.getDistance()))
+            .andExpect(jsonPath("$.content[0].distance").value(tripDto.getDistance().doubleValue()))
             .andExpect(jsonPath("$.content[0].date").value(tripDto.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
-            .andExpect(jsonPath("$.content[0].bill").value(tripDto.getBill()))
+            .andExpect(jsonPath("$.content[0].bill").value(tripDto.getBill().doubleValue()))
             .andExpect(jsonPath("$.content[0].status").value(tripDto.getStatus().name()))
             .andExpect(jsonPath("$.content[0].cars.length()").value(tripDto.getCars().size()));
     }
@@ -166,10 +166,10 @@ class TripControllerTest {
             .andExpect(jsonPath("$.originId").value(tripConfirmDto.getOriginId()))
             .andExpect(jsonPath("$.destinationId").value(tripConfirmDto.getDestinationId()))
             .andExpect(jsonPath("$.categoryId").value(tripConfirmDto.getCategoryId()))
-            .andExpect(jsonPath("$.distance").value(tripConfirmDto.getDistance()))
-            .andExpect(jsonPath("$.price").value(tripConfirmDto.getPrice()))
-            .andExpect(jsonPath("$.discount").value(tripConfirmDto.getDiscount()))
-            .andExpect(jsonPath("$.total").value(tripConfirmDto.getTotal()))
+            .andExpect(jsonPath("$.distance").value(tripConfirmDto.getDistance().doubleValue()))
+            .andExpect(jsonPath("$.price").value(tripConfirmDto.getPrice().doubleValue()))
+            .andExpect(jsonPath("$.discount").value(tripConfirmDto.getDiscount().doubleValue()))
+            .andExpect(jsonPath("$.total").value(tripConfirmDto.getTotal().doubleValue()))
             .andExpect(jsonPath("$.waitTime").value(tripConfirmDto.getWaitTime().format(DateTimeFormatter.ISO_TIME)))
             .andExpect(jsonPath("$.cars.length()").value(tripConfirmDto.getCars().size()));
     }
@@ -266,9 +266,9 @@ class TripControllerTest {
             .andExpect(jsonPath("$.personId").value(tripDto.getPersonId()))
             .andExpect(jsonPath("$.originId").value(tripDto.getOriginId()))
             .andExpect(jsonPath("$.destinationId").value(tripDto.getDestinationId()))
-            .andExpect(jsonPath("$.distance").value(tripDto.getDistance()))
+            .andExpect(jsonPath("$.distance").value(tripDto.getDistance().doubleValue()))
             .andExpect(jsonPath("$.date").value(tripDto.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
-            .andExpect(jsonPath("$.bill").value(tripDto.getBill()))
+            .andExpect(jsonPath("$.bill").value(tripDto.getBill().doubleValue()))
             .andExpect(jsonPath("$.status").value(tripDto.getStatus().name()))
             .andExpect(jsonPath("$.cars.length()").value(tripDto.getCars().size()));
     }
@@ -346,9 +346,9 @@ class TripControllerTest {
             .andExpect(jsonPath("$.personId").value(tripDto.getPersonId()))
             .andExpect(jsonPath("$.originId").value(tripDto.getOriginId()))
             .andExpect(jsonPath("$.destinationId").value(tripDto.getDestinationId()))
-            .andExpect(jsonPath("$.distance").value(tripDto.getDistance()))
+            .andExpect(jsonPath("$.distance").value(tripDto.getDistance().doubleValue()))
             .andExpect(jsonPath("$.date").value(tripDto.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
-            .andExpect(jsonPath("$.bill").value(tripDto.getBill()))
+            .andExpect(jsonPath("$.bill").value(tripDto.getBill().doubleValue()))
             .andExpect(jsonPath("$.status").value(tripDto.getStatus().name()))
             .andExpect(jsonPath("$.cars.length()").value(tripDto.getCars().size()));
     }

@@ -5,9 +5,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.example.taxiservicespring.controller.dto.CarDto;
 import com.example.taxiservicespring.controller.dto.CarModelDto;
@@ -47,11 +49,11 @@ public class TestDataUtil {
     public static final int CATEGORY_ID = 1;
     public static final int CAPACITY = 1;
     public static final long DEST_ID = 4L;
-    public static final BigDecimal DISTANCE = BigDecimal.valueOf(1.73);
-    public static final BigDecimal PRICE = BigDecimal.valueOf(43.25);
-    public static final BigDecimal BILL = BigDecimal.valueOf(42.38);
-    public static final BigDecimal DISCOUNT = BigDecimal.valueOf(0.87);
-    public static final BigDecimal TOTAL_BILL = BigDecimal.valueOf(101.14);
+    public static final BigDecimal DISTANCE = BigDecimal.ONE.setScale(2);
+    public static final BigDecimal PRICE = BigDecimal.valueOf(25).setScale(2);
+    public static final BigDecimal BILL = BigDecimal.valueOf(24.5).setScale(2);
+    public static final BigDecimal DISCOUNT = BigDecimal.valueOf(0.5).setScale(2);
+    public static final BigDecimal TOTAL_BILL = BigDecimal.valueOf(100).setScale(2);
     public static final LocalDateTime DATE = LocalDateTime.now();
     public static final String DATE_RANGE = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)) + "-"
             + LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT));
@@ -74,10 +76,10 @@ public class TestDataUtil {
     public static Location createDestination() {
         return Location.builder()
                 .id(4L)
-                .streetName("Vovchynetska")
-                .streetNumber("225")
-                .latitude(BigDecimal.valueOf(48.94107697890707))
-                .longitude(BigDecimal.valueOf(24.73865635966828))
+                .streetName("Sofiivs'kyi Ln")
+                .streetNumber("18")
+                .latitude(BigDecimal.valueOf(48.92899254668747))
+                .longitude(BigDecimal.valueOf(24.72473578396449))
                 .build();
     }
     
@@ -99,6 +101,17 @@ public class TestDataUtil {
                 .year(2012)
                 .color("Blue")
                 .seatCount(3)
+                .build();
+    }
+    
+    public static CarModel createCarModelWithBiggerCapacity() {
+        return CarModel.builder()
+                .id(2L)
+                .brand("Ford")
+                .name("Fusion")
+                .year(2016)
+                .color("Blue")
+                .seatCount(4)
                 .build();
     }
     
@@ -146,6 +159,68 @@ public class TestDataUtil {
                 .surname(SURNAME)
                 .role(Role.CLIENT)
                 .build();
+    }
+    
+    public static List<Car> createCarList(){
+        List<Car> result = new ArrayList<>();
+        CarModel carModel = CarModel.builder()
+                .id(1L)
+                .brand("Ford")
+                .name("Focus")
+                .year(2012)
+                .color("Blue")
+                .seatCount(3)
+                .build();
+        CarModel carModel2 = CarModel.builder()
+                .id(2L)
+                .brand("Ford")
+                .name("Fusion")
+                .year(2016)
+                .color("Blue")
+                .seatCount(4)
+                .build();
+        
+        Car car = Car.builder()
+                .id(1L)
+                .regNumber("AA1234TV")
+                .model(carModel)
+                .category(createCategory())
+                .location(createLocation())
+                .build();
+        result.add(car);
+        car = Car.builder()
+                .id(2L)
+                .regNumber("AA1235TV")
+                .model(carModel2)
+                .category(createCategory())
+                .location(createLocation())
+                .build();
+        result.add(car);
+        car = Car.builder()
+                .id(3L)
+                .regNumber("AA1236TV")
+                .model(carModel)
+                .category(createCategory())
+                .location(createLocation())
+                .build();
+        result.add(car);
+        car = Car.builder()
+                .id(4L)
+                .regNumber("AA1237TV")
+                .model(carModel2)
+                .category(createCategory())
+                .location(createLocation())
+                .build();
+        result.add(car);
+  
+        return result;
+    }
+    
+    public static List<CarDto> createCarDtoList(){
+        return createCarList()
+                .stream()
+                .map(car -> CarMapper.INSTANCE.mapCarDto(car))
+                .collect(Collectors.toList());
     }
     
     public static CarDto createCarDto() {
@@ -200,6 +275,38 @@ public class TestDataUtil {
                 .total(BILL)
                 .waitTime(LocalTime.MIDNIGHT)
                 .cars(List.of(createCarDto()))
+                .build();      
+    }
+    
+    public static TripConfirmDto createTripConfirmDtoWithMultipleCars() {
+        List<CarDto> cars = createCarDtoList();        
+        return TripConfirmDto.builder()
+                .personId(PERSON_ID)
+                .originId(ORIGIN_ID)
+                .destinationId(DEST_ID)
+                .categoryId(CATEGORY_ID)
+                .distance(DISTANCE)
+                .price(BigDecimal.valueOf(50).setScale(2))
+                .discount(BigDecimal.ONE.setScale(2))
+                .total(BigDecimal.valueOf(49).setScale(2))
+                .waitTime(LocalTime.MIDNIGHT)
+                .cars(List.of(cars.get(1), cars.get(2)))
+                .build();      
+    }
+    
+    public static TripConfirmDto createTripConfirmDtoWithMultipleCarsCapacityEqual() {
+        List<CarDto> cars = createCarDtoList();        
+        return TripConfirmDto.builder()
+                .personId(PERSON_ID)
+                .originId(ORIGIN_ID)
+                .destinationId(DEST_ID)
+                .categoryId(CATEGORY_ID)
+                .distance(DISTANCE)
+                .price(BigDecimal.valueOf(50).setScale(2))
+                .discount(BigDecimal.ONE.setScale(2))
+                .total(BigDecimal.valueOf(49).setScale(2))
+                .waitTime(LocalTime.MIDNIGHT)
+                .cars(List.of(cars.get(1), cars.get(0)))
                 .build();      
     }
 }

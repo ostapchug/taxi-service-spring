@@ -123,6 +123,34 @@
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.9.4</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.0.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <targetClasses>
+                        <param>com.example.taxiservicespring.service.impl.*</param>
+                        <param>com.example.taxiservicespring.controller.CarController</param>
+                        <param>com.example.taxiservicespring.controller.LocationController</param>
+                        <param>com.example.taxiservicespring.controller.PersonController</param>
+                        <param>com.example.taxiservicespring.controller.TripController</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>com.example.taxiservicespring.service.impl.*</param>
+                        <param>com.example.taxiservicespring.controller.CarControllerTest</param>
+                        <param>com.example.taxiservicespring.controller.LocationControllerTest</param>
+                        <param>com.example.taxiservicespring.controller.PersonControllerTest</param>
+                        <param>com.example.taxiservicespring.controller.TripControllerTest</param>
+                    </targetTests>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

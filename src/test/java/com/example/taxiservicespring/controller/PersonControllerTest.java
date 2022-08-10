@@ -189,7 +189,8 @@ class PersonControllerTest {
 
     @Test
     void deleteTest() throws Exception {
-        mockMvc.perform(delete("/api/v1/person/" + PHONE));
+        mockMvc.perform(delete("/api/v1/person/" + PHONE))
+            .andExpect(status().isNoContent());
         verify(personService, times(1)).delete(any());
     }
 }

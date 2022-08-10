@@ -10,15 +10,19 @@ import static com.example.taxiservicespring.util.TestDataUtil.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,7 +84,7 @@ class TripServiceImplTest {
         Trip trip = createTrip();
         TripDto testTripDto = createTripDto();
         when(tripRepository.findById(anyLong())).thenReturn(Optional.of(trip));
-        when(tripMapper.mapTripDto(any())).thenReturn(testTripDto);
+        when(tripMapper.mapTripDto(trip)).thenReturn(testTripDto);
         
         TripDto tripDto = tripService.find(anyLong());
         
@@ -177,13 +181,33 @@ class TripServiceImplTest {
     @Test
     void createUseMultipleCarsTest() {
         TripCreateDto tripCreateDto = createTripCreateDto();
+        tripCreateDto.setCapacity(5);
         tripCreateDto.setMultipleCars(true);
-        TripConfirmDto testTripConfirmDto = createTripConfirmDto();
+        TripConfirmDto testTripConfirmDto = createTripConfirmDtoWithMultipleCars();
         Category category = createCategory();
-        Car car = createCar(); 
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.of(category));
-        when(carRepository.findAllByCategoryIdAndStatus(anyInt(), any())).thenReturn(new ArrayList<>(Arrays.asList(car)));
+        when(carRepository.findAllByCategoryIdAndStatus(anyInt(), any())).thenReturn(createCarList());
+        when(locationRepository.findById(ORIGIN_ID)).thenReturn(Optional.of(createOrigin()));
+        when(locationRepository.findById(DEST_ID)).thenReturn(Optional.of(createDestination()));
+        when(tripRepository.getTotalBill(anyLong(), any())).thenReturn(Optional.of(TOTAL_BILL));
+        when(discounts.entrySet()).thenReturn(DISCOUNTS.entrySet());
+        
+        TripConfirmDto tripConfirmDto = tripService.create(tripCreateDto);
+        
+        assertThat(tripConfirmDto, equalTo(testTripConfirmDto));  
+    }
+    
+    @Test
+    void createUseMultipleCarsCapacityEqualTest() {
+        TripCreateDto tripCreateDto = createTripCreateDto();
+        tripCreateDto.setCapacity(7);
+        tripCreateDto.setMultipleCars(true);
+        TripConfirmDto testTripConfirmDto = createTripConfirmDtoWithMultipleCarsCapacityEqual();
+        Category category = createCategory();
+        when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
+        when(categoryRepository.findById(anyInt())).thenReturn(Optional.of(category));
+        when(carRepository.findAllByCategoryIdAndStatus(anyInt(), any())).thenReturn(createCarList());
         when(locationRepository.findById(ORIGIN_ID)).thenReturn(Optional.of(createOrigin()));
         when(locationRepository.findById(DEST_ID)).thenReturn(Optional.of(createDestination()));
         when(tripRepository.getTotalBill(anyLong(), any())).thenReturn(Optional.of(TOTAL_BILL));
@@ -208,12 +232,11 @@ class TripServiceImplTest {
     @Test
     void createUseMultipleCarsCarsNotEnoughTest() {
         TripCreateDto tripCreateDto = createTripCreateDto();
-        tripCreateDto.setCapacity(7);
+        tripCreateDto.setCapacity(15);
         tripCreateDto.setMultipleCars(true);
         Category category = createCategory();
-        Car car = createCar(); 
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
-        when(carRepository.findAllByCategoryIdAndStatus(anyInt(), any())).thenReturn(new ArrayList<>(Arrays.asList(car, car)));
+        when(carRepository.findAllByCategoryIdAndStatus(anyInt(), any())).thenReturn(createCarList());
         
         assertThrows(DataProcessingException.class, () -> tripService.create(tripCreateDto));
     }
@@ -256,7 +279,9 @@ class TripServiceImplTest {
         Trip trip = createTrip();
         Person person = createPerson();
         Category category = createCategory();
-        Car car = createCar();
+        Car car = mock(Car.class);
+        when(car.getCategory()).thenReturn(category);
+        when(car.getStatus()).thenReturn(CarStatus.READY);
         when(carRepository.findByIdForUpdate(anyLong())).thenReturn(Optional.of(car));
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
         when(personRepository.getReferenceById(anyLong())).thenReturn(person);
@@ -272,6 +297,7 @@ class TripServiceImplTest {
         
         TripDto tripDto = tripService.confirm(tripConfirmDto);
         
+        verify(car, times(1)).setStatus(CarStatus.BUSY);        
         assertThat(tripDto, equalTo(testTripDto));     
     }
     
@@ -382,12 +408,15 @@ class TripServiceImplTest {
     void updateStatusTest() {
         TripDto testTripDto = createTripDto();
         testTripDto.setStatus(TripStatus.ACCEPTED);
-        Trip trip = createTrip();
+        Trip trip = mock(Trip.class);
         when(tripRepository.findByIdForUpdate(anyLong())).thenReturn(Optional.of(trip));
         when(tripMapper.mapTripDto(any())).thenReturn(testTripDto);
+        when(trip.getStatus()).thenReturn(TripStatus.NEW);
         
         TripDto tripDto = tripService.updateStatus(ID, TripStatus.ACCEPTED.name());
         
+        verify(trip, times(1)).setStatus(TripStatus.ACCEPTED);
+        verify(trip, never()).getCars();
         assertThat(tripDto, equalTo(testTripDto)); 
     }
     
@@ -395,12 +424,16 @@ class TripServiceImplTest {
     void updateStatusAndUnlockCarsTest() {
         TripDto testTripDto = createTripDto();
         testTripDto.setStatus(TripStatus.COMPLETED);
-        Trip trip = createTrip();
+        Trip trip = mock(Trip.class);
+        Car car = mock(Car.class);
         when(tripRepository.findByIdForUpdate(anyLong())).thenReturn(Optional.of(trip));
         when(tripMapper.mapTripDto(any())).thenReturn(testTripDto);
+        when(trip.getStatus()).thenReturn(TripStatus.ACCEPTED);
+        when(trip.getCars()).thenReturn(Set.of(car));
         
         TripDto tripDto = tripService.updateStatus(ID, TripStatus.COMPLETED.name());
-        
+        verify(trip, times(1)).setStatus(TripStatus.COMPLETED);
+        verify(car, times(1)).setStatus(CarStatus.READY);
         assertThat(tripDto, equalTo(testTripDto)); 
     }
     

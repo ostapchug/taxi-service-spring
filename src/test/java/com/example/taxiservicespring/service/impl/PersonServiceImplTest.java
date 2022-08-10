@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.taxiservicespring.controller.dto.PersonDto;
 import com.example.taxiservicespring.service.exception.EntityNotFoundException;
+import com.example.taxiservicespring.service.mapper.PersonMapper;
 import com.example.taxiservicespring.service.model.Person;
 import com.example.taxiservicespring.service.repository.PersonRepository;
 
@@ -113,10 +114,13 @@ class PersonServiceImplTest {
 
     @Test
     void updateTest() {
-        Person person = createPerson(); 
-        PersonDto testPersonDto = createPersonDto();
+        Person person = createPerson();
+        Person updatedPerson = createPerson(); 
+        updatedPerson.setName("Jack");
+        updatedPerson.setSurname("Smith");
+        PersonDto testPersonDto = PersonMapper.INSTANCE.mapPersoDto(updatedPerson);
         when(personRepository.findByPhone(PHONE)).thenReturn(Optional.of(person));
-        when(personRepository.save(person)).thenReturn(person);
+        when(personRepository.save(person)).thenReturn(updatedPerson);
         
         PersonDto personDto = personService.update(PHONE, testPersonDto);
         
