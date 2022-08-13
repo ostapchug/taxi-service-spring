@@ -24,14 +24,14 @@ public class PersonServiceImpl implements PersonService {
     public PersonDto find(long id) {
         log.info("get person by id {}", id);
         Person person = personRepository.find(id);
-        return PersonMapper.INSTANCE.mapPersoDto(person);
+        return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
     public PersonDto find(String phone) {
         log.info("get person by phone {}", phone);
         Person person = personRepository.find(phone);
-        return PersonMapper.INSTANCE.mapPersoDto(person);
+        return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class PersonServiceImpl implements PersonService {
         log.info("get all persons");
         return personRepository.getAll()
                 .stream()
-                .map(person -> PersonMapper.INSTANCE.mapPersoDto(person))
+                .map(person -> PersonMapper.INSTANCE.mapPersonDto(person))
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +48,7 @@ public class PersonServiceImpl implements PersonService {
         log.info("create person with phone {}", personDto.getPhone());
         Person person = PersonMapper.INSTANCE.mapPerson(personDto);
         person = personRepository.create(person);
-        return PersonMapper.INSTANCE.mapPersoDto(person);
+        return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PersonServiceImpl implements PersonService {
         log.info("update person with phone {}", phone);
         Person person = PersonMapper.INSTANCE.mapPerson(personDto);
         person = personRepository.update(phone, person);
-        return PersonMapper.INSTANCE.mapPersoDto(person);
+        return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
