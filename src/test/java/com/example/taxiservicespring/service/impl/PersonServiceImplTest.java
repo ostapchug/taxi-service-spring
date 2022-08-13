@@ -118,7 +118,7 @@ class PersonServiceImplTest {
         Person updatedPerson = createPerson(); 
         updatedPerson.setName("Jack");
         updatedPerson.setSurname("Smith");
-        PersonDto testPersonDto = PersonMapper.INSTANCE.mapPersoDto(updatedPerson);
+        PersonDto testPersonDto = PersonMapper.INSTANCE.mapPersonDto(updatedPerson);
         when(personRepository.findByPhone(PHONE)).thenReturn(Optional.of(person));
         when(personRepository.save(person)).thenReturn(updatedPerson);
         
