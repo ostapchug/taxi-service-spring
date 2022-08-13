@@ -271,22 +271,26 @@ public class TripServiceImpl implements TripService {
         List<Car> cars = carRepository.findAllByCategoryIdAndStatus(categoryId, CarStatus.READY);
         cars.sort((c1, c2) -> c2.getModel().getSeatCount() - c1.getModel().getSeatCount());
         
-        int i = 3;
-        while(cars.size() != 0 && capacity > 0 && i > 0) {
-            for (int j = 0; j < cars.size(); j++) {
-                int currentCapacity = cars.get(j).getModel().getSeatCount();
-                if (capacity - currentCapacity >= -currentCapacity / i) {
-                    result.add(cars.remove(j));
-                    capacity -= currentCapacity;
-                }
+        for (Car car : cars) {
+            int currentCapacity = car.getModel().getSeatCount();
+            if (capacity >= currentCapacity) {
+                result.add(car);
+                capacity -= currentCapacity;
             }
-            i--;
+        }
+        
+        cars.removeAll(result);
+        
+        if(capacity > 0 && cars.size() > 0) {
+            capacity -= cars.get(cars.size() - 1).getModel().getSeatCount();
+            result.add(cars.get(cars.size() - 1));  
         }
         
         if (capacity > 0) {
             log.error("DataProcessingException: message not enough cars in this category");
             throw new DataProcessingException("Not enough cars in this category");
         }
+        
         return result.stream()
                 .map(car -> CarMapper.INSTANCE.mapCarDto(car))
                 .collect(Collectors.toList());
