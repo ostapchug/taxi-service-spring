@@ -272,7 +272,6 @@ public class TripServiceImpl implements TripService {
         
         for (Car car : cars) {
             int currentCapacity = car.getModel().getSeatCount();
-            log.info("capacity: {}, currentCapacity: {}", capacity, currentCapacity);
             if (capacity >= currentCapacity) {
                 result.add(car);
                 capacity -= currentCapacity;
