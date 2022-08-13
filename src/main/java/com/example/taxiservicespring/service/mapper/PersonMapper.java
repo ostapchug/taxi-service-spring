@@ -14,7 +14,7 @@ public interface PersonMapper {
     PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
 
     @Mapping(target = "password", ignore = true)
-    PersonDto mapPersoDto(Person person);
+    PersonDto mapPersonDto(Person person);
 
     Person mapPerson(PersonDto personDto);
 }

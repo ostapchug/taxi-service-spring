@@ -26,7 +26,7 @@ public class PersonServiceImpl implements PersonService {
         log.info("get person by id {}", id);
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
-        return PersonMapper.INSTANCE.mapPersoDto(person);
+        return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PersonServiceImpl implements PersonService {
         log.info("get person by phone {}", phone);
         Person person = personRepository.findByPhone(phone)
                 .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
-        return PersonMapper.INSTANCE.mapPersoDto(person);
+        return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PersonServiceImpl implements PersonService {
         log.info("get all persons");
         return personRepository.findAll()
                 .stream()
-                .map(person -> PersonMapper.INSTANCE.mapPersoDto(person))
+                .map(person -> PersonMapper.INSTANCE.mapPersonDto(person))
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +51,7 @@ public class PersonServiceImpl implements PersonService {
         log.info("create person with phone {}", personDto.getPhone());
         Person person = PersonMapper.INSTANCE.mapPerson(personDto);
         person = personRepository.save(person);
-        return PersonMapper.INSTANCE.mapPersoDto(person);
+        return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class PersonServiceImpl implements PersonService {
         dbPerson.setName(person.getName());
         dbPerson.setSurname(person.getSurname());
         person = personRepository.save(dbPerson);
-        return PersonMapper.INSTANCE.mapPersoDto(person);
+        return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
