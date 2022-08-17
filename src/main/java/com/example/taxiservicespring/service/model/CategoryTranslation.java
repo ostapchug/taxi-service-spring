@@ -1,17 +1,13 @@
 package com.example.taxiservicespring.service.model;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -27,24 +23,22 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@NamedQuery(name = "Category.findAllCategories", query = "SELECT c FROM Category c")
-public class Category {
+public class CategoryTranslation {
     
     @Id
     @GeneratedValue
     private int id;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
+    
     @NaturalId
     @Column(length = 50)
     private String name;
     
-    @Column(nullable = false, precision = 6, scale = 2)
-    private BigDecimal price;
+    @Column(name = "language_id", nullable = false)
+    private Language language;
     
-    @ToString.Exclude
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CategoryTranslation> translations = new ArrayList<>();
-
     @Override
     public int hashCode() {
         return Objects.hash(getName());
@@ -56,7 +50,7 @@ public class Category {
             return true;
         if (getClass() != obj.getClass())
             return false;
-        Category other = (Category) obj;
+        Person other = (Person) obj;
         return Objects.equals(getName(), other.getName());
     }
 }
