@@ -43,6 +43,7 @@ public class Category {
     @Column(nullable = false, precision = 6, scale = 2)
     private BigDecimal price;
     
+    @Builder.Default
     @ToString.Exclude
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryTranslation> translations = new ArrayList<>();
