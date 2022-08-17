@@ -372,7 +372,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc",
+							"raw": "http://localhost:8080/api/v1/trip?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -381,10 +381,21 @@
 							"path": [
 								"api",
 								"v1",
-								"trip",
-								"1",
-								"2",
-								"date-desc"
+								"trip"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "date,desc"
+								}
 							]
 						}
 					},
@@ -396,7 +407,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/person-id/1",
+							"raw": "http://localhost:8080/api/v1/trip/person-id/1?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -406,11 +417,22 @@
 								"api",
 								"v1",
 								"trip",
-								"1",
-								"2",
-								"date-desc",
 								"person-id",
 								"1"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "date,desc"
+								}
 							]
 						}
 					},
@@ -422,7 +444,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/date/01.07.22-30.07.22",
+							"raw": "http://localhost:8080/api/v1/trip/date/01.07.22-30.08.22?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -432,11 +454,22 @@
 								"api",
 								"v1",
 								"trip",
-								"1",
-								"2",
-								"date-desc",
 								"date",
-								"01.07.22-30.07.22"
+								"01.07.22-30.08.22"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "date,desc"
+								}
 							]
 						}
 					},
@@ -448,7 +481,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/1/01.07.22-30.07.22",
+							"raw": "http://localhost:8080/api/v1/trip/1/01.07.22-30.08.22?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -459,10 +492,21 @@
 								"v1",
 								"trip",
 								"1",
-								"2",
-								"date-desc",
-								"1",
-								"01.07.22-30.07.22"
+								"01.07.22-30.08.22"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "date,desc"
+								}
 							]
 						}
 					},

@@ -32,7 +32,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import com.example.taxiservicespring.controller.dto.TripConfirmDto;
 import com.example.taxiservicespring.controller.dto.TripCreateDto;
@@ -336,13 +335,13 @@ class TripServiceImplTest {
         when(tripRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(trip)));
         when(tripMapper.mapTripDto(any())).thenReturn(tripDto);
         
-        Page<TripDto> page = tripService.getAll(1, 2, "date-desc"); 
+        Page<TripDto> page = tripService.getAll(PAGEABLE); 
         
         assertThat(page, allOf(
                 hasProperty("totalElements", is(1L)),
                 hasProperty("number", is(0)),
                 hasProperty("size", is(2)),
-                hasProperty("sort", is(Sort.by("date").descending())),
+                hasProperty("sort", is(SORTING)),
                 hasProperty("content", is(List.of(tripDto)))
                 ));
     }
@@ -355,13 +354,13 @@ class TripServiceImplTest {
                 .thenReturn(new PageImpl<>(List.of(trip)));
         when(tripMapper.mapTripDto(any())).thenReturn(tripDto);
         
-        Page<TripDto> page = tripService.getAllByPersonId(ID, 1, 2, "date-asc"); 
+        Page<TripDto> page = tripService.getAllByPersonId(ID, PAGEABLE); 
         
         assertThat(page, allOf(
                 hasProperty("totalElements", is(1L)),
                 hasProperty("number", is(0)),
                 hasProperty("size", is(2)),
-                hasProperty("sort", is(Sort.by("date"))),
+                hasProperty("sort", is(SORTING)),
                 hasProperty("content", is(List.of(tripDto)))
                 ));
     }
@@ -374,13 +373,13 @@ class TripServiceImplTest {
                 any(Pageable.class))).thenReturn(new PageImpl<>(List.of(trip)));
         when(tripMapper.mapTripDto(any())).thenReturn(tripDto);
         
-        Page<TripDto> page = tripService.getAllByDate(DATE_RANGE, 1, 2, "bill-desc"); 
+        Page<TripDto> page = tripService.getAllByDate(DATE_RANGE, PAGEABLE); 
         
         assertThat(page, allOf(
                 hasProperty("totalElements", is(1L)),
                 hasProperty("number", is(0)),
                 hasProperty("size", is(2)),
-                hasProperty("sort", is(Sort.by("bill").descending())),
+                hasProperty("sort", is(SORTING)),
                 hasProperty("content", is(List.of(tripDto)))
                 ));
     }
@@ -393,13 +392,13 @@ class TripServiceImplTest {
                 any(LocalDateTime.class), any(Pageable.class))).thenReturn(new PageImpl<>(List.of(trip)));
         when(tripMapper.mapTripDto(any())).thenReturn(tripDto);
         
-        Page<TripDto> page = tripService.getAllByPersonIdAndDate(ID, DATE_RANGE, 1, 2, "bill-asc"); 
+        Page<TripDto> page = tripService.getAllByPersonIdAndDate(ID, DATE_RANGE, PAGEABLE); 
         
         assertThat(page, allOf(
                 hasProperty("totalElements", is(1L)),
                 hasProperty("number", is(0)),
                 hasProperty("size", is(2)),
-                hasProperty("sort", is(Sort.by("bill"))),
+                hasProperty("sort", is(SORTING)),
                 hasProperty("content", is(List.of(tripDto)))
                 ));
     }

@@ -11,6 +11,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import com.example.taxiservicespring.controller.dto.CarDto;
 import com.example.taxiservicespring.controller.dto.CarModelDto;
 import com.example.taxiservicespring.controller.dto.CategoryDto;
@@ -43,7 +47,8 @@ public class TestDataUtil {
     public static final String PASSWORD = "Client#0";
     public static final String NAME = "John";
     public static final String SURNAME = "Doe";
-    public static final String SORTING = "date-desc";
+    public static final Sort SORTING = Sort.by("date").descending();
+    public static final Pageable PAGEABLE= PageRequest.of(0, 2, SORTING);
     public static final long PERSON_ID = 1L;
     public static final long ORIGIN_ID = 1L;
     public static final int CATEGORY_ID = 1;

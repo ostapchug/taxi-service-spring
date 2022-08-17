@@ -1,6 +1,9 @@
 package com.example.taxiservicespring.controller;
 
+
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.taxiservicespring.api.TripApi;
@@ -25,27 +28,27 @@ public class TripController implements TripApi{
     }
 
     @Override
-    public Page<TripDto> getAll(int page, int count, String sorting) {
+    public Page<TripDto> getAll(Pageable pageable) {
         log.info("request list of all trips");
-        return tripService.getAll(page, count, sorting);
+        return tripService.getAll(pageable);
     }
 
     @Override
-    public Page<TripDto> getAllByPersonId(int page, int count, String sorting, int personId) {
+    public Page<TripDto> getAllByPersonId(long personId, Pageable pageable) {
         log.info("request list of trips filtered by person id {}", personId);
-        return tripService.getAllByPersonId(personId, page, count, sorting);
+        return tripService.getAllByPersonId(personId, pageable);
     }
 
     @Override
-    public Page<TripDto> getAllByDate(int page, int count, String sorting, String dateRange) {
+    public Page<TripDto> getAllByDate(String dateRange, Pageable pageable) {
         log.info("request list of trips filtered by date {}", dateRange);
-        return tripService.getAllByDate(dateRange, page, count, sorting);
+        return tripService.getAllByDate(dateRange, pageable);
     }
 
     @Override
-    public Page<TripDto> getAllByPersonIdAndDate(int page, int count, String sorting, int personId, String dateRange) {
+    public Page<TripDto> getAllByPersonIdAndDate(long personId, String dateRange, Pageable pageable) {
         log.info("request list of trips filtered by person id {} and date {}", personId, dateRange);
-        return tripService.getAllByPersonIdAndDate(personId, dateRange, page, count, sorting);
+        return tripService.getAllByPersonIdAndDate(personId, dateRange, pageable);
     }
 
     @Override
