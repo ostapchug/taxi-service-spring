@@ -47,8 +47,8 @@ public interface TripApi {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id"),
         @ApiImplicitParam(name = "page", paramType = "query", value = "Page value"),
-        @ApiImplicitParam(name = "count", paramType = "query", value = "Count of trips per page"),
-        @ApiImplicitParam(name = "sorting", paramType = "query", value = "Sorting, example: 'date,desc'")
+        @ApiImplicitParam(name = "size", paramType = "query", value = "Count of trips per page"),
+        @ApiImplicitParam(name = "sort", paramType = "query", value = "Sorting, example: 'date,desc'")
         })
     @ApiOperation("Get trips by person id, supports pagination and sorting")
     @ResponseStatus(HttpStatus.OK)
@@ -58,8 +58,8 @@ public interface TripApi {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "dateRange", paramType = "path", required = true, value = "Date range"),
         @ApiImplicitParam(name = "page", paramType = "query", value = "Page value"),
-        @ApiImplicitParam(name = "count", paramType = "query", value = "Count of trips per page"),
-        @ApiImplicitParam(name = "sorting", paramType = "query", value = "Sorting, example: 'date,desc'")
+        @ApiImplicitParam(name = "size", paramType = "query", value = "Count of trips per page"),
+        @ApiImplicitParam(name = "sort", paramType = "query", value = "Sorting, example: 'date,desc'")
         })
     @ApiOperation("Get trips by date, supports pagination and sorting")
     @ResponseStatus(HttpStatus.OK)
@@ -70,8 +70,8 @@ public interface TripApi {
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id"),
         @ApiImplicitParam(name = "dateRange", paramType = "path", required = true, value = "Date range"),
         @ApiImplicitParam(name = "page", paramType = "query", value = "Page value"),
-        @ApiImplicitParam(name = "count", paramType = "query", value = "Count of trips per page"),
-        @ApiImplicitParam(name = "sorting", paramType = "query", value = "Sorting, example: 'date,desc'")
+        @ApiImplicitParam(name = "size", paramType = "query", value = "Count of trips per page"),
+        @ApiImplicitParam(name = "sort", paramType = "query", value = "Sorting, example: 'date,desc'")
         })
     @ApiOperation("Get trips by person id and date, supports pagination and sorting")
     @ResponseStatus(HttpStatus.OK)
