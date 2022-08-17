@@ -18,9 +18,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +53,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TripServiceImpl implements TripService {
     private static final String DATE_FORMAT = "dd.MM.yy";
-    private static final BigDecimal MIN_DICTANCE = BigDecimal.valueOf(1);
+    private static final BigDecimal MIN_DICTANCE = BigDecimal.ONE;
     private static final BigDecimal AVG_SPEED = BigDecimal.valueOf(0.3); // car average speed in km/min
     private static final int SCALE = 2;
     @Value("#{${discount}}")
@@ -190,9 +188,8 @@ public class TripServiceImpl implements TripService {
     }
     
     @Override
-    public Page<TripDto> getAll(int page, int count, String sorting) {
+    public Page<TripDto> getAll(Pageable pageable) {
         log.info("get all trips");
-        Pageable pageable = PageRequest.of(--page, count, getSorting(sorting));
         Page<Trip> trips = tripRepository.findAll(pageable);
         return new PageImpl<>(
                 trips.getContent()
@@ -202,9 +199,8 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Page<TripDto> getAllByPersonId(long personId, int page, int count, String sorting) {
+    public Page<TripDto> getAllByPersonId(long personId, Pageable pageable) {
         log.info("get list of trips filtered by person id {}", personId);
-        Pageable pageable = PageRequest.of(--page, count, getSorting(sorting));
         Page<Trip> trips = tripRepository.findAllByPersonId(personId, pageable);
         return new PageImpl<>(
                 trips.getContent()
@@ -214,10 +210,9 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Page<TripDto> getAllByDate(String dateRange, int page, int count, String sorting) {
+    public Page<TripDto> getAllByDate(String dateRange, Pageable pageable) {
         log.info("get list of trips filtered by date range {}", dateRange);
         LocalDateTime[] date = getDateRange(dateRange);
-        Pageable pageable = PageRequest.of(--page, count, getSorting(sorting));
         Page<Trip> trips = tripRepository.findAllByDateBetween(date[0], date[1], pageable);
         return new PageImpl<>(
                 trips.getContent()
@@ -227,10 +222,9 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Page<TripDto> getAllByPersonIdAndDate(long personId, String dateRange, int page, int count, String sorting) {
+    public Page<TripDto> getAllByPersonIdAndDate(long personId, String dateRange, Pageable pageable) {
         log.info("get list of trips filtered by pereson id {} and date range {}", personId, dateRange);
         LocalDateTime[] date = getDateRange(dateRange);
-        Pageable pageable = PageRequest.of(--page, count, getSorting(sorting));
         Page<Trip> trips = tripRepository.findAllByPersonIdAndDateBetween(personId, date[0], date[1], pageable);
         return new PageImpl<>(
                 trips.getContent()
@@ -328,26 +322,6 @@ public class TripServiceImpl implements TripService {
                 .orElse(BigDecimal.ZERO);
         int waitTime = maxCarDistance.divide(AVG_SPEED, SCALE, RoundingMode.HALF_UP).intValue();
         return LocalTime.MIN.plus(Duration.ofMinutes(waitTime));
-    }
-    
-    private Sort getSorting(String sorting) {
-        Sort result = null;
-        
-        switch (sorting) {
-        case "date-asc":
-            result = Sort.by("date");
-            break;
-        case "bill-asc":
-            result = Sort.by("bill");
-            break;
-        case "bill-desc":
-            result = Sort.by("bill").descending();
-            break;
-        default:
-            result = Sort.by("date").descending();
-            break;
-        }  
-        return result;
     }
 
     private LocalDateTime[] getDateRange(String dateRange) {
