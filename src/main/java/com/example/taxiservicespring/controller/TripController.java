@@ -41,34 +41,31 @@ public class TripController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/trip/{page}/{count}/{sorting}")
-    public List<TripDto> getAll(@PathVariable int page, @PathVariable int count, @PathVariable String sorting) {
+    @GetMapping(value = "/trip")
+    public List<TripDto> getAll() {
         log.info("request list of all trips");
-        return tripService.getAll(page, count, sorting);
+        return tripService.getAll();
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/trip/{page}/{count}/{sorting}/person-id/{personId}")
-    public List<TripDto> getAllByPersonId(@PathVariable int page, @PathVariable int count, @PathVariable String sorting,
-            @PathVariable int personId) {
+    @GetMapping(value = "/trip/person-id/{personId}")
+    public List<TripDto> getAllByPersonId(@PathVariable int personId) {
         log.info("request list of trips filtered by person id {}", personId);
-        return tripService.getAllByPersonId(personId, page, count, sorting);
+        return tripService.getAllByPersonId(personId);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/trip/{page}/{count}/{sorting}/date/{dateRange}")
-    public List<TripDto> getAllByDate(@PathVariable int page, @PathVariable int count, @PathVariable String sorting,
-            @PathVariable String dateRange) {
+    @GetMapping(value = "/trip/date/{dateRange}")
+    public List<TripDto> getAllByDate(@PathVariable String dateRange) {
         log.info("request list of trips filtered by date {}", dateRange);
-        return tripService.getAllByDate(dateRange, page, count, sorting);
+        return tripService.getAllByDate(dateRange);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/trip/{page}/{count}/{sorting}/{personId}/{dateRange}")
-    public List<TripDto> getAllByPersonIdAndDate(@PathVariable int page, @PathVariable int count,
-            @PathVariable String sorting, @PathVariable int personId, @PathVariable String dateRange) {
+    @GetMapping(value = "/trip/{personId}/{dateRange}")
+    public List<TripDto> getAllByPersonIdAndDate(@PathVariable int personId, @PathVariable String dateRange) {
         log.info("request list of trips filtered by person id {} and date {}", personId, dateRange);
-        return tripService.getAllByPersonIdAndDate(personId, dateRange, page, count, sorting);
+        return tripService.getAllByPersonIdAndDate(personId, dateRange);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

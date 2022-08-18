@@ -14,13 +14,13 @@ public interface TripRepository {
 
     Trip create(Trip trip, List<Car> cars);
 
-    List<Trip> findAll(int offset, int count, String sorting);
+    List<Trip> findAll();
 
-    List<Trip> findAllByPersonId(long personId, int offset, int count, String sorting);
+    List<Trip> findAllByPersonId(long personId);
 
-    List<Trip> findAllByDate(LocalDateTime[] dateRange, int offset, int count, String sorting);
+    List<Trip> findAllByDate(LocalDateTime[] dateRange);
 
-    List<Trip> findAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange, int offset, int count, String sorting);
+    List<Trip> findAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange);
 
     List<Car> findCarsByTripId(long tripId);
 

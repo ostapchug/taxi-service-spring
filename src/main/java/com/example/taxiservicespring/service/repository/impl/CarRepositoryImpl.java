@@ -9,50 +9,17 @@ import com.example.taxiservicespring.service.model.Car;
 import com.example.taxiservicespring.service.model.CarStatus;
 import com.example.taxiservicespring.service.repository.CarModelRepository;
 import com.example.taxiservicespring.service.repository.CarRepository;
+import com.example.taxiservicespring.util.DataGenerator;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class CarRepositoryImpl implements CarRepository {
-    private final List<Car> cars = new ArrayList<>();
+    private final List<Car> cars = DataGenerator.createCars();
     private final CarModelRepository carModelRepository;
-
-    CarRepositoryImpl(CarModelRepository carModelRepository) {
-        this.carModelRepository = carModelRepository;
-
-        Car car = new Car();
-        car.setId(0L);
-        car.setRegNumber("AA1234TV");
-        car.setModelId(1L);
-        car.setCategoryId(1);
-        car.setLocationId(1L);
-        cars.add(car);
-
-        car = new Car();
-        car.setId(1L);
-        car.setRegNumber("AA1334TV");
-        car.setModelId(1L);
-        car.setCategoryId(1);
-        car.setLocationId(3L);
-        cars.add(car);
-
-        car = new Car();
-        car.setId(2L);
-        car.setRegNumber("AA1734TV");
-        car.setModelId(2L);
-        car.setCategoryId(2);
-        car.setLocationId(3L);
-        cars.add(car);
-
-        car = new Car();
-        car.setId(3L);
-        car.setRegNumber("AA2234TV");
-        car.setModelId(3L);
-        car.setCategoryId(3);
-        car.setLocationId(5L);
-        cars.add(car);
-    }
 
     @Override
     public Car find(long id) {
