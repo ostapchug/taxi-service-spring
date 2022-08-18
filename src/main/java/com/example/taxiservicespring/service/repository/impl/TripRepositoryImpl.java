@@ -47,7 +47,7 @@ public class TripRepositoryImpl implements TripRepository {
     @Override
     public List<Trip> findAll() {
         log.info("find all trips");
-        return trips;
+        return new ArrayList<>(trips);
     }
 
     @Override
