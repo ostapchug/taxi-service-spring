@@ -5,11 +5,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +41,21 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestDataUtil {
+    private static final BigDecimal DISTANCE = BigDecimal.ONE.setScale(2);
+    private static final BigDecimal PRICE = BigDecimal.valueOf(25).setScale(2);
+    private static final BigDecimal BILL = BigDecimal.valueOf(24.5).setScale(2);
+    private static final BigDecimal DISCOUNT = BigDecimal.valueOf(0.5).setScale(2);
+    private static final int CATEGORY_ID = 1;
+    private static final String CATEGORY_NAME = "Economy";
+    private static final int CAPACITY = 1;
     private static final String DATE_FORMAT = "dd.MM.yy";
+    private static final String CAR__BRAND = "Ford";
+    private static final String [] CAR__NAMES = {"Focus", "Fusion"};
+    private static final int [] CAR__CAPACITIES = {3, 4};
+    private static final int [] CAR__YEARS = {2012, 2016};
+    private static final String CAR__COLOR = "Blue";
+    private static final String [] CAR__REG_NUMBERS = {"AA1234TV", "AA1235TV", "AA1236TV", "AA1237TV"};
+    private static final LocalDateTime DATE = LocalDateTime.now();
     public static final long ID = 1L;
     public static final String PHONE = "0123456780";
     public static final String PASSWORD = "Client#0";
@@ -49,17 +63,9 @@ public class TestDataUtil {
     public static final String SURNAME = "Doe";
     public static final Sort SORTING = Sort.by("date").descending();
     public static final Pageable PAGEABLE= PageRequest.of(0, 2, SORTING);
-    public static final long PERSON_ID = 1L;
     public static final long ORIGIN_ID = 1L;
-    public static final int CATEGORY_ID = 1;
-    public static final int CAPACITY = 1;
     public static final long DEST_ID = 4L;
-    public static final BigDecimal DISTANCE = BigDecimal.ONE.setScale(2);
-    public static final BigDecimal PRICE = BigDecimal.valueOf(25).setScale(2);
-    public static final BigDecimal BILL = BigDecimal.valueOf(24.5).setScale(2);
-    public static final BigDecimal DISCOUNT = BigDecimal.valueOf(0.5).setScale(2);
     public static final BigDecimal TOTAL_BILL = BigDecimal.valueOf(100).setScale(2);
-    public static final LocalDateTime DATE = LocalDateTime.now();
     public static final String DATE_RANGE = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)) + "-"
             + LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     public static final Map<BigDecimal, BigDecimal> DISCOUNTS = Map.of(
@@ -68,9 +74,45 @@ public class TestDataUtil {
             BigDecimal.valueOf(1000), BigDecimal.valueOf(0.10)
             );
     
+    private static List<CarModel> createCarModelList() {
+        return IntStream.iterate(0, i -> i+1)
+                .limit(2)
+                .mapToObj(i -> CarModel.builder()
+                        .id(i+1)
+                        .brand(CAR__BRAND)
+                        .name(CAR__NAMES[i])
+                        .year(CAR__YEARS[i])
+                        .color(CAR__COLOR)
+                        .seatCount(CAR__CAPACITIES[i])
+                        .build())
+                .collect(Collectors.toList());
+    }
+    
+    public static CarModel createCarModel() {
+        return createCarModelList().get(0);
+    }
+    
+    public static List<Car> createCarList() {
+        List<CarModel> carModels = createCarModelList();  
+        return IntStream.iterate(0, i -> i+1)
+                .limit(4)
+                .mapToObj(i -> Car.builder()
+                        .id(i+1)
+                        .regNumber(CAR__REG_NUMBERS[i])
+                        .model(carModels.get(i%carModels.size()))
+                        .category(createCategory())
+                        .location(createLocation())
+                        .build())
+                .collect(Collectors.toList());
+    }
+    
+    public static Car createCar() {
+        return createCarList().get(0);
+    }    
+    
     public static Location createOrigin() {
         return Location.builder()
-                .id(1L)
+                .id(ORIGIN_ID)
                 .streetName("Molodizhna")
                 .streetNumber("36")
                 .latitude(BigDecimal.valueOf(48.925541084296924))
@@ -80,12 +122,16 @@ public class TestDataUtil {
     
     public static Location createDestination() {
         return Location.builder()
-                .id(4L)
+                .id(DEST_ID)
                 .streetName("Sofiivs'kyi Ln")
                 .streetNumber("18")
                 .latitude(BigDecimal.valueOf(48.92899254668747))
                 .longitude(BigDecimal.valueOf(24.72473578396449))
                 .build();
+    }
+    
+    public static Location createLocation() {
+        return createOrigin();
     }
     
     public static Person createPerson() {
@@ -98,53 +144,17 @@ public class TestDataUtil {
                 .build();
     }
     
-    public static CarModel createCarModel() {
-        return CarModel.builder()
-                .id(1L)
-                .brand("Ford")
-                .name("Focus")
-                .year(2012)
-                .color("Blue")
-                .seatCount(3)
-                .build();
-    }
-    
-    public static CarModel createCarModelWithBiggerCapacity() {
-        return CarModel.builder()
-                .id(2L)
-                .brand("Ford")
-                .name("Fusion")
-                .year(2016)
-                .color("Blue")
-                .seatCount(4)
-                .build();
-    }
-    
     public static Category createCategory() {
         return Category.builder()
                 .id(CATEGORY_ID)
-                .name("Economy")
-                .price(BigDecimal.valueOf(25))
-                .build();
-    }
-    
-    public static Location createLocation() {
-        return createOrigin();
-    }
-    
-    public static Car createCar() {
-        return Car.builder()
-                .id(1L)
-                .regNumber("AA1234TV")
-                .model(createCarModel())
-                .category(createCategory())
-                .location(createLocation())
+                .name(CATEGORY_NAME)
+                .price(PRICE)
                 .build();
     }
     
     public static Trip createTrip() {
         return Trip.builder()
-                .id(1L)
+                .id(ID)
                 .person(createPerson())
                 .origin(createOrigin())
                 .destination(createDestination())
@@ -166,62 +176,7 @@ public class TestDataUtil {
                 .build();
     }
     
-    public static List<Car> createCarList(){
-        List<Car> result = new ArrayList<>();
-        CarModel carModel = CarModel.builder()
-                .id(1L)
-                .brand("Ford")
-                .name("Focus")
-                .year(2012)
-                .color("Blue")
-                .seatCount(3)
-                .build();
-        CarModel carModel2 = CarModel.builder()
-                .id(2L)
-                .brand("Ford")
-                .name("Fusion")
-                .year(2016)
-                .color("Blue")
-                .seatCount(4)
-                .build();
-        
-        Car car = Car.builder()
-                .id(1L)
-                .regNumber("AA1234TV")
-                .model(carModel)
-                .category(createCategory())
-                .location(createLocation())
-                .build();
-        result.add(car);
-        car = Car.builder()
-                .id(2L)
-                .regNumber("AA1235TV")
-                .model(carModel2)
-                .category(createCategory())
-                .location(createLocation())
-                .build();
-        result.add(car);
-        car = Car.builder()
-                .id(3L)
-                .regNumber("AA1236TV")
-                .model(carModel)
-                .category(createCategory())
-                .location(createLocation())
-                .build();
-        result.add(car);
-        car = Car.builder()
-                .id(4L)
-                .regNumber("AA1237TV")
-                .model(carModel2)
-                .category(createCategory())
-                .location(createLocation())
-                .build();
-        result.add(car);
-  
-        return result;
-    }
-    
-    public static List<CarDto> createCarDtoList(){
+    public static List<CarDto> createCarDtoList() {
         return createCarList()
                 .stream()
                 .map(car -> CarMapper.INSTANCE.mapCarDto(car))
@@ -246,8 +201,8 @@ public class TestDataUtil {
     
     public static TripDto createTripDto() {
         return TripDto.builder()
-                .id(1L)
-                .personId(PERSON_ID)
+                .id(ID)
+                .personId(ID)
                 .originId(ORIGIN_ID)
                 .destinationId(DEST_ID)
                 .distance(DISTANCE)
@@ -260,7 +215,7 @@ public class TestDataUtil {
     
     public static TripCreateDto createTripCreateDto() {
         return TripCreateDto.builder()
-                .personId(PERSON_ID)
+                .personId(ID)
                 .originId(ORIGIN_ID)
                 .destinationId(DEST_ID)
                 .categoryId(CATEGORY_ID)
@@ -270,7 +225,7 @@ public class TestDataUtil {
     
     public static TripConfirmDto createTripConfirmDto() {
         return TripConfirmDto.builder()
-                .personId(PERSON_ID)
+                .personId(ID)
                 .originId(ORIGIN_ID)
                 .destinationId(DEST_ID)
                 .categoryId(CATEGORY_ID)
@@ -286,7 +241,7 @@ public class TestDataUtil {
     public static TripConfirmDto createTripConfirmDtoWithMultipleCars() {
         List<CarDto> cars = createCarDtoList();        
         return TripConfirmDto.builder()
-                .personId(PERSON_ID)
+                .personId(ID)
                 .originId(ORIGIN_ID)
                 .destinationId(DEST_ID)
                 .categoryId(CATEGORY_ID)
@@ -302,7 +257,7 @@ public class TestDataUtil {
     public static TripConfirmDto createTripConfirmDtoWithMultipleCarsCapacityEqual() {
         List<CarDto> cars = createCarDtoList();        
         return TripConfirmDto.builder()
-                .personId(PERSON_ID)
+                .personId(ID)
                 .originId(ORIGIN_ID)
                 .destinationId(DEST_ID)
                 .categoryId(CATEGORY_ID)
