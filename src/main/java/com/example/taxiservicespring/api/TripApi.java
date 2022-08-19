@@ -43,52 +43,35 @@ public interface TripApi {
     @GetMapping(value = "/car/{tripId}")
     List<CarDto> getCarsByTripId(@PathVariable long tripId);
 
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "page", paramType = "path", required = true, value = "Page value"),
-        @ApiImplicitParam(name = "count", paramType = "path", required = true, value = "Count of trips per page"),
-        @ApiImplicitParam(name = "sorting", paramType = "path", required = true, value = "Sorting method")
-        })
-    @ApiOperation("Get all trips, supports pagination and sorting")
+    @ApiOperation("Get all trips")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{page}/{count}/{sorting}")
-    List<TripDto> getAll(@PathVariable int page, @PathVariable int count, @PathVariable String sorting);
+    @GetMapping
+    List<TripDto> getAll();
 
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "page", paramType = "path", required = true, value = "Page value"),
-        @ApiImplicitParam(name = "count", paramType = "path", required = true, value = "Count of trips per page"),
-        @ApiImplicitParam(name = "sorting", paramType = "path", required = true, value = "Sorting method"),
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id")
         })
-    @ApiOperation("Get trips by person id, supports pagination and sorting")
+    @ApiOperation("Get trips by person id")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{page}/{count}/{sorting}/person-id/{personId}")
-    List<TripDto> getAllByPersonId(@PathVariable int page, @PathVariable int count, @PathVariable String sorting,
-            @PathVariable int personId);
+    @GetMapping(value = "/person-id/{personId}")
+    List<TripDto> getAllByPersonId(@PathVariable long personId);
     
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "page", paramType = "path", required = true, value = "Page value"),
-        @ApiImplicitParam(name = "count", paramType = "path", required = true, value = "Count of trips per page"),
-        @ApiImplicitParam(name = "sorting", paramType = "path", required = true, value = "Sorting method"),
         @ApiImplicitParam(name = "dateRange", paramType = "path", required = true, value = "Date range")
         })
-    @ApiOperation("Get trips by date, supports pagination and sorting")
+    @ApiOperation("Get trips by date")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{page}/{count}/{sorting}/date/{dateRange}")
-    List<TripDto> getAllByDate(@PathVariable int page, @PathVariable int count, @PathVariable String sorting,
-            @PathVariable String dateRange);
+    @GetMapping(value = "/date/{dateRange}")
+    List<TripDto> getAllByDate(@PathVariable String dateRange);
     
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "page", paramType = "path", required = true, value = "Page value"),
-        @ApiImplicitParam(name = "count", paramType = "path", required = true, value = "Count of trips per page"),
-        @ApiImplicitParam(name = "sorting", paramType = "path", required = true, value = "Sorting method"),
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id"),
         @ApiImplicitParam(name = "dateRange", paramType = "path", required = true, value = "Date range")
         })
-    @ApiOperation("Get trips by person id and date, supports pagination and sorting")
+    @ApiOperation("Get trips by person id and date")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{page}/{count}/{sorting}/{personId}/{dateRange}")
-    List<TripDto> getAllByPersonIdAndDate(@PathVariable int page, @PathVariable int count,
-            @PathVariable String sorting, @PathVariable int personId, @PathVariable String dateRange);
+    @GetMapping(value = "/{personId}/{dateRange}")
+    List<TripDto> getAllByPersonIdAndDate(@PathVariable long personId, @PathVariable String dateRange);
     
     @ApiOperation("Create trip")
     @ResponseStatus(HttpStatus.CREATED)

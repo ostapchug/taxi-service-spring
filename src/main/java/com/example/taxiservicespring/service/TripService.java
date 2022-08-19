@@ -19,11 +19,11 @@ public interface TripService {
 
     TripDto updateStatus(long tripId, String status);
 
-    List<TripDto> getAll(int page, int count, String sorting);
+    List<TripDto> getAll();
 
-    List<TripDto> getAllByPersonId(long personId, int page, int count, String sorting);
+    List<TripDto> getAllByPersonId(long personId);
 
-    List<TripDto> getAllByDate(String dateRange, int page, int count, String sorting);
+    List<TripDto> getAllByDate(String dateRange);
 
-    List<TripDto> getAllByPersonIdAndDate(long personId, String dateRange, int page, int count, String sorting);
+    List<TripDto> getAllByPersonIdAndDate(long personId, String dateRange);
 }

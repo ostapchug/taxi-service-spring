@@ -33,6 +33,7 @@ import com.example.taxiservicespring.service.repository.CarRepository;
 import com.example.taxiservicespring.service.repository.CategoryRepository;
 import com.example.taxiservicespring.service.repository.LocationRepository;
 import com.example.taxiservicespring.service.repository.TripRepository;
+import com.example.taxiservicespring.util.DistanceCalculator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TripServiceImpl implements TripService {
     private static final String DATE_FORMAT = "dd.MM.yy";
-    private static final BigDecimal MIN_DICTANCE = BigDecimal.valueOf(1);
+    private static final BigDecimal MIN_DICTANCE = BigDecimal.ONE;
     private static final BigDecimal AVG_SPEED = BigDecimal.valueOf(0.3); // car average speed in km/min
     private static final int SCALE = 2;
     @Value("#{${discount}}")
@@ -138,41 +139,37 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public List<TripDto> getAll(int page, int count, String sorting) {
+    public List<TripDto> getAll() {
         log.info("get all trips");
-        int offset = (page - 1) * count;
-        return tripRepository.findAll(offset, count, sorting)
+        return tripRepository.findAll()
                 .stream().map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<TripDto> getAllByPersonId(long personId, int page, int count, String sorting) {
+    public List<TripDto> getAllByPersonId(long personId) {
         log.info("get list of trips filtered by person id {}", personId);
-        int offset = (page - 1) * count;
-        return tripRepository.findAllByPersonId(personId, offset, count, sorting)
+        return tripRepository.findAllByPersonId(personId)
                 .stream()
                 .map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<TripDto> getAllByDate(String dateRange, int page, int count, String sorting) {
+    public List<TripDto> getAllByDate(String dateRange) {
         log.info("get list of trips filtered by date range {}", dateRange);
-        int offset = (page - 1) * count;
         LocalDateTime[] date = getDateRange(dateRange);
-        return tripRepository.findAllByDate(date, offset, count, sorting)
+        return tripRepository.findAllByDate(date)
                 .stream()
                 .map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<TripDto> getAllByPersonIdAndDate(long personId, String dateRange, int page, int count, String sorting) {
+    public List<TripDto> getAllByPersonIdAndDate(long personId, String dateRange) {
         log.info("get list of trips filtered by pereson id {} and date range {}", personId, dateRange);
-        int offset = (page - 1) * count;
         LocalDateTime[] date = getDateRange(dateRange);
-        return tripRepository.findAllByPersonIdAndDate(personId, date, offset, count, sorting)
+        return tripRepository.findAllByPersonIdAndDate(personId, date)
                 .stream()
                 .map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
                 .collect(Collectors.toList());
@@ -200,17 +197,12 @@ public class TripServiceImpl implements TripService {
         log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
         Location origin = locationRepository.find(originId);
         Location destination = locationRepository.find(destinationId);
-        double r = 6371;
-        double lat1 = Math.toRadians(origin.getLatitude().doubleValue());
-        double lat2 = Math.toRadians(destination.getLatitude().doubleValue());
-        double lon1 = Math.toRadians(origin.getLongitude().doubleValue());
-        double lon2 = Math.toRadians(destination.getLongitude().doubleValue());
-        
-        double dLat = lat2 - lat1;
-        double dLon = lon2 - lon1;
-        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dLon / 2), 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return BigDecimal.valueOf(c * r).setScale(SCALE, RoundingMode.HALF_UP);
+        BigDecimal lat1 = origin.getLatitude();
+        BigDecimal lat2 = destination.getLatitude();
+        BigDecimal lon1 = origin.getLongitude();
+        BigDecimal lon2 = destination.getLongitude();
+        BigDecimal distance = DistanceCalculator.getDistance(lat1, lat2, lon1, lon2);
+        return distance.setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     private BigDecimal getPrice(BigDecimal categoryPrice, BigDecimal distance) {

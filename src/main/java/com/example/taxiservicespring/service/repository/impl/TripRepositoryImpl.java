@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TripRepositoryImpl implements TripRepository {
     private final List<Trip> trips = new ArrayList<>();
     private final Map<Long, List<Car>> m2mTripCar = new HashMap<>();
-    private long uid = 0;
+    private long uid = 0L;
 
     @Override
     public Trip find(long id) {
@@ -46,39 +46,34 @@ public class TripRepositoryImpl implements TripRepository {
     }
 
     @Override
-    public List<Trip> findAll(int offset, int count, String sorting) {
+    public List<Trip> findAll() {
         log.info("find all trips");
-        List<Trip> result = sort(sorting);
-        return getSubList(offset, count, result);
+        return new ArrayList<>(trips);
     }
 
     @Override
-    public List<Trip> findAllByPersonId(long personId, int offset, int count, String sorting) {
+    public List<Trip> findAllByPersonId(long personId) {
         log.info("find trips filtered by person id {}", personId);
-        List<Trip> result = sort(sorting).stream()
+        return trips.stream()
                 .filter(trip -> trip.getPersonId() == personId)
                 .collect(Collectors.toList());
-        return getSubList(offset, count, result);
     }
 
     @Override
-    public List<Trip> findAllByDate(LocalDateTime[] dateRange, int offset, int count, String sorting) {
+    public List<Trip> findAllByDate(LocalDateTime[] dateRange) {
         log.info("find trips filtered by date {}", Arrays.toString(dateRange));
-        List<Trip> result = sort(sorting).stream()
+        return trips.stream()
                 .filter(trip -> trip.getDate().isAfter(dateRange[0]) && trip.getDate().isBefore(dateRange[1]))
                 .collect(Collectors.toList());
-        return getSubList(offset, count, result);
     }
 
     @Override
-    public List<Trip> findAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange, int offset, int count,
-            String sorting) {
+    public List<Trip> findAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange) {
         log.info("find trips filtered by person id {} and date {}", personId, Arrays.toString(dateRange));
-        List<Trip> result = sort(sorting).stream()
+        return trips.stream()
                 .filter(t -> t.getPersonId() == personId)
                 .filter(trip -> trip.getDate().isAfter(dateRange[0]) && trip.getDate().isBefore(dateRange[1]))
                 .collect(Collectors.toList());
-        return getSubList(offset, count, result);
     }
 
     @Override
@@ -102,39 +97,5 @@ public class TripRepositoryImpl implements TripRepository {
                 .filter(t -> t.getPersonId() == personId && t.getStatus().equals(status))
                 .map(t -> t.getBill())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private List<Trip> sort(String sorting) {
-        List<Trip> result = new ArrayList<>(trips);
-
-        switch (sorting) {
-        case "date-asc":
-            result.sort((t1, t2) -> t1.getDate().compareTo(t2.getDate()));
-            break;
-        case "bill-asc":
-            result.sort((t1, t2) -> t1.getBill().compareTo(t2.getBill()));
-            break;
-        case "bill-desc":
-            result.sort((t1, t2) -> t2.getBill().compareTo(t1.getBill()));
-            break;
-        default:
-            result.sort((t1, t2) -> t2.getDate().compareTo(t1.getDate()));
-            break;
-        }
-        return result;
-    }
-
-    private List<Trip> getSubList(int offset, int count, List<Trip> list) {
-        List<Trip> result = null;
-        int size = list.size();
-        int fromIndex = offset >= size && count <= size ? size - count : offset;
-        int toIndex = count + fromIndex > size || count > size ? size : count + fromIndex;
-
-        if (fromIndex >= size || fromIndex < 0 || toIndex > size || toIndex < 0) {
-            result = new ArrayList<>();
-        } else {
-            result = list.subList(fromIndex, toIndex);
-        }
-        return result;
     }
 }

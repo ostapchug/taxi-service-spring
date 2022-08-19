@@ -59,7 +59,20 @@
 					"name": "get car category by id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Accept-Language",
+								"value": "uk",
+								"type": "default",
+								"disabled": true
+							}
+						],
 						"url": {
 							"raw": "http://localhost:8080/api/v1/car/category/id/1",
 							"protocol": "http",
@@ -83,7 +96,20 @@
 					"name": "get all car categories",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Accept-Language",
+								"value": "uk",
+								"type": "default",
+								"disabled": true
+							}
+						],
 						"url": {
 							"raw": "http://localhost:8080/api/v1/car/category",
 							"protocol": "http",
@@ -161,7 +187,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/person/id/0",
+							"raw": "http://localhost:8080/api/v1/person/id/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -172,7 +198,7 @@
 								"v1",
 								"person",
 								"id",
-								"0"
+								"1"
 							]
 						}
 					},
@@ -362,7 +388,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc",
+							"raw": "http://localhost:8080/api/v1/trip",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -371,10 +397,7 @@
 							"path": [
 								"api",
 								"v1",
-								"trip",
-								"1",
-								"2",
-								"date-desc"
+								"trip"
 							]
 						}
 					},
@@ -386,7 +409,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/person-id/0",
+							"raw": "http://localhost:8080/api/v1/trip/person-id/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -396,11 +419,8 @@
 								"api",
 								"v1",
 								"trip",
-								"1",
-								"2",
-								"date-desc",
 								"person-id",
-								"0"
+								"1"
 							]
 						}
 					},
@@ -412,7 +432,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/date/01.07.22-30.07.22",
+							"raw": "http://localhost:8080/api/v1/trip/date/01.07.22-30.08.22",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -422,11 +442,8 @@
 								"api",
 								"v1",
 								"trip",
-								"1",
-								"2",
-								"date-desc",
 								"date",
-								"01.07.22-30.07.22"
+								"01.07.22-30.08.22"
 							]
 						}
 					},
@@ -438,7 +455,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/2/date-desc/0/01.07.22-30.07.22",
+							"raw": "http://localhost:8080/api/v1/1/01.07.22-30.08.22",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -447,12 +464,8 @@
 							"path": [
 								"api",
 								"v1",
-								"trip",
 								"1",
-								"2",
-								"date-desc",
-								"0",
-								"01.07.22-30.07.22"
+								"01.07.22-30.08.22"
 							]
 						}
 					},
@@ -465,7 +478,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": \"0\",\r\n    \"originId\": \"1\",\r\n    \"destinationId\": \"2\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
+							"raw": "{\r\n    \"personId\": \"1\",\r\n    \"originId\": \"2\",\r\n    \"destinationId\": \"3\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -495,7 +508,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": 0,\r\n    \"originId\": 2,\r\n    \"destinationId\": 3,\r\n    \"categoryId\": 1,\r\n    \"distance\": 2.07,\r\n    \"price\": 51.75,\r\n    \"discount\": 1.04,\r\n    \"total\": 50.71,\r\n    \"waitTime\": \"00:03:00\",\r\n    \"cars\": [\r\n        {\r\n            \"id\": 0,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"statusId\": 0\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"personId\": 1,\r\n    \"originId\": 2,\r\n    \"destinationId\": 3,\r\n    \"categoryId\": 1,\r\n    \"distance\": 2.07,\r\n    \"price\": 51.75,\r\n    \"discount\": 1.04,\r\n    \"total\": 50.71,\r\n    \"waitTime\": \"00:03:00\",\r\n    \"cars\": [\r\n        {\r\n            \"id\": 0,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"statusId\": 0\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
