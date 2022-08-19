@@ -7,14 +7,11 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public abstract class ServiceException extends RuntimeException {
-    private ErrorType errorType;
+public class ServiceException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+    private ErrorType errorType = ErrorType.FATAL_ERROR;
 
     ServiceException(String message) {
         super(message);
-    }
-
-    public ErrorType getErrorType() {
-        return ErrorType.FATAL_ERROR;
     }
 }

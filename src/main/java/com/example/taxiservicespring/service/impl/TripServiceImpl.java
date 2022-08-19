@@ -116,7 +116,7 @@ public class TripServiceImpl implements TripService {
             Car car = carRepository.find(carDto.getId());
             
             if (tripConfirmDto.getCategoryId() != car.getCategoryId()) {
-                throw new RuntimeException("Car doesn't belong to category!");
+                throw new DataProcessingException("Car doesn't belong to category!");
             }
             
             cars.add(car);
@@ -188,7 +188,6 @@ public class TripServiceImpl implements TripService {
         
         if (distance.compareTo(MIN_DICTANCE) < 0) {
             throw new DataProcessingException("Distance is not enough!");
-
         } 
         return distance; 
     }
