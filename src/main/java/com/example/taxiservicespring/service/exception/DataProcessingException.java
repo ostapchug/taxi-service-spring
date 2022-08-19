@@ -3,18 +3,15 @@ package com.example.taxiservicespring.service.exception;
 import com.example.taxiservicespring.service.model.ErrorType;
 
 public class DataProcessingException extends ServiceException {
-    private static final String DEFAULT_MESSAGE = "Can't create entity";
+    private static final long serialVersionUID = 1L;
+    private static final String DEFAULT_MESSAGE = "Something went wrong!";
 
     public DataProcessingException() {
-        super(DEFAULT_MESSAGE);
+        this(DEFAULT_MESSAGE);
     }
 
     public DataProcessingException(String message) {
         super(message);
-    }
-
-    @Override
-    public ErrorType getErrorType() {
-        return ErrorType.PROCESSING_ERROR;
+        setErrorType(ErrorType.PROCESSING_ERROR);
     }
 }
