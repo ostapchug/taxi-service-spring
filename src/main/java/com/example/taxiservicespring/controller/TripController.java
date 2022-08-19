@@ -49,7 +49,7 @@ public class TripController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/trip/person-id/{personId}")
-    public List<TripDto> getAllByPersonId(@PathVariable int personId) {
+    public List<TripDto> getAllByPersonId(@PathVariable long personId) {
         log.info("request list of trips filtered by person id {}", personId);
         return tripService.getAllByPersonId(personId);
     }
@@ -63,7 +63,7 @@ public class TripController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/trip/{personId}/{dateRange}")
-    public List<TripDto> getAllByPersonIdAndDate(@PathVariable int personId, @PathVariable String dateRange) {
+    public List<TripDto> getAllByPersonIdAndDate(@PathVariable long personId, @PathVariable String dateRange) {
         log.info("request list of trips filtered by person id {} and date {}", personId, dateRange);
         return tripService.getAllByPersonIdAndDate(personId, dateRange);
     }

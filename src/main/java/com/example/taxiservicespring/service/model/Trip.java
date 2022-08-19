@@ -16,7 +16,6 @@ public class Trip {
     private BigDecimal distance;
     private LocalDateTime date;
     private BigDecimal bill;
-    
     @Builder.Default
     private TripStatus status = TripStatus.NEW;
 }
