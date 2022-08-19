@@ -43,7 +43,7 @@ public interface TripApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     Page<TripDto> getAll(Pageable pageable);
-    
+
     @ApiImplicitParams({
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id"),
         @ApiImplicitParam(name = "page", paramType = "query", value = "Page value"),

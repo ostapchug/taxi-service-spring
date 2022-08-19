@@ -44,6 +44,7 @@ import com.example.taxiservicespring.service.repository.CategoryRepository;
 import com.example.taxiservicespring.service.repository.LocationRepository;
 import com.example.taxiservicespring.service.repository.PersonRepository;
 import com.example.taxiservicespring.service.repository.TripRepository;
+import com.example.taxiservicespring.util.DistanceCalculator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -125,12 +126,10 @@ public class TripServiceImpl implements TripService {
                     .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
             
             if (tripConfirmDto.getCategoryId() != car.getCategory().getId()) {
-                log.error("DataProcessingException: message car doesn't belong to category");
                 throw new DataProcessingException("Car doesn't belong to category");
             }
             
             if(!car.getStatus().equals(CarStatus.READY)) {
-                log.error("DataProcessingException: message can't create new trip, car is busy");
                 throw new DataProcessingException("Can't create new trip, car is busy");
             }
             car.setStatus(CarStatus.BUSY);
@@ -173,17 +172,12 @@ public class TripServiceImpl implements TripService {
                 .orElseThrow(() -> new EntityNotFoundException("Origin location is not found!"));
         Location destination = locationRepository.findById(destinationId)
                 .orElseThrow(() -> new EntityNotFoundException("Destination location is not found!"));
-        double r = 6371;
-        double lat1 = Math.toRadians(origin.getLatitude().doubleValue());
-        double lat2 = Math.toRadians(destination.getLatitude().doubleValue());
-        double lon1 = Math.toRadians(origin.getLongitude().doubleValue());
-        double lon2 = Math.toRadians(destination.getLongitude().doubleValue());
-        
-        double dLat = lat2 - lat1;
-        double dLon = lon2 - lon1;
-        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dLon / 2), 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return BigDecimal.valueOf(c * r).setScale(SCALE, RoundingMode.HALF_UP);
+        BigDecimal lat1 = origin.getLatitude();
+        BigDecimal lat2 = destination.getLatitude();
+        BigDecimal lon1 = origin.getLongitude();
+        BigDecimal lon2 = destination.getLongitude();
+        BigDecimal distance = DistanceCalculator.getDistance(lat1, lat2, lon1, lon2);
+        return distance.setScale(SCALE, RoundingMode.HALF_UP);
     }
     
     @Override
@@ -251,10 +245,8 @@ public class TripServiceImpl implements TripService {
                 }
             }
         }else {
-            log.error("DataProcessingException: message can't change status for trip that already done");
             throw new DataProcessingException("Can't change status for trip that already done");
         }
-        
         trip = tripRepository.save(trip);
         return tripMapper.mapTripDto(trip);
     }
@@ -271,7 +263,6 @@ public class TripServiceImpl implements TripService {
                 capacity -= currentCapacity;
             }
         }
-        
         cars.removeAll(result);
         
         if(capacity > 0 && cars.size() > 0) {
@@ -280,10 +271,8 @@ public class TripServiceImpl implements TripService {
         }
         
         if (capacity > 0) {
-            log.error("DataProcessingException: message not enough cars in this category");
             throw new DataProcessingException("Not enough cars in this category");
         }
-        
         return result.stream()
                 .map(car -> CarMapper.INSTANCE.mapCarDto(car))
                 .collect(Collectors.toList());

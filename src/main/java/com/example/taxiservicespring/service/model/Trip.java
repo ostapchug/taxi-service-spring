@@ -56,7 +56,6 @@ public class Trip {
 
     @Column(nullable = false, precision = 6, scale = 2)
     private BigDecimal bill;
-    
     @Builder.Default
     @Column(name = "status_id", nullable = false)
     private TripStatus status = TripStatus.NEW;
