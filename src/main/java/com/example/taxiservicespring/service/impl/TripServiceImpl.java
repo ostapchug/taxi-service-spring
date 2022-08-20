@@ -262,6 +262,10 @@ public class TripServiceImpl implements TripService {
                 result.add(car);
                 capacity -= currentCapacity;
             }
+            
+            if (capacity == 0) {
+                break;
+            }
         }
         cars.removeAll(result);
         
