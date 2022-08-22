@@ -58,7 +58,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarModelDto findCarModel(long id) {
-        log.info("get car model by id {}", id);        
+        log.info("get car model by id {}", id);
         CarModel carModel = carModelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Car model is not found!"));
         return CarModelMapper.INSTANCE.mapCarModelDto(carModel);

@@ -31,23 +31,23 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Trip {
-    
+
     @Id
     @GeneratedValue
     private long id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "origin_id", nullable = false)
     private Location origin;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "destination_id", nullable = false)
     private Location destination;
-    
+
     @Column(nullable = false, precision = 6, scale = 2)
     private BigDecimal distance;
 
@@ -56,16 +56,17 @@ public class Trip {
 
     @Column(nullable = false, precision = 6, scale = 2)
     private BigDecimal bill;
+
     @Builder.Default
     @Column(name = "status_id", nullable = false)
     private TripStatus status = TripStatus.NEW;
-    
+
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
-        name = "trip_car", 
-        joinColumns = { @JoinColumn(name = "trip_id") }, 
+        name = "trip_car",
+        joinColumns = { @JoinColumn(name = "trip_id") },
         inverseJoinColumns = { @JoinColumn(name = "car_id") }
     )
     private Set<Car> cars = new HashSet<>();

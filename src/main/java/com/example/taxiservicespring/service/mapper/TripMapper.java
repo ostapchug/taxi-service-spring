@@ -10,8 +10,8 @@ import com.example.taxiservicespring.service.model.Trip;
 @Mapper(injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = CarMapper.class)
 public interface TripMapper {
 
-    @Mapping(target="personId", source="person.id")
-    @Mapping(target="originId", source="origin.id")
-    @Mapping(target="destinationId", source="destination.id")
+    @Mapping(source = "person.id", target = "personId")
+    @Mapping(source = "origin.id", target = "originId")
+    @Mapping(source = "destination.id", target = "destinationId")
     TripDto mapTripDto(Trip trip);
 }

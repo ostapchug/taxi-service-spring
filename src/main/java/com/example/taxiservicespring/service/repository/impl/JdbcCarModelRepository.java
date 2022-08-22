@@ -18,7 +18,7 @@ public class JdbcCarModelRepository implements CarModelRepository {
     @Override
     public Optional<CarModel> findById(long id) {
         return jdbcTemplate.queryForObject(
-                "SELECT * FROM car_model WHERE id = ?", 
+                "SELECT * FROM car_model WHERE id = ?",
                 (rs, rowNum) ->  Optional.of(
                         new CarModel(
                                 rs.getLong("id"),
@@ -28,7 +28,7 @@ public class JdbcCarModelRepository implements CarModelRepository {
                                 rs.getInt("year"),
                                 rs.getInt("seat_count")
                                 )
-                        ), 
+                        ),
                 id
                 );
     }

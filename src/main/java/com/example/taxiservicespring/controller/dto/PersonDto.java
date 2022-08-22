@@ -20,18 +20,18 @@ public class PersonDto {
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
 
     private long id;
-    
+
     @NotEmpty(message = "{phone.notempty}")
     @Pattern(message = "{phone.format}", regexp = PHONE_PATTERN)
     private String phone;
-    
+
     @NotEmpty(message = "{password.notempty}")
     @Pattern(message = "{password.format}", regexp = PASSWORD_PATTERN)
     private String password;
-    
+
     @Pattern(message = "{name.format}", regexp = TEXT_PATTERN)
     private String name;
-    
+
     @Pattern(message = "{name.format}", regexp = TEXT_PATTERN)
     private String surname;
 

@@ -24,24 +24,24 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person {
-    
+
     @Id
     @GeneratedValue
     private long id;
-    
+
     @NaturalId
     @Column(length = 10)
     private String phone;
-    
+
     @Column(length = 100, nullable = false)
     private String password;
-    
+
     @Column(length = 50)
     private String name;
-    
+
     @Column(length = 50)
     private String surname;
-    
+
     @Builder.Default
     @Column(name = "role_id", nullable = false)
     private Role role = Role.CLIENT;

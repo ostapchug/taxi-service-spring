@@ -10,9 +10,9 @@ import com.example.taxiservicespring.service.model.Car;
 @Mapper
 public interface CarMapper {
     CarMapper INSTANCE = Mappers.getMapper(CarMapper.class);
-    
-    @Mapping(target="modelId", source="model.id")
-    @Mapping(target="categoryId", source="category.id")
-    @Mapping(target="locationId", source="location.id")
-    CarDto mapCarDto(Car car);  
+
+    @Mapping(source = "model.id", target = "modelId")
+    @Mapping(source = "category.id", target = "categoryId")
+    @Mapping(source = "location.id", target = "locationId")
+    CarDto mapCarDto(Car car);
 }

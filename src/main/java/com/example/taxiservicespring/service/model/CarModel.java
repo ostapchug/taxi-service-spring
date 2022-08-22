@@ -23,29 +23,29 @@ import lombok.ToString;
 @AllArgsConstructor
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "brand", "name", "color", "`year`" }) })
 public class CarModel {
-    
+
     @Id
     @GeneratedValue
     private long id;
-    
+
     @Column(length = 50)
     private String brand;
-    
+
     @Column(length = 50)
     private String name;
-    
+
     @Column(length = 50)
     private String color;
 
     @Column(name = "`year`")
     private int year;
     private int seatCount;
-    
+
     @Override
     public int hashCode() {
         return getClass().hashCode();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

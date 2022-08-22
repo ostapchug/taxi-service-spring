@@ -25,22 +25,22 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryTranslation {
-    
+
     @Id
     @GeneratedValue
     private int id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-    
+
     @NaturalId
     @Column(length = 50)
     private String name;
-    
+
     @Column(name = "language_id", nullable = false)
     private Language language;
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(getName());

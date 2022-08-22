@@ -31,18 +31,18 @@ import lombok.ToString;
 @AllArgsConstructor
 @NamedQuery(name = "Category.findAllCategories", query = "SELECT c FROM Category c")
 public class Category {
-    
+
     @Id
     @GeneratedValue
     private int id;
-    
+
     @NaturalId
     @Column(length = 50)
     private String name;
-    
+
     @Column(nullable = false, precision = 6, scale = 2)
     private BigDecimal price;
-    
+
     @Builder.Default
     @ToString.Exclude
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
