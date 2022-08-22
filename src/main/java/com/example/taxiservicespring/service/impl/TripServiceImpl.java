@@ -183,7 +183,6 @@ public class TripServiceImpl implements TripService {
 
         if (distance.compareTo(MIN_DICTANCE) < 0) {
             throw new RuntimeException("Distance is not enough!");
-
         }
         return distance;
     }
