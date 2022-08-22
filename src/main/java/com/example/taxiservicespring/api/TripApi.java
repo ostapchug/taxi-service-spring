@@ -54,7 +54,7 @@ public interface TripApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/person-id/{personId}")
     Page<TripDto> getAllByPersonId(@PathVariable long personId, Pageable pageable);
-    
+
     @ApiImplicitParams({
         @ApiImplicitParam(name = "dateRange", paramType = "path", required = true, value = "Date range"),
         @ApiImplicitParam(name = "page", paramType = "query", value = "Page value"),
@@ -65,7 +65,7 @@ public interface TripApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/date/{dateRange}")
     Page<TripDto> getAllByDate(@PathVariable String dateRange, Pageable pageable);
-    
+
     @ApiImplicitParams({
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id"),
         @ApiImplicitParam(name = "dateRange", paramType = "path", required = true, value = "Date range"),
@@ -77,17 +77,17 @@ public interface TripApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{personId}/{dateRange}")
     Page<TripDto> getAllByPersonIdAndDate(@PathVariable long personId, @PathVariable String dateRange, Pageable pageable);
-    
+
     @ApiOperation("Create trip")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     TripConfirmDto create(@Valid @RequestBody TripCreateDto tripCreateDto);
-    
+
     @ApiOperation("Confirm trip")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/confirm")
     TripDto confirm(@Valid @RequestBody TripConfirmDto tripConfirmDto);
-    
+
     @ApiImplicitParams({
         @ApiImplicitParam(name = "tripId", paramType = "path", required = true, value = "Trip id"),
         @ApiImplicitParam(name = "status", paramType = "path", required = true, value = "Trip status")

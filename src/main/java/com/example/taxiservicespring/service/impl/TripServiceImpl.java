@@ -94,7 +94,6 @@ public class TripServiceImpl implements TripService {
                     .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
             cars.add(CarMapper.INSTANCE.mapCarDto(car));
         }
-        
         BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
         BigDecimal price = getPrice(category.getId(), distance).multiply(BigDecimal.valueOf(cars.size()));
         BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
@@ -134,14 +133,14 @@ public class TripServiceImpl implements TripService {
             }
             car.setStatus(CarStatus.BUSY);
             cars.add(car);
-        }
-        
+        }        
         Person person = personRepository.getReferenceById(tripConfirmDto.getPersonId());
         Location origin = locationRepository.getReferenceById(tripConfirmDto.getOriginId());
         Location destination = locationRepository.getReferenceById(tripConfirmDto.getDestinationId());
         Category category = categoryRepository.getReferenceById(tripConfirmDto.getCategoryId());
         BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());        
         BigDecimal price = getPrice(category.getId(), distance).multiply(BigDecimal.valueOf(cars.size()));
+
         BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
         Trip trip = Trip.builder()
@@ -156,17 +155,17 @@ public class TripServiceImpl implements TripService {
         trip = tripRepository.save(trip);
         return tripMapper.mapTripDto(trip);
     }
-    
+
     private BigDecimal getDistanceForTrip(long originId, long destinationId) {
         BigDecimal distance = getDistance(originId, destinationId);
-        
+
         if (distance.compareTo(MIN_DICTANCE) < 0) {
             throw new DataProcessingException("Distance is not enough!");
-        } 
-        return distance; 
+        }
+        return distance;
     }
 
-    private BigDecimal getDistance(long originId, long destinationId) {  
+    private BigDecimal getDistance(long originId, long destinationId) {
         log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
         Location origin = locationRepository.findById(originId)
                 .orElseThrow(() -> new EntityNotFoundException("Origin location is not found!"));
@@ -293,22 +292,20 @@ public class TripServiceImpl implements TripService {
         BigDecimal discount = null;
         BigDecimal totalBill = tripRepository.getTotalBill(personId, TripStatus.COMPLETED)
                 .orElse(BigDecimal.ZERO);
-
         discount = discounts.entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().compareTo(totalBill) <= 0)
                 .map(entry -> entry.getValue())
                 .max(Comparator.naturalOrder())
                 .orElse(BigDecimal.ZERO);
-        
-        result = bill.multiply(discount).setScale(SCALE, RoundingMode.HALF_UP);        
+        result = bill.multiply(discount).setScale(SCALE, RoundingMode.HALF_UP);
         return result;
     }
 
     private LocalTime getWaitTime(long originId, List<CarDto> cars) {
         List<BigDecimal> distanceToCar = cars.stream()
                 .map(car -> getDistance(originId, car.getLocationId()))
-                .collect(Collectors.toList());       
+                .collect(Collectors.toList());
         BigDecimal maxCarDistance = distanceToCar.stream()
                 .max(Comparator.naturalOrder())
                 .orElse(BigDecimal.ZERO);
