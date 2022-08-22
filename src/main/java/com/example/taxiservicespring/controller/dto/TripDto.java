@@ -18,5 +18,5 @@ public class TripDto {
     private LocalDateTime date;
     private BigDecimal bill;
     private TripStatus status;
-    private Set<CarDto> cars; 
+    private Set<CarDto> cars;
 }

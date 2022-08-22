@@ -23,20 +23,20 @@ import lombok.ToString;
 @AllArgsConstructor
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "streetName", "streetNumber" }) })
 public class Location {
-    
+
     @Id
     @GeneratedValue
     private long id;
-    
+
     @Column(length = 50)
     private String streetName;
-    
+
     @Column(length = 50)
     private String streetNumber;
-    
+
     @Column(precision = 17, scale = 15)
     private BigDecimal latitude;
-    
+
     @Column(precision = 18, scale = 15)
     private BigDecimal longitude;
 

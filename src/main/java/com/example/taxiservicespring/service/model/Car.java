@@ -26,33 +26,33 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @NamedNativeQuery(
-        name = "Car.findByCategoryIdAndStatusAndCapacity", 
+        name = "Car.findByCategoryIdAndStatusAndCapacity",
         query = "SELECT * FROM car c INNER JOIN car_model cm ON c.model_id = cm.id "
                 + "WHERE c.category_id = ?1 AND c.status_id = ?2 AND cm.seat_count >= ?3 "
-                + "ORDER BY cm.seat_count LIMIT 1", 
+                + "ORDER BY cm.seat_count LIMIT 1",
         resultClass = Car.class)
 public class Car {
-    
+
     @Id
     @GeneratedValue
     private long id;
-    
+
     @NaturalId
     @Column(length = 50)
     private String regNumber;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "model_id", nullable = false)
     private CarModel model;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
-    
+
     @Column(name = "status_id", nullable = false)
     private CarStatus status = CarStatus.READY;
 
