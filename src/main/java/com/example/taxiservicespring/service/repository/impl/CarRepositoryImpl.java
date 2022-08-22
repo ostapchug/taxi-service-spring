@@ -57,7 +57,6 @@ public class CarRepositoryImpl implements CarRepository {
         log.info("find cars by category id {} and capacity {}", categoryId, capacity);
         List<Car> result = new ArrayList<>();
         int currentCapacity = 0;
-        
         for (Car car : cars) {
             if (car.getCategoryId() == categoryId && car.getStatus().equals(CarStatus.READY)) {
                 if (currentCapacity >= capacity) {

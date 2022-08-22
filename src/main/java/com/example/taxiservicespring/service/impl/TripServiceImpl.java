@@ -78,8 +78,8 @@ public class TripServiceImpl implements TripService {
             cars = carRepository.findCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity())
                     .stream()
                     .map(car -> CarMapper.INSTANCE.mapCarDto(car))
-                    .collect(Collectors.toList());      
-        } else if (tripCreateDto.isIgnoreCategory()) {
+                    .collect(Collectors.toList());
+            } else if (tripCreateDto.isIgnoreCategory()) {
             Car car = carRepository.findByCapacity(tripCreateDto.getCapacity());
             category = categoryRepository.find(car.getCategoryId());
             cars.add(CarMapper.INSTANCE.mapCarDto(car));
@@ -87,7 +87,6 @@ public class TripServiceImpl implements TripService {
             Car car = carRepository.find(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());
             cars.add(CarMapper.INSTANCE.mapCarDto(car));
         }
-        
         BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
         BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
         BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
@@ -114,14 +113,11 @@ public class TripServiceImpl implements TripService {
 
         for (CarDto carDto : carDtoList) {
             Car car = carRepository.find(carDto.getId());
-            
             if (tripConfirmDto.getCategoryId() != car.getCategoryId()) {
                 throw new DataProcessingException("Car doesn't belong to category!");
             }
-            
             cars.add(car);
         }
-        
         Category category = categoryRepository.find(tripConfirmDto.getCategoryId());
         BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
         BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
@@ -178,21 +174,21 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripDto updateStatus(long tripId, String status) {
         log.info("update trip status to {} for trip with id {}", status, tripId);
-        TripStatus tripStatus = TripStatus.valueOf(status.toUpperCase()); 
+        TripStatus tripStatus = TripStatus.valueOf(status.toUpperCase());
         Trip trip = tripRepository.updateStatus(tripId, tripStatus);
         return TripMapper.INSTANCE.mapTripDto(trip);
     }
-    
+
     private BigDecimal getDistanceForTrip(long originId, long destinationId) {
         BigDecimal distance = getDistance(originId, destinationId);
-        
+
         if (distance.compareTo(MIN_DICTANCE) < 0) {
             throw new DataProcessingException("Distance is not enough!");
         } 
         return distance; 
     }
 
-    private BigDecimal getDistance(long originId, long destinationId) {  
+    private BigDecimal getDistance(long originId, long destinationId) {
         log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
         Location origin = locationRepository.find(originId);
         Location destination = locationRepository.find(destinationId);
@@ -212,22 +208,20 @@ public class TripServiceImpl implements TripService {
         BigDecimal result = null;
         BigDecimal discount = null;
         BigDecimal totalBill = tripRepository.getTotalBill(personId, TripStatus.COMPLETED);
-
         discount = discounts.entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().compareTo(totalBill) <= 0)
                 .map(entry -> entry.getValue())
                 .max(Comparator.naturalOrder())
                 .orElse(BigDecimal.ZERO);
-        
-        result = bill.multiply(discount).setScale(SCALE, RoundingMode.HALF_UP);        
+        result = bill.multiply(discount).setScale(SCALE, RoundingMode.HALF_UP);
         return result;
     }
 
     private LocalTime getWaitTime(long originId, List<CarDto> cars) {
         List<BigDecimal> distanceToCar = cars.stream()
                 .map(car -> getDistance(originId, car.getLocationId()))
-                .collect(Collectors.toList());       
+                .collect(Collectors.toList());
         BigDecimal maxCarDistance = distanceToCar.stream()
                 .max(Comparator.naturalOrder())
                 .orElse(BigDecimal.ZERO);

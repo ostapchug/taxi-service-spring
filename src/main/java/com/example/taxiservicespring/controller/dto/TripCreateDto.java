@@ -25,8 +25,7 @@ public class TripCreateDto {
     
     @Positive(message = "{car.capacity}")
     private int capacity;
-    
-    boolean multipleCars;
-    
-    boolean ignoreCategory;
+
+    private boolean multipleCars;
+    private boolean ignoreCategory;
 }
