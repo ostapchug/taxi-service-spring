@@ -55,7 +55,7 @@ public interface TripApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/person-id/{personId}")
     List<TripDto> getAllByPersonId(@PathVariable long personId);
-    
+
     @ApiImplicitParams({
         @ApiImplicitParam(name = "dateRange", paramType = "path", required = true, value = "Date range")
         })
@@ -63,7 +63,7 @@ public interface TripApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/date/{dateRange}")
     List<TripDto> getAllByDate(@PathVariable String dateRange);
-    
+
     @ApiImplicitParams({
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id"),
         @ApiImplicitParam(name = "dateRange", paramType = "path", required = true, value = "Date range")
@@ -72,17 +72,17 @@ public interface TripApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{personId}/{dateRange}")
     List<TripDto> getAllByPersonIdAndDate(@PathVariable long personId, @PathVariable String dateRange);
-    
+
     @ApiOperation("Create trip")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     TripConfirmDto create(@Valid @RequestBody TripCreateDto tripCreateDto);
-    
+
     @ApiOperation("Confirm trip")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/confirm")
     TripDto confirm(@Valid @RequestBody TripConfirmDto tripConfirmDto);
-    
+
     @ApiImplicitParams({
         @ApiImplicitParam(name = "tripId", paramType = "path", required = true, value = "Trip id"),
         @ApiImplicitParam(name = "status", paramType = "path", required = true, value = "Trip status")

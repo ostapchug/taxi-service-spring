@@ -184,8 +184,8 @@ public class TripServiceImpl implements TripService {
 
         if (distance.compareTo(MIN_DICTANCE) < 0) {
             throw new DataProcessingException("Distance is not enough!");
-        } 
-        return distance; 
+        }
+        return distance;
     }
 
     private BigDecimal getDistance(long originId, long destinationId) {

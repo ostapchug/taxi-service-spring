@@ -15,9 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class PersonController implements PersonApi{
+public class PersonController implements PersonApi {
     private final PersonService personService;
-    
+
     @Override
     public PersonDto getById(long id) {
         log.info("request person with id {}", id);

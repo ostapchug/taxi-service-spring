@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class TripController implements TripApi{
+public class TripController implements TripApi {
     private final TripService tripService;
 
     @Override

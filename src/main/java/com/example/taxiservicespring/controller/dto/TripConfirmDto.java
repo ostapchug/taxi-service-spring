@@ -16,30 +16,27 @@ import lombok.Data;
 
 @Data
 @Builder
-@Different({"originId", "destinationId"})
+@Different({ "originId", "destinationId" })
 public class TripConfirmDto {
-    
+
     @PositiveOrZero
     private long personId;
-    
+
     @PositiveOrZero
     private long originId;
-    
+
     @PositiveOrZero
     private long destinationId;
-    
+
     @PositiveOrZero
     private int categoryId;
-    
+
     @Min(message = "{trip.distance}", value = 1)
     private BigDecimal distance;
-    
+
     private BigDecimal price;
-    
     private BigDecimal discount;
-    
     private BigDecimal total;
-    
     private LocalTime waitTime;
 
     @NotNull
