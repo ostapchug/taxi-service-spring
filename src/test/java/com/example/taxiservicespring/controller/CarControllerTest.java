@@ -1,11 +1,15 @@
 package com.example.taxiservicespring.controller;
 
-import static com.example.taxiservicespring.util.TestDataUtil.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static com.example.taxiservicespring.util.TestDataUtil.createCarDto;
+import static com.example.taxiservicespring.util.TestDataUtil.createCarModelDto;
+import static com.example.taxiservicespring.util.TestDataUtil.createCategoryDto;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
@@ -18,8 +22,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import com.example.taxiservicespring.config.TestConfig;
 
+import com.example.taxiservicespring.config.TestConfig;
 import com.example.taxiservicespring.controller.dto.CarDto;
 import com.example.taxiservicespring.controller.dto.CarModelDto;
 import com.example.taxiservicespring.controller.dto.CategoryDto;
@@ -29,10 +33,10 @@ import com.example.taxiservicespring.service.CarService;
 @WebMvcTest(CarController.class)
 @Import(TestConfig.class)
 class CarControllerTest {
-    
+
     @MockBean
     private CarService carService;
-    
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -40,7 +44,7 @@ class CarControllerTest {
     void getByIdTest() throws Exception {
         CarDto carDto = createCarDto();
         when(carService.find(anyLong())).thenReturn(carDto);
-        
+
         mockMvc.perform(get("/api/v1/car/id/" + anyLong()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -56,7 +60,7 @@ class CarControllerTest {
     void getCategoryByIdTest() throws Exception {
         CategoryDto categoryDto = createCategoryDto();
         when(carService.findCategory(anyInt())).thenReturn(categoryDto);
-        
+
         mockMvc.perform(get("/api/v1/car/category/id/" + anyInt()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -68,7 +72,7 @@ class CarControllerTest {
     void getAllCategoriesTest() throws Exception {
         CategoryDto categoryDto = createCategoryDto();
         when(carService.findAllCategories()).thenReturn(List.of(categoryDto));
-        
+
         mockMvc.perform(get("/api/v1/car/category"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -79,7 +83,7 @@ class CarControllerTest {
     void getCarModelByIdTest() throws Exception {
         CarModelDto carModelDto = createCarModelDto();
         when(carService.findCarModel(anyLong())).thenReturn(carModelDto);
-        
+
         mockMvc.perform(get("/api/v1/car/car-model/id/" + anyLong()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))

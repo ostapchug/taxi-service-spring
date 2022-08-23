@@ -1,18 +1,21 @@
 package com.example.taxiservicespring.service.impl;
 
+import static com.example.taxiservicespring.util.TestDataUtil.createCar;
+import static com.example.taxiservicespring.util.TestDataUtil.createCarModel;
+import static com.example.taxiservicespring.util.TestDataUtil.createCategory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
-import static com.example.taxiservicespring.util.TestDataUtil.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,16 +35,16 @@ import com.example.taxiservicespring.service.repository.CategoryRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CarServiceImplTest {
-    
+
     @Mock
     private CarRepository carRepository;
-    
+
     @Mock
     private CategoryRepository categoryRepository;
-    
+
     @Mock
     private CarModelRepository carModelRepository;
-    
+
     @InjectMocks
     private CarServiceImpl carService;
 
@@ -49,9 +52,9 @@ class CarServiceImplTest {
     void findTest() {
         Car car = createCar();
         when(carRepository.findById(anyLong())).thenReturn(Optional.of(car));
-        
+
         CarDto carDto = carService.find(anyLong());
-        
+
         assertThat(carDto, allOf(
                 hasProperty("id", equalTo(car.getId())),
                 hasProperty("regNumber", equalTo(car.getRegNumber())),
@@ -61,54 +64,53 @@ class CarServiceImplTest {
                 hasProperty("status", equalTo(car.getStatus()))
                 ));
     }
-    
+
     @Test
     void findCarNotFoundTest() {
         when(carRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> carService.find(anyLong()));  
+        assertThrows(EntityNotFoundException.class, () -> carService.find(anyLong()));
     }
-    
 
     @Test
     void findCategoryTest() {
         Category category = createCategory();
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.of(category));
-        
+
         CategoryDto categoryDto = carService.findCategory(anyInt());
-        
+
         assertThat(categoryDto, allOf(
                 hasProperty("id", equalTo(category.getId())),
                 hasProperty("name", equalTo(category.getName()))
                 ));
     }
-    
+
     @Test
     void findCategoryNotFoundTest() {
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> carService.findCategory(anyInt()));  
+        assertThrows(EntityNotFoundException.class, () -> carService.findCategory(anyInt()));
     }
 
     @Test
     void findAllCategoriesTest() {
         Category category = createCategory();
         when(categoryRepository.findAllCategories()).thenReturn(List.of(category));
-        
+
         List<CategoryDto> categoryDtoList = carService.findAllCategories();
-        
+
         assertThat(categoryDtoList, hasSize(1));
         assertThat(categoryDtoList.get(0), allOf(
                 hasProperty("id", equalTo(category.getId())),
                 hasProperty("name", equalTo(category.getName()))
-                ));        
+                ));
     }
 
     @Test
     void findCarModelTest() {
         CarModel carModel = createCarModel();
         when(carModelRepository.findById(anyLong())).thenReturn(Optional.of(carModel));
-        
+
         CarModelDto carModelDto = carService.findCarModel(anyLong());
-        
+
         assertThat(carModelDto, allOf(
                 hasProperty("id", equalTo(carModel.getId())),
                 hasProperty("brand", equalTo(carModel.getBrand())),
@@ -117,7 +119,7 @@ class CarServiceImplTest {
                 hasProperty("color", equalTo(carModel.getColor()))
                 ));
     }
-    
+
     @Test
     void findCarModelNotFoundTest() {
         when(carModelRepository.findById(anyLong())).thenReturn(Optional.empty());

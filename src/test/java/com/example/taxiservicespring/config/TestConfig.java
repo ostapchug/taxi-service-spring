@@ -12,7 +12,7 @@ import org.springframework.plugin.core.SimplePluginRegistry;
 
 @TestConfiguration
 public class TestConfig {
-    
+
     @Bean
     public LinkDiscoverers discoverers() {
         List<LinkDiscoverer> plugins = new ArrayList<>();

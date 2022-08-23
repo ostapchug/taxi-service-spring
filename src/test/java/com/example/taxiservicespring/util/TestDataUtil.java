@@ -49,12 +49,12 @@ public class TestDataUtil {
     private static final String CATEGORY_NAME = "Economy";
     private static final int CAPACITY = 1;
     private static final String DATE_FORMAT = "dd.MM.yy";
-    private static final String CAR__BRAND = "Ford";
-    private static final String [] CAR__NAMES = {"Focus", "Fusion"};
-    private static final int [] CAR__CAPACITIES = {3, 4};
-    private static final int [] CAR__YEARS = {2012, 2016};
-    private static final String CAR__COLOR = "Blue";
-    private static final String [] CAR__REG_NUMBERS = {"AA1234TV", "AA1235TV", "AA1236TV", "AA1237TV"};
+    private static final String CAR_BRAND = "Ford";
+    private static final String[] CAR_NAMES = {"Focus", "Fusion"};
+    private static final int[] CAR_CAPACITIES = {3, 4};
+    private static final int[] CAR_YEARS = {2012, 2016};
+    private static final String CAR_COLOR = "Blue";
+    private static final String[] CAR_REG_NUMBERS = {"AA1234TV", "AA1235TV", "AA1236TV", "AA1237TV"};
     private static final LocalDateTime DATE = LocalDateTime.now();
     public static final long ID = 1L;
     public static final String PHONE = "0123456780";
@@ -62,7 +62,7 @@ public class TestDataUtil {
     public static final String NAME = "John";
     public static final String SURNAME = "Doe";
     public static final Sort SORTING = Sort.by("date").descending();
-    public static final Pageable PAGEABLE= PageRequest.of(0, 2, SORTING);
+    public static final Pageable PAGEABLE = PageRequest.of(0, 2, SORTING);
     public static final long ORIGIN_ID = 1L;
     public static final long DEST_ID = 4L;
     public static final BigDecimal TOTAL_BILL = BigDecimal.valueOf(100).setScale(2);
@@ -73,43 +73,43 @@ public class TestDataUtil {
             BigDecimal.valueOf(500), BigDecimal.valueOf(0.05),
             BigDecimal.valueOf(1000), BigDecimal.valueOf(0.10)
             );
-    
+
     private static List<CarModel> createCarModelList() {
-        return IntStream.iterate(0, i -> i+1)
+        return IntStream.iterate(0, i -> i + 1)
                 .limit(2)
                 .mapToObj(i -> CarModel.builder()
-                        .id(i+1)
-                        .brand(CAR__BRAND)
-                        .name(CAR__NAMES[i])
-                        .year(CAR__YEARS[i])
-                        .color(CAR__COLOR)
-                        .seatCount(CAR__CAPACITIES[i])
+                        .id(i + 1)
+                        .brand(CAR_BRAND)
+                        .name(CAR_NAMES[i])
+                        .year(CAR_YEARS[i])
+                        .color(CAR_COLOR)
+                        .seatCount(CAR_CAPACITIES[i])
                         .build())
                 .collect(Collectors.toList());
     }
-    
+
     public static CarModel createCarModel() {
         return createCarModelList().get(0);
     }
-    
+
     public static List<Car> createCarList() {
-        List<CarModel> carModels = createCarModelList();  
-        return IntStream.iterate(0, i -> i+1)
+        List<CarModel> carModels = createCarModelList();
+        return IntStream.iterate(0, i -> i + 1)
                 .limit(4)
                 .mapToObj(i -> Car.builder()
-                        .id(i+1)
-                        .regNumber(CAR__REG_NUMBERS[i])
-                        .model(carModels.get(i%carModels.size()))
+                        .id(i + 1)
+                        .regNumber(CAR_REG_NUMBERS[i])
+                        .model(carModels.get(i % carModels.size()))
                         .category(createCategory())
                         .location(createLocation())
                         .build())
                 .collect(Collectors.toList());
     }
-    
+
     public static Car createCar() {
         return createCarList().get(0);
-    }    
-    
+    }
+
     public static Location createOrigin() {
         return Location.builder()
                 .id(ORIGIN_ID)
@@ -119,7 +119,7 @@ public class TestDataUtil {
                 .longitude(BigDecimal.valueOf(24.737374909778257))
                 .build();
     }
-    
+
     public static Location createDestination() {
         return Location.builder()
                 .id(DEST_ID)
@@ -129,11 +129,11 @@ public class TestDataUtil {
                 .longitude(BigDecimal.valueOf(24.72473578396449))
                 .build();
     }
-    
+
     public static Location createLocation() {
         return createOrigin();
     }
-    
+
     public static Person createPerson() {
         return Person.builder()
                 .id(ID)
@@ -143,7 +143,7 @@ public class TestDataUtil {
                 .surname(SURNAME)
                 .build();
     }
-    
+
     public static Category createCategory() {
         return Category.builder()
                 .id(CATEGORY_ID)
@@ -151,7 +151,7 @@ public class TestDataUtil {
                 .price(PRICE)
                 .build();
     }
-    
+
     public static Trip createTrip() {
         return Trip.builder()
                 .id(ID)
@@ -164,7 +164,7 @@ public class TestDataUtil {
                 .cars(Set.of(createCar()))
                 .build();
     }
-    
+
     public static PersonDto createPersonDto() {
         return PersonDto.builder()
                 .id(ID)
@@ -175,30 +175,30 @@ public class TestDataUtil {
                 .role(Role.CLIENT)
                 .build();
     }
-    
+
     public static List<CarDto> createCarDtoList() {
         return createCarList()
                 .stream()
                 .map(car -> CarMapper.INSTANCE.mapCarDto(car))
                 .collect(Collectors.toList());
     }
-    
+
     public static CarDto createCarDto() {
         return CarMapper.INSTANCE.mapCarDto(createCar());
     }
-    
+
     public static CategoryDto createCategoryDto() {
         return CategoryMapper.INSTANCE.mapCategoryDto(createCategory());
     }
-    
+
     public static CarModelDto createCarModelDto() {
         return CarModelMapper.INSTANCE.mapCarModelDto(createCarModel());
     }
-    
+
     public static LocationDto createLocationDto() {
         return LocationMapper.INSTANCE.mapLocationDto(createLocation());
     }
-    
+
     public static TripDto createTripDto() {
         return TripDto.builder()
                 .id(ID)
@@ -212,7 +212,7 @@ public class TestDataUtil {
                 .cars(Set.of(createCarDto()))
                 .build();
     }
-    
+
     public static TripCreateDto createTripCreateDto() {
         return TripCreateDto.builder()
                 .personId(ID)
@@ -220,9 +220,9 @@ public class TestDataUtil {
                 .destinationId(DEST_ID)
                 .categoryId(CATEGORY_ID)
                 .capacity(CAPACITY)
-                .build();      
+                .build();
     }
-    
+
     public static TripConfirmDto createTripConfirmDto() {
         return TripConfirmDto.builder()
                 .personId(ID)
@@ -235,11 +235,11 @@ public class TestDataUtil {
                 .total(BILL)
                 .waitTime(LocalTime.MIDNIGHT)
                 .cars(List.of(createCarDto()))
-                .build();      
+                .build();
     }
-    
+
     public static TripConfirmDto createTripConfirmDtoWithMultipleCars() {
-        List<CarDto> cars = createCarDtoList();        
+        List<CarDto> cars = createCarDtoList();
         return TripConfirmDto.builder()
                 .personId(ID)
                 .originId(ORIGIN_ID)
@@ -251,11 +251,11 @@ public class TestDataUtil {
                 .total(BigDecimal.valueOf(49).setScale(2))
                 .waitTime(LocalTime.MIDNIGHT)
                 .cars(List.of(cars.get(1), cars.get(2)))
-                .build();      
+                .build();
     }
-    
+
     public static TripConfirmDto createTripConfirmDtoWithMultipleCarsCapacityEqual() {
-        List<CarDto> cars = createCarDtoList();        
+        List<CarDto> cars = createCarDtoList();
         return TripConfirmDto.builder()
                 .personId(ID)
                 .originId(ORIGIN_ID)
@@ -267,6 +267,6 @@ public class TestDataUtil {
                 .total(BigDecimal.valueOf(49).setScale(2))
                 .waitTime(LocalTime.MIDNIGHT)
                 .cars(List.of(cars.get(1), cars.get(0)))
-                .build();      
+                .build();
     }
 }

@@ -1,14 +1,17 @@
 package com.example.taxiservicespring.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static com.example.taxiservicespring.util.TestDataUtil.*;
+import static com.example.taxiservicespring.util.TestDataUtil.DATE_RANGE;
+import static com.example.taxiservicespring.util.TestDataUtil.createTripConfirmDto;
+import static com.example.taxiservicespring.util.TestDataUtil.createTripCreateDto;
+import static com.example.taxiservicespring.util.TestDataUtil.createTripDto;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,10 +46,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @WebMvcTest(TripController.class)
 @Import(TestConfig.class)
 class TripControllerTest {
-    
+
     @MockBean
     private TripService tripService;
-    
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -54,7 +57,7 @@ class TripControllerTest {
     void getByIdTest() throws Exception {
         TripDto tripDto = createTripDto();
         when(tripService.find(anyLong())).thenReturn(tripDto);
-        
+
         mockMvc.perform(get("/api/v1/trip/id/" + anyLong()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -73,7 +76,7 @@ class TripControllerTest {
     void getAllTest() throws Exception {
         TripDto tripDto = createTripDto();
         when(tripService.getAll(any())).thenReturn(new PageImpl<>(List.of(tripDto)));
-        
+
         mockMvc.perform(get("/api/v1/trip?page=0&size=2&sort=date,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -93,7 +96,7 @@ class TripControllerTest {
     void getAllByPersonIdTest() throws Exception {
         TripDto tripDto = createTripDto();
         when(tripService.getAllByPersonId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(tripDto)));
-        
+
         mockMvc.perform(get("/api/v1/trip/person-id/" + tripDto.getPersonId() + "?page=0&size=2&sort=date,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -113,7 +116,7 @@ class TripControllerTest {
     void getAllByDateTest() throws Exception {
         TripDto tripDto = createTripDto();
         when(tripService.getAllByDate(anyString(), any())).thenReturn(new PageImpl<>(List.of(tripDto)));
-        
+
         mockMvc.perform(get("/api/v1/trip/date/" + DATE_RANGE + "?page=0&size=2&sort=date,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -133,7 +136,7 @@ class TripControllerTest {
     void getAllByPersonIdAndDateTest() throws Exception {
         TripDto tripDto = createTripDto();
         when(tripService.getAllByPersonIdAndDate(anyLong(), anyString(), any())).thenReturn(new PageImpl<>(List.of(tripDto)));
-        
+
         mockMvc.perform(get("/api/v1/trip/" + tripDto.getPersonId() + "/" + DATE_RANGE + "?page=0&size=2&sort=date,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -155,7 +158,7 @@ class TripControllerTest {
         TripConfirmDto tripConfirmDto = createTripConfirmDto();
         ObjectMapper objectMapper = new ObjectMapper();
         when(tripService.create(tripCreateDto)).thenReturn(tripConfirmDto);
-        
+
         mockMvc.perform(post("/api/v1/trip", tripCreateDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripCreateDto))
@@ -173,13 +176,13 @@ class TripControllerTest {
             .andExpect(jsonPath("$.waitTime").value(tripConfirmDto.getWaitTime().format(DateTimeFormatter.ISO_TIME)))
             .andExpect(jsonPath("$.cars.length()").value(tripConfirmDto.getCars().size()));
     }
-    
+
     @Test
     void createPersonIdNotValidTest() throws Exception {
         TripCreateDto tripCreateDto = createTripCreateDto();
         tripCreateDto.setPersonId(0);
         ObjectMapper objectMapper = new ObjectMapper();
-        
+
         mockMvc.perform(post("/api/v1/trip", tripCreateDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripCreateDto))
@@ -188,13 +191,13 @@ class TripControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
-    
+
     @Test
     void createOriginIdNotValidTest() throws Exception {
         TripCreateDto tripCreateDto = createTripCreateDto();
         tripCreateDto.setOriginId(0);
         ObjectMapper objectMapper = new ObjectMapper();
-        
+
         mockMvc.perform(post("/api/v1/trip", tripCreateDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripCreateDto))
@@ -203,13 +206,13 @@ class TripControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
-    
+
     @Test
     void createDestinationIdNotValidTest() throws Exception {
         TripCreateDto tripCreateDto = createTripCreateDto();
         tripCreateDto.setDestinationId(0);
         ObjectMapper objectMapper = new ObjectMapper();
-        
+
         mockMvc.perform(post("/api/v1/trip", tripCreateDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripCreateDto))
@@ -218,13 +221,13 @@ class TripControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
-    
+
     @Test
     void createSameLocationsTest() throws Exception {
         TripCreateDto tripCreateDto = createTripCreateDto();
         ObjectMapper objectMapper = new ObjectMapper();
         tripCreateDto.setDestinationId(tripCreateDto.getOriginId());
-        
+
         mockMvc.perform(post("/api/v1/trip", tripCreateDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripCreateDto))
@@ -233,13 +236,13 @@ class TripControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
-    
+
     @Test
     void createCapacityNotEnoghTest() throws  Exception {
         TripCreateDto tripCreateDto = createTripCreateDto();
         ObjectMapper objectMapper = new ObjectMapper();
         tripCreateDto.setCapacity(0);
-        
+
         mockMvc.perform(post("/api/v1/trip", tripCreateDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripCreateDto))
@@ -255,7 +258,7 @@ class TripControllerTest {
         TripConfirmDto tripConfirmDto = createTripConfirmDto();
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         when(tripService.confirm(tripConfirmDto)).thenReturn(tripDto);
-        
+
         mockMvc.perform(post("/api/v1/trip/confirm", tripConfirmDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripConfirmDto))
@@ -272,13 +275,13 @@ class TripControllerTest {
             .andExpect(jsonPath("$.status").value(tripDto.getStatus().name()))
             .andExpect(jsonPath("$.cars.length()").value(tripDto.getCars().size()));
     }
-    
+
     @Test
     void confirmSameLocationsTest() throws  Exception {
         TripConfirmDto tripConfirmDto = createTripConfirmDto();
         tripConfirmDto.setOriginId(tripConfirmDto.getDestinationId());
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        
+
         mockMvc.perform(post("/api/v1/trip", tripConfirmDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripConfirmDto))
@@ -287,13 +290,13 @@ class TripControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
-    
+
     @Test
     void confirmDistanceNotEnoughTest() throws  Exception {
         TripConfirmDto tripConfirmDto = createTripConfirmDto();
         tripConfirmDto.setDistance(BigDecimal.ZERO);
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        
+
         mockMvc.perform(post("/api/v1/trip/confirm", tripConfirmDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripConfirmDto))
@@ -302,13 +305,13 @@ class TripControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
-    
+
     @Test
     void confirmCarsEmptyTest() throws  Exception {
         TripConfirmDto tripConfirmDto = createTripConfirmDto();
         tripConfirmDto.setCars(new ArrayList<>());
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        
+
         mockMvc.perform(post("/api/v1/trip/confirm", tripConfirmDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripConfirmDto))
@@ -317,13 +320,13 @@ class TripControllerTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
-    
+
     @Test
     void confirmCarsNullTest() throws  Exception {
         TripConfirmDto tripConfirmDto = createTripConfirmDto();
         tripConfirmDto.setCars(null);
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        
+
         mockMvc.perform(post("/api/v1/trip/confirm", tripConfirmDto)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(tripConfirmDto))
@@ -338,7 +341,7 @@ class TripControllerTest {
         TripDto tripDto = createTripDto();
         tripDto.setStatus(TripStatus.ACCEPTED);
         when(tripService.updateStatus(anyLong(), anyString())).thenReturn(tripDto);
-        
+
         mockMvc.perform(put("/api/v1/trip/status/1/accepted"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))

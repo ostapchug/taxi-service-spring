@@ -1,6 +1,6 @@
 package com.example.taxiservicespring.controller;
 
-import static com.example.taxiservicespring.util.TestDataUtil.*;
+import static com.example.taxiservicespring.util.TestDataUtil.createLocationDto;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -28,10 +28,10 @@ import com.example.taxiservicespring.service.LocationService;
 @WebMvcTest(LocationController.class)
 @Import(TestConfig.class)
 class LocationControllerTest {
-    
+
     @MockBean
     private LocationService locationService;
-    
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -39,7 +39,7 @@ class LocationControllerTest {
     void getByIdTest() throws Exception {
         LocationDto locationDto = createLocationDto();
         when(locationService.find(anyLong())).thenReturn(locationDto);
-        
+
         mockMvc.perform(get("/api/v1/location/id/" + anyLong()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -52,7 +52,7 @@ class LocationControllerTest {
     void getAllTest() throws Exception {
         LocationDto locationDto = createLocationDto();
         when(locationService.getAll()).thenReturn(List.of(locationDto));
-        
+
         mockMvc.perform(get("/api/v1/location"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
