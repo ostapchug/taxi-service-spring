@@ -6,7 +6,7 @@ import com.example.taxiservicespring.controller.dto.LocationDto;
 
 public interface LocationService {
 
-    LocationDto find(long id);
+    LocationDto getById(long id);
 
     List<LocationDto> getAll();
 }

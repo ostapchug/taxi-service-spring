@@ -6,9 +6,9 @@ import com.example.taxiservicespring.controller.dto.PersonDto;
 
 public interface PersonService {
 
-    PersonDto find(long id);
+    PersonDto getById(long id);
 
-    PersonDto find(String phone);
+    PersonDto getByPhone(String phone);
 
     List<PersonDto> getAll();
 

@@ -1,5 +1,7 @@
 package com.example.taxiservicespring.api;
 
+import java.time.LocalDateTime;
+
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.taxiservicespring.controller.dto.TripConfirmDto;
 import com.example.taxiservicespring.controller.dto.TripCreateDto;
 import com.example.taxiservicespring.controller.dto.TripDto;
-
+import com.example.taxiservicespring.service.model.TripStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -52,7 +54,7 @@ public interface TripApi {
         })
     @ApiOperation("Get trips by person id, supports pagination and sorting")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/person-id/{personId}")
+    @GetMapping(value = "/person/{personId}")
     Page<TripDto> getAllByPersonId(@PathVariable long personId, Pageable pageable);
 
     @ApiImplicitParams({
@@ -64,7 +66,7 @@ public interface TripApi {
     @ApiOperation("Get trips by date, supports pagination and sorting")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/date/{dateRange}")
-    Page<TripDto> getAllByDate(@PathVariable String dateRange, Pageable pageable);
+    Page<TripDto> getAllByDate(@PathVariable LocalDateTime[] dateRange, Pageable pageable);
 
     @ApiImplicitParams({
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id"),
@@ -76,7 +78,8 @@ public interface TripApi {
     @ApiOperation("Get trips by person id and date, supports pagination and sorting")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{personId}/{dateRange}")
-    Page<TripDto> getAllByPersonIdAndDate(@PathVariable long personId, @PathVariable String dateRange, Pageable pageable);
+    Page<TripDto> getAllByPersonIdAndDate(@PathVariable long personId, @PathVariable LocalDateTime[] dateRange,
+            Pageable pageable);
 
     @ApiOperation("Create trip")
     @ResponseStatus(HttpStatus.CREATED)
@@ -89,10 +92,10 @@ public interface TripApi {
     TripDto confirm(@Valid @RequestBody TripConfirmDto tripConfirmDto);
 
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "tripId", paramType = "path", required = true, value = "Trip id"),
+        @ApiImplicitParam(name = "id", paramType = "path", required = true, value = "Trip id"),
         @ApiImplicitParam(name = "status", paramType = "path", required = true, value = "Trip status")
         })
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping(value = "/status/{tripId}/{status}")
-    TripDto updateStatus(@PathVariable long tripId, @PathVariable String status);
+    @PutMapping(value = "/status/{id}/{status}")
+    TripDto updateStatus(@PathVariable long id, @PathVariable TripStatus status);
 }

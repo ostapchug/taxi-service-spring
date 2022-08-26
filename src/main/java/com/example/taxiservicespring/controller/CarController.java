@@ -22,24 +22,24 @@ public class CarController implements CarApi {
     @Override
     public CarDto getById(long id) {
         log.info("request car with id {}", id);
-        return carService.find(id);
+        return carService.getById(id);
     }
 
     @Override
     public CategoryDto getCategoryById(int id) {
         log.info("request car category with id {}", id);
-        return carService.findCategory(id);
+        return carService.getCategoryById(id);
     }
 
     @Override
     public List<CategoryDto> getAllCategories() {
         log.info("request list of all car categories");
-        return carService.findAllCategories();
+        return carService.getAllCategories();
     }
 
     @Override
     public CarModelDto getCarModelById(long id) {
         log.info("request car model with id {}", id);
-        return carService.findCarModel(id);
+        return carService.getCarModelById(id);
     }
 }

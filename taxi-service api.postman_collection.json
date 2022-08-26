@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "fcce9392-b873-438b-852b-9011678585f4",
-		"name": "taxi-service api v1",
+		"_postman_id": "48af8f98-16ca-41f6-974e-e5fc53a87502",
+		"name": "taxi-service api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -32,12 +32,12 @@
 					"response": []
 				},
 				{
-					"name": "get car-model  by id",
+					"name": "get car model  by id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/car/car-model/id/1",
+							"raw": "http://localhost:8080/api/v1/car/model/id/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -47,7 +47,7 @@
 								"api",
 								"v1",
 								"car",
-								"car-model",
+								"model",
 								"id",
 								"1"
 							]
@@ -69,8 +69,7 @@
 							{
 								"key": "Accept-Language",
 								"value": "uk",
-								"type": "default",
-								"disabled": true
+								"type": "default"
 							}
 						],
 						"url": {
@@ -106,8 +105,7 @@
 							{
 								"key": "Accept-Language",
 								"value": "uk",
-								"type": "default",
-								"disabled": true
+								"type": "default"
 							}
 						],
 						"url": {
@@ -122,13 +120,6 @@
 								"v1",
 								"car",
 								"category"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -205,7 +196,7 @@
 								"v1",
 								"person",
 								"id",
-								"0"
+								"1"
 							]
 						}
 					},
@@ -262,7 +253,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"phone\":\"0123456780\",\r\n    \"password\":\"Client#0\",\r\n    \"name\":\"Jane\",\r\n    \"surname\": \"Doe\"\r\n}",
+							"raw": "{\r\n    \"phone\":\"0123456781\",\r\n    \"password\":\"Client#1\",\r\n    \"name\":\"Jane\",\r\n    \"surname\": \"Doe\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -292,7 +283,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"phone\":\"0123456780\",\r\n    \"password\":\"Client#0\",\r\n    \"name\":\"Jane\",\r\n    \"surname\":\"Smith\"\r\n}",
+							"raw": "{\r\n    \"phone\":\"0123456781\",\r\n    \"password\":\"Client#0\",\r\n    \"name\":\"Jane\",\r\n    \"surname\":\"Smith\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -300,7 +291,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/person/0123456780",
+							"raw": "http://localhost:8080/api/v1/person/0123456781",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -310,7 +301,7 @@
 								"api",
 								"v1",
 								"person",
-								"0123456780"
+								"0123456781"
 							]
 						}
 					},
@@ -407,7 +398,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/person-id/1?page=0&size=2&sort=date,desc",
+							"raw": "http://localhost:8080/api/v1/trip/person/1?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -417,7 +408,7 @@
 								"api",
 								"v1",
 								"trip",
-								"person-id",
+								"person",
 								"1"
 							],
 							"query": [
@@ -516,10 +507,22 @@
 					"name": "create trip",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Accept-Language",
+								"value": "uk",
+								"type": "default"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": \"1\",\r\n    \"originId\": \"4\",\r\n    \"destinationId\": \"3\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
+							"raw": "{\r\n    \"personId\": \"1\",\r\n    \"originId\": \"2\",\r\n    \"destinationId\": \"4\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -546,10 +549,22 @@
 					"name": "confirm trip",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Accept-Language",
+								"value": "uk",
+								"type": "default"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": 1,\r\n    \"originId\": 4,\r\n    \"destinationId\": 3,\r\n    \"categoryId\": 1,\r\n    \"distance\": 1.35,\r\n    \"price\": 33.75,\r\n    \"discount\": 0.68,\r\n    \"total\": 33.07,\r\n    \"waitTime\": \"00:05:00\",\r\n    \"cars\": [\r\n        {\r\n            \"id\": 1,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"status\": \"READY\"\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"personId\": 1,\r\n    \"originId\": 2,\r\n    \"destinationId\": 4,\r\n    \"categoryId\": 1,\r\n    \"distance\": 1.29,\r\n    \"price\": 32.25,\r\n    \"discount\": 0.65,\r\n    \"total\": 31.60,\r\n    \"waitTime\": \"00:01:00\",\r\n    \"cars\": [\r\n        {\r\n            \"id\": 1,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"status\": \"READY\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -579,7 +594,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/status/1/cancelled",
+							"raw": "http://localhost:8080/api/v1/trip/status/1/completed",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -591,7 +606,7 @@
 								"trip",
 								"status",
 								"1",
-								"cancelled"
+								"completed"
 							]
 						}
 					},

@@ -22,7 +22,7 @@ public class LocationServiceImpl implements LocationService {
     private final LocationRepository locationRepository;
 
     @Override
-    public LocationDto find(long id) {
+    public LocationDto getById(long id) {
         log.info("get location by id {}", id);
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Location is not found!"));
