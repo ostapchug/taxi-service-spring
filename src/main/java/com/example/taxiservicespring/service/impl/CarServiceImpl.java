@@ -32,7 +32,7 @@ public class CarServiceImpl implements CarService {
     private final CarModelRepository carModelRepository;
 
     @Override
-    public CarDto find(long id) {
+    public CarDto getById(long id) {
         log.info("get car by id {}", id);
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
@@ -40,7 +40,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CategoryDto findCategory(int id) {
+    public CategoryDto getCategoryById(int id) {
         log.info("get category by id {}", id);
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found!"));
@@ -48,7 +48,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CategoryDto> findAllCategories() {
+    public List<CategoryDto> getAllCategories() {
         log.info("get all categories");
         return categoryRepository.findAllCategories()
                 .stream()
@@ -57,7 +57,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarModelDto findCarModel(long id) {
+    public CarModelDto getCarModelById(long id) {
         log.info("get car model by id {}", id);
         CarModel carModel = carModelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Car model is not found!"));

@@ -46,7 +46,7 @@ public interface CarApi {
         @ApiImplicitParam(name = "id", paramType = "path", required = true, value = "Car model id")
     })
     @ApiOperation("Get car model by id")
-    @GetMapping(value = "/car-model/id/{id}")
+    @GetMapping(value = "/model/id/{id}")
     @ResponseStatus(HttpStatus.OK)
     CarModelDto getCarModelById(@PathVariable long id);
 }

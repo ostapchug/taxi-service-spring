@@ -21,13 +21,13 @@ public class PersonController implements PersonApi {
     @Override
     public PersonDto getById(long id) {
         log.info("request person with id {}", id);
-        return personService.find(id);
+        return personService.getById(id);
     }
 
     @Override
     public PersonDto getByPhone(String phone) {
         log.info("request person with phone {}", phone);
-        return personService.find(phone);
+        return personService.getByPhone(phone);
     }
 
     @Override

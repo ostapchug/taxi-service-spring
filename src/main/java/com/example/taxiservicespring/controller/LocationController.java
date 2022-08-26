@@ -20,7 +20,7 @@ public class LocationController implements LocationApi {
     @Override
     public LocationDto getById(long id) {
         log.info("request location with id {}", id);
-        return locationService.find(id);
+        return locationService.getById(id);
     }
 
     @Override

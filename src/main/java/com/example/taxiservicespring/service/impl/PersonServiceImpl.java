@@ -22,7 +22,7 @@ public class PersonServiceImpl implements PersonService {
     private final PersonRepository personRepository;
 
     @Override
-    public PersonDto find(long id) {
+    public PersonDto getById(long id) {
         log.info("get person by id {}", id);
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
@@ -30,7 +30,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonDto find(String phone) {
+    public PersonDto getByPhone(String phone) {
         log.info("get person by phone {}", phone);
         Person person = personRepository.findByPhone(phone)
                 .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
