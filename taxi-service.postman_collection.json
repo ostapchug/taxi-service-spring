@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a600872f-ad4a-4ea5-8d28-ede721406668",
+		"_postman_id": "ae357d23-9274-4a4f-ae87-7fe0cf6b7baa",
 		"name": "taxi-service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -30,12 +30,12 @@
 					"response": []
 				},
 				{
-					"name": "get car-model  by id",
+					"name": "get car model  by id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/car/car-model/id/1",
+							"raw": "http://localhost:8080/car/model/id/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -43,7 +43,7 @@
 							"port": "8080",
 							"path": [
 								"car",
-								"car-model",
+								"model",
 								"id",
 								"1"
 							]
@@ -353,7 +353,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/trip/person-id/1",
+							"raw": "http://localhost:8080/trip/person/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -361,7 +361,7 @@
 							"port": "8080",
 							"path": [
 								"trip",
-								"person-id",
+								"person",
 								"1"
 							]
 						}

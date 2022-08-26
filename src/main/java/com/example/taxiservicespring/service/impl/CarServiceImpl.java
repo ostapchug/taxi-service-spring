@@ -31,32 +31,32 @@ public class CarServiceImpl implements CarService {
     private final CarModelRepository carModelRepository;
 
     @Override
-    public CarDto find(long id) {
+    public CarDto getById(long id) {
         log.info("get car by id {}", id);
-        Car car = carRepository.find(id);
+        Car car = carRepository.findById(id);
         return CarMapper.INSTANCE.mapCarDto(car);
     }
 
     @Override
-    public CategoryDto findCategory(int id) {
+    public CategoryDto getCategoryById(int id) {
         log.info("get category by id {}", id);
-        Category category = categoryRepository.find(id);
+        Category category = categoryRepository.findById(id);
         return CategoryMapper.INSTANCE.mapCategoryDto(category);
     }
 
     @Override
-    public List<CategoryDto> findAllCategories() {
+    public List<CategoryDto> getAllCategories() {
         log.info("get all categories");
-        return categoryRepository.getAll()
+        return categoryRepository.findAll()
                 .stream()
                 .map(category -> CategoryMapper.INSTANCE.mapCategoryDto(category))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CarModelDto findCarModel(long id) {
+    public CarModelDto getCarModelById(long id) {
         log.info("get car model by id {}", id);
-        CarModel carModel = carModelRepository.find(id);
+        CarModel carModel = carModelRepository.findById(id);
         return CarModelMapper.INSTANCE.mapCarModelDto(carModel);
     }
 }

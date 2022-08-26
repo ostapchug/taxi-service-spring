@@ -8,11 +8,11 @@ import com.example.taxiservicespring.controller.dto.CategoryDto;
 
 public interface CarService {
 
-    CarDto find(long id);
+    CarDto getById(long id);
 
-    CategoryDto findCategory(int id);
+    CategoryDto getCategoryById(int id);
 
-    List<CategoryDto> findAllCategories();
+    List<CategoryDto> getAllCategories();
 
-    CarModelDto findCarModel(long id);
+    CarModelDto getCarModelById(long id);
 }
