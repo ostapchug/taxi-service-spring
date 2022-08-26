@@ -192,7 +192,7 @@ public class TripServiceImpl implements TripService {
 
     private TripConfirmDto createTripConfirmDto(TripCreateDto tripCreateDto, Category category, List<CarDto> cars) {
         BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
-        BigDecimal price = getPrice(category.getId(), distance).multiply(BigDecimal.valueOf(cars.size()));
+        BigDecimal price = getPrice(category.getId(), distance, cars.size());
         BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
         LocalTime waitTime = getWaitTime(tripCreateDto.getOriginId(), cars);
@@ -215,8 +215,7 @@ public class TripServiceImpl implements TripService {
         Location destination = locationRepository.getReferenceById(tripConfirmDto.getDestinationId());
         Category category = categoryRepository.getReferenceById(tripConfirmDto.getCategoryId());
         BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
-        BigDecimal price = getPrice(category.getId(), distance)
-                .multiply(BigDecimal.valueOf(tripConfirmDto.getCars().size()));
+        BigDecimal price = getPrice(category.getId(), distance, tripConfirmDto.getCars().size());
         BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
         BigDecimal total = price.subtract(discount);
         return Trip.builder()
@@ -235,11 +234,8 @@ public class TripServiceImpl implements TripService {
                 .orElseThrow(() -> new EntityNotFoundException("Origin location is not found!"));
         Location destination = locationRepository.findById(destinationId)
                 .orElseThrow(() -> new EntityNotFoundException("Destination location is not found!"));
-        BigDecimal lat1 = origin.getLatitude();
-        BigDecimal lat2 = destination.getLatitude();
-        BigDecimal lon1 = origin.getLongitude();
-        BigDecimal lon2 = destination.getLongitude();
-        BigDecimal distance = DistanceCalculator.getDistance(lat1, lat2, lon1, lon2);
+        BigDecimal distance = DistanceCalculator.getDistance(origin.getLatitude(), destination.getLatitude(),
+                origin.getLongitude(), destination.getLongitude());
         return distance.setScale(SCALE, RoundingMode.HALF_UP);
     }
 
@@ -283,10 +279,12 @@ public class TripServiceImpl implements TripService {
                 .collect(Collectors.toList());
     }
 
-    private BigDecimal getPrice(int categoryId, BigDecimal distance) {
+    private BigDecimal getPrice(int categoryId, BigDecimal distance, int carCount) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Category is not found!"));
-        return category.getPrice().multiply(distance).setScale(SCALE, RoundingMode.HALF_UP);
+        return category.getPrice().multiply(distance)
+                .multiply(BigDecimal.valueOf(carCount))
+                .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     private BigDecimal getDiscount(long personId, BigDecimal bill) {
