@@ -3,14 +3,12 @@ package com.example.taxiservicespring.service.repository.impl;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Component;
-
+import org.springframework.stereotype.Repository;
 import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.model.Car;
 import com.example.taxiservicespring.service.model.Trip;
@@ -20,29 +18,19 @@ import com.example.taxiservicespring.service.repository.TripRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+@Repository
 public class TripRepositoryImpl implements TripRepository {
     private final List<Trip> trips = new ArrayList<>();
     private final Map<Long, List<Car>> m2mTripCar = new HashMap<>();
     private long uid = 0L;
 
     @Override
-    public Trip find(long id) {
+    public Trip findById(long id) {
         log.info("find trip by id {}", id);
         return trips.stream()
                 .filter(trip -> trip.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Trip is not found!"));
-    }
-
-    @Override
-    public Trip create(Trip trip, List<Car> cars) {
-        log.info("create trip");
-        trip.setId(++uid);
-        trip.setDate(LocalDateTime.now());
-        m2mTripCar.put(trip.getId(), cars);
-        trips.add(trip);
-        return trip;
     }
 
     @Override
@@ -61,18 +49,21 @@ public class TripRepositoryImpl implements TripRepository {
 
     @Override
     public List<Trip> findAllByDate(LocalDateTime[] dateRange) {
-        log.info("find trips filtered by date {}", Arrays.toString(dateRange));
+        log.info("find trips filtered by date range {} - {}", dateRange[0], dateRange[1]);
         return trips.stream()
-                .filter(trip -> trip.getDate().isAfter(dateRange[0]) && trip.getDate().isBefore(dateRange[1]))
+                .filter(trip -> trip.getDate().isAfter(dateRange[0])
+                        && trip.getDate().isBefore(dateRange[1]))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Trip> findAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange) {
-        log.info("find trips filtered by person id {} and date {}", personId, Arrays.toString(dateRange));
+        log.info("find trips filtered by person id {} and date range {} - {}", personId,
+                dateRange[0], dateRange[1]);
         return trips.stream()
                 .filter(t -> t.getPersonId() == personId)
-                .filter(trip -> trip.getDate().isAfter(dateRange[0]) && trip.getDate().isBefore(dateRange[1]))
+                .filter(trip -> trip.getDate().isAfter(dateRange[0])
+                        && trip.getDate().isBefore(dateRange[1]))
                 .collect(Collectors.toList());
     }
 
@@ -83,9 +74,19 @@ public class TripRepositoryImpl implements TripRepository {
     }
 
     @Override
-    public Trip updateStatus(long tripId, TripStatus status) {
-        log.info("update status to {} for trip with id {}", status, tripId);
-        Trip trip = find(tripId);
+    public Trip create(Trip trip, List<Car> cars) {
+        log.info("create trip");
+        trip.setId(++uid);
+        trip.setDate(LocalDateTime.now());
+        m2mTripCar.put(trip.getId(), cars);
+        trips.add(trip);
+        return trip;
+    }
+
+    @Override
+    public Trip updateStatus(long id, TripStatus status) {
+        log.info("update status to {} for trip with id {}", status, id);
+        Trip trip = findById(id);
         trip.setStatus(status);
         return trip;
     }
@@ -94,7 +95,7 @@ public class TripRepositoryImpl implements TripRepository {
     public BigDecimal getTotalBill(long personId, TripStatus status) {
         log.info("find total bill for person with id {}", personId);
         return trips.stream()
-                .filter(t -> t.getPersonId() == personId && t.getStatus().equals(status))
+                .filter(t -> t.getPersonId() == personId && t.getStatus() == status)
                 .map(t -> t.getBill())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

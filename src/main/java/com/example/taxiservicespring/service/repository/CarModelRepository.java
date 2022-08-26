@@ -4,5 +4,5 @@ import com.example.taxiservicespring.service.model.CarModel;
 
 public interface CarModelRepository {
 
-    CarModel find(long id);
+    CarModel findById(long id);
 }

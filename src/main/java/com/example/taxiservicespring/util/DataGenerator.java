@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DataGenerator {
-    private static final String[] LOCATION_STREET_NAMES = {"Molodizhna", "Nezalezhnosti", "Halytska", "Vovchynetska",
-            "Pasichna"};
+    private static final String[] LOCATION_STREET_NAMES = {"Molodizhna", "Nezalezhnosti", "Halytska",
+            "Vovchynetska", "Pasichna"};
     private static final String[] LOCATION_STREET_NUMBERS = {"36", "168", "11", "225", "21"};
     private static final BigDecimal[] LOCATION_LATITUDES = {BigDecimal.valueOf(48.925541084296924),
             BigDecimal.valueOf(48.91574609793521), BigDecimal.valueOf(48.922336888655614),
@@ -52,7 +52,8 @@ public class DataGenerator {
     }
 
     public static List<Category> createCategories() {
-        return IntStream.iterate(0, i -> i + 1).limit(2)
+        return IntStream.iterate(0, i -> i + 1)
+                .limit(2)
                 .mapToObj(i -> Category.builder()
                         .id(i + 1)
                         .name(CATEGORY_NAMES[i])
@@ -62,7 +63,8 @@ public class DataGenerator {
     }
 
     public static List<Location> createLocations() {
-        return IntStream.iterate(0, i -> i + 1).limit(4)
+        return IntStream.iterate(0, i -> i + 1)
+                .limit(4)
                 .mapToObj(i -> Location.builder()
                         .id(i + 1)
                         .streetName(LOCATION_STREET_NAMES[i])
@@ -77,7 +79,8 @@ public class DataGenerator {
         List<CarModel> carModels = createCarModels();
         List<Category> categories = createCategories();
         List<Location> locations = createLocations();
-        return IntStream.iterate(0, i -> i + 1).limit(4)
+        return IntStream.iterate(0, i -> i + 1)
+                .limit(4)
                 .mapToObj(i -> Car.builder()
                         .id(i + 1)
                         .regNumber(CAR_REG_NUMBERS[i])
@@ -96,7 +99,8 @@ public class DataGenerator {
                 .password("Admin#0")
                 .name("John")
                 .surname("Doe")
-                .role(Role.ADMIN).build();
+                .role(Role.ADMIN)
+                .build();
         persons.add(person);
         return persons;
     }

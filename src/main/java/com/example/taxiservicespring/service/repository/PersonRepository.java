@@ -6,11 +6,11 @@ import com.example.taxiservicespring.service.model.Person;
 
 public interface PersonRepository {
 
-    Person find(long id);
+    Person findById(long id);
 
-    Person find(String phone);
+    Person findByPhone(String phone);
 
-    List<Person> getAll();
+    List<Person> findAll();
 
     Person create(Person person);
 

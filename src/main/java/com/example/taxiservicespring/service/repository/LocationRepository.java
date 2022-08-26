@@ -6,7 +6,7 @@ import com.example.taxiservicespring.service.model.Location;
 
 public interface LocationRepository {
 
-    Location find(long id);
+    Location findById(long id);
 
-    List<Location> getAll();
+    List<Location> findAll();
 }

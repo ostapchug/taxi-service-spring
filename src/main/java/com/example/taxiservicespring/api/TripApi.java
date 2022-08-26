@@ -1,5 +1,6 @@
 package com.example.taxiservicespring.api;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,7 +18,7 @@ import com.example.taxiservicespring.controller.dto.CarDto;
 import com.example.taxiservicespring.controller.dto.TripConfirmDto;
 import com.example.taxiservicespring.controller.dto.TripCreateDto;
 import com.example.taxiservicespring.controller.dto.TripDto;
-
+import com.example.taxiservicespring.service.model.TripStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,14 +36,6 @@ public interface TripApi {
     @GetMapping(value = "/id/{id}")
     TripDto getById(@PathVariable long id);
 
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "tripId", paramType = "path", required = true, value = "Trip id")
-    })
-    @ApiOperation("Get trip cars by trip id")
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/car/{tripId}")
-    List<CarDto> getCarsByTripId(@PathVariable long tripId);
-
     @ApiOperation("Get all trips")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
@@ -53,7 +46,7 @@ public interface TripApi {
         })
     @ApiOperation("Get trips by person id")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/person-id/{personId}")
+    @GetMapping(value = "/person/{personId}")
     List<TripDto> getAllByPersonId(@PathVariable long personId);
 
     @ApiImplicitParams({
@@ -62,7 +55,7 @@ public interface TripApi {
     @ApiOperation("Get trips by date")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/date/{dateRange}")
-    List<TripDto> getAllByDate(@PathVariable String dateRange);
+    List<TripDto> getAllByDate(@PathVariable LocalDateTime[] dateRange);
 
     @ApiImplicitParams({
         @ApiImplicitParam(name = "personId", paramType = "path", required = true, value = "Person id"),
@@ -71,7 +64,15 @@ public interface TripApi {
     @ApiOperation("Get trips by person id and date")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{personId}/{dateRange}")
-    List<TripDto> getAllByPersonIdAndDate(@PathVariable long personId, @PathVariable String dateRange);
+    List<TripDto> getAllByPersonIdAndDate(@PathVariable long personId, @PathVariable LocalDateTime[] dateRange);
+
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "id", paramType = "path", required = true, value = "Trip id")
+    })
+    @ApiOperation("Get trip cars by trip id")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/car/{id}")
+    List<CarDto> getCarsByTripId(@PathVariable long id);
 
     @ApiOperation("Create trip")
     @ResponseStatus(HttpStatus.CREATED)
@@ -84,10 +85,10 @@ public interface TripApi {
     TripDto confirm(@Valid @RequestBody TripConfirmDto tripConfirmDto);
 
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "tripId", paramType = "path", required = true, value = "Trip id"),
+        @ApiImplicitParam(name = "id", paramType = "path", required = true, value = "Trip id"),
         @ApiImplicitParam(name = "status", paramType = "path", required = true, value = "Trip status")
         })
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping(value = "/status/{tripId}/{status}")
-    TripDto updateStatus(@PathVariable long tripId, @PathVariable String status);
+    @PutMapping(value = "/status/{id}/{status}")
+    TripDto updateStatus(@PathVariable long id, @PathVariable TripStatus status);
 }

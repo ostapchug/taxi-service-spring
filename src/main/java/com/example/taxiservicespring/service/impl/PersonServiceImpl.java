@@ -21,23 +21,23 @@ public class PersonServiceImpl implements PersonService {
     private final PersonRepository personRepository;
 
     @Override
-    public PersonDto find(long id) {
+    public PersonDto getById(long id) {
         log.info("get person by id {}", id);
-        Person person = personRepository.find(id);
+        Person person = personRepository.findById(id);
         return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
-    public PersonDto find(String phone) {
+    public PersonDto getByPhone(String phone) {
         log.info("get person by phone {}", phone);
-        Person person = personRepository.find(phone);
+        Person person = personRepository.findByPhone(phone);
         return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
     public List<PersonDto> getAll() {
         log.info("get all persons");
-        return personRepository.getAll()
+        return personRepository.findAll()
                 .stream()
                 .map(person -> PersonMapper.INSTANCE.mapPersonDto(person))
                 .collect(Collectors.toList());

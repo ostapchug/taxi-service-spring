@@ -6,7 +6,7 @@ import com.example.taxiservicespring.service.model.Category;
 
 public interface CategoryRepository {
 
-    Category find(int id);
+    Category findById(int id);
 
-    List<Category> getAll();
+    List<Category> findAll();
 }

@@ -21,16 +21,16 @@ public class LocationServiceImpl implements LocationService {
     private final LocationRepository locationRepository;
 
     @Override
-    public LocationDto find(long id) {
+    public LocationDto getById(long id) {
         log.info("get location by id {}", id);
-        Location location = locationRepository.find(id);
+        Location location = locationRepository.findById(id);
         return LocationMapper.INSTANCE.mapLocationDto(location);
     }
 
     @Override
     public List<LocationDto> getAll() {
         log.info("get all locations");
-        return locationRepository.getAll()
+        return locationRepository.findAll()
                 .stream()
                 .map(location -> LocationMapper.INSTANCE.mapLocationDto(location))
                 .collect(Collectors.toList());

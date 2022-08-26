@@ -10,9 +10,7 @@ import com.example.taxiservicespring.service.model.TripStatus;
 
 public interface TripRepository {
 
-    Trip find(long id);
-
-    Trip create(Trip trip, List<Car> cars);
+    Trip findById(long id);
 
     List<Trip> findAll();
 
@@ -22,9 +20,11 @@ public interface TripRepository {
 
     List<Trip> findAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange);
 
-    List<Car> findCarsByTripId(long tripId);
+    List<Car> findCarsByTripId(long id);
 
-    Trip updateStatus(long tripId, TripStatus status);
+    Trip create(Trip trip, List<Car> cars);
+
+    Trip updateStatus(long id, TripStatus status);
 
     BigDecimal getTotalBill(long personId, TripStatus status);
 }
