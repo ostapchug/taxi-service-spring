@@ -86,7 +86,8 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public List<TripDto> getAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange) {
-        log.info("get list of trips filtered by person id {} and date range {} - {}", personId, dateRange[0], dateRange[1]);
+        log.info("get list of trips filtered by person id {} and date range {} - {}", personId, dateRange[0],
+                dateRange[1]);
         return tripRepository.findAllByPersonIdAndDate(personId, dateRange)
                 .stream()
                 .map(trip -> TripMapper.INSTANCE.mapTripDto(trip))
