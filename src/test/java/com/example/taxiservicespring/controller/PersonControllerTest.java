@@ -48,7 +48,7 @@ class PersonControllerTest {
     @Test
     void getByIdTest() throws Exception {
         PersonDto personDto = createPersonDto();
-        when(personService.find(ID)).thenReturn(personDto);
+        when(personService.getById(ID)).thenReturn(personDto);
 
         mockMvc.perform(get("/api/v1/person/id/" + ID))
             .andExpect(status().isOk())
@@ -59,7 +59,7 @@ class PersonControllerTest {
     @Test
     void getByPhoneTest() throws Exception {
         PersonDto personDto = createPersonDto();
-        when(personService.find(PHONE)).thenReturn(personDto);
+        when(personService.getByPhone(PHONE)).thenReturn(personDto);
 
         mockMvc.perform(get("/api/v1/person/phone/" + PHONE))
             .andExpect(status().isOk())

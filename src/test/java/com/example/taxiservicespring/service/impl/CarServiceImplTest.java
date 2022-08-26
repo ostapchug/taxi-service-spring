@@ -53,7 +53,7 @@ class CarServiceImplTest {
         Car car = createCar();
         when(carRepository.findById(anyLong())).thenReturn(Optional.of(car));
 
-        CarDto carDto = carService.find(anyLong());
+        CarDto carDto = carService.getById(anyLong());
 
         assertThat(carDto, allOf(
                 hasProperty("id", equalTo(car.getId())),
@@ -68,7 +68,7 @@ class CarServiceImplTest {
     @Test
     void findCarNotFoundTest() {
         when(carRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> carService.find(anyLong()));
+        assertThrows(EntityNotFoundException.class, () -> carService.getById(anyLong()));
     }
 
     @Test
@@ -76,7 +76,7 @@ class CarServiceImplTest {
         Category category = createCategory();
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.of(category));
 
-        CategoryDto categoryDto = carService.findCategory(anyInt());
+        CategoryDto categoryDto = carService.getCategoryById(anyInt());
 
         assertThat(categoryDto, allOf(
                 hasProperty("id", equalTo(category.getId())),
@@ -87,7 +87,7 @@ class CarServiceImplTest {
     @Test
     void findCategoryNotFoundTest() {
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> carService.findCategory(anyInt()));
+        assertThrows(EntityNotFoundException.class, () -> carService.getCategoryById(anyInt()));
     }
 
     @Test
@@ -95,7 +95,7 @@ class CarServiceImplTest {
         Category category = createCategory();
         when(categoryRepository.findAllCategories()).thenReturn(List.of(category));
 
-        List<CategoryDto> categoryDtoList = carService.findAllCategories();
+        List<CategoryDto> categoryDtoList = carService.getAllCategories();
 
         assertThat(categoryDtoList, hasSize(1));
         assertThat(categoryDtoList.get(0), allOf(
@@ -109,7 +109,7 @@ class CarServiceImplTest {
         CarModel carModel = createCarModel();
         when(carModelRepository.findById(anyLong())).thenReturn(Optional.of(carModel));
 
-        CarModelDto carModelDto = carService.findCarModel(anyLong());
+        CarModelDto carModelDto = carService.getCarModelById(anyLong());
 
         assertThat(carModelDto, allOf(
                 hasProperty("id", equalTo(carModel.getId())),
@@ -123,6 +123,6 @@ class CarServiceImplTest {
     @Test
     void findCarModelNotFoundTest() {
         when(carModelRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> carService.findCarModel(anyLong()));
+        assertThrows(EntityNotFoundException.class, () -> carService.getCarModelById(anyLong()));
     }
 }

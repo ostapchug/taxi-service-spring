@@ -38,7 +38,7 @@ class LocationControllerTest {
     @Test
     void getByIdTest() throws Exception {
         LocationDto locationDto = createLocationDto();
-        when(locationService.find(anyLong())).thenReturn(locationDto);
+        when(locationService.getById(anyLong())).thenReturn(locationDto);
 
         mockMvc.perform(get("/api/v1/location/id/" + anyLong()))
             .andExpect(status().isOk())

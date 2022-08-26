@@ -104,7 +104,7 @@ class TripServiceImplTest {
         when(tripRepository.findById(anyLong())).thenReturn(Optional.of(trip));
         when(tripMapper.mapTripDto(trip)).thenReturn(testTripDto);
 
-        TripDto tripDto = tripService.find(anyLong());
+        TripDto tripDto = tripService.getById(anyLong());
 
         assertThat(tripDto, equalTo(testTripDto));
     }
@@ -112,7 +112,7 @@ class TripServiceImplTest {
     @Test
     void findNotFoundTest() {
         when(tripRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> tripService.find(anyLong()));
+        assertThrows(EntityNotFoundException.class, () -> tripService.getById(anyLong()));
     }
 
     @Test
@@ -431,7 +431,7 @@ class TripServiceImplTest {
         when(tripMapper.mapTripDto(any())).thenReturn(testTripDto);
         when(trip.getStatus()).thenReturn(TripStatus.NEW);
 
-        TripDto tripDto = tripService.updateStatus(ID, TripStatus.ACCEPTED.name());
+        TripDto tripDto = tripService.updateStatus(ID, TripStatus.ACCEPTED);
 
         verify(trip, times(1)).setStatus(TripStatus.ACCEPTED);
         verify(trip, never()).getCars();
@@ -449,7 +449,7 @@ class TripServiceImplTest {
         when(trip.getStatus()).thenReturn(TripStatus.ACCEPTED);
         when(trip.getCars()).thenReturn(Set.of(car));
 
-        TripDto tripDto = tripService.updateStatus(ID, TripStatus.COMPLETED.name());
+        TripDto tripDto = tripService.updateStatus(ID, TripStatus.COMPLETED);
         verify(trip, times(1)).setStatus(TripStatus.COMPLETED);
         verify(car, times(1)).setStatus(CarStatus.READY);
         assertThat(tripDto, equalTo(testTripDto));
@@ -458,7 +458,7 @@ class TripServiceImplTest {
     @Test
     void updateStatusTripNotFoundTest() {
         when(tripRepository.findByIdForUpdate(anyLong())).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> tripService.updateStatus(ID, TripStatus.ACCEPTED.name()));
+        assertThrows(EntityNotFoundException.class, () -> tripService.updateStatus(ID, TripStatus.ACCEPTED));
     }
 
     @Test
@@ -468,6 +468,6 @@ class TripServiceImplTest {
         trip.setStatus(TripStatus.COMPLETED);
         when(tripRepository.findByIdForUpdate(anyLong())).thenReturn(Optional.of(trip));
 
-        assertThrows(DataProcessingException.class, () -> tripService.updateStatus(ID, TripStatus.ACCEPTED.name()));
+        assertThrows(DataProcessingException.class, () -> tripService.updateStatus(ID, TripStatus.ACCEPTED));
     }
 }

@@ -45,7 +45,7 @@ class PersonServiceImplTest {
         Person person = createPerson();
         when(personRepository.findById(ID)).thenReturn(Optional.of(person));
 
-        PersonDto personDto = personService.find(ID);
+        PersonDto personDto = personService.getById(ID);
 
         assertThat(personDto, allOf(
                 hasProperty("id", equalTo(person.getId())),
@@ -60,7 +60,7 @@ class PersonServiceImplTest {
     @Test
     void findByIdNotFoundTest() {
         when(personRepository.findById(ID)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> personService.find(ID));
+        assertThrows(EntityNotFoundException.class, () -> personService.getById(ID));
     }
 
     @Test
@@ -68,7 +68,7 @@ class PersonServiceImplTest {
         Person person = createPerson();
         when(personRepository.findByPhone(PHONE)).thenReturn(Optional.of(person));
 
-        PersonDto personDto = personService.find(PHONE);
+        PersonDto personDto = personService.getByPhone(PHONE);
 
         assertThat(personDto, allOf(
                 hasProperty("id", equalTo(person.getId())),
@@ -83,7 +83,7 @@ class PersonServiceImplTest {
     @Test
     void findByPhoneNotFoundTest() {
         when(personRepository.findByPhone(PHONE)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> personService.find(PHONE));
+        assertThrows(EntityNotFoundException.class, () -> personService.getByPhone(PHONE));
     }
 
     @Test

@@ -38,7 +38,7 @@ class LocationServiceImplTest {
         Location location = createLocation();
         when(locationRepository.findById(anyLong())).thenReturn(Optional.of(location));
 
-        LocationDto locationDto = locationService.find(anyLong());
+        LocationDto locationDto = locationService.getById(anyLong());
 
         assertThat(locationDto, allOf(
                 hasProperty("id", equalTo(location.getId())),
@@ -50,7 +50,7 @@ class LocationServiceImplTest {
     @Test
     void findLocationNotFoundTest() {
         when(locationRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> locationService.find(anyLong()));
+        assertThrows(EntityNotFoundException.class, () -> locationService.getById(anyLong()));
     }
 
     @Test

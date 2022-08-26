@@ -43,7 +43,7 @@ class CarControllerTest {
     @Test
     void getByIdTest() throws Exception {
         CarDto carDto = createCarDto();
-        when(carService.find(anyLong())).thenReturn(carDto);
+        when(carService.getById(anyLong())).thenReturn(carDto);
 
         mockMvc.perform(get("/api/v1/car/id/" + anyLong()))
             .andExpect(status().isOk())
@@ -59,7 +59,7 @@ class CarControllerTest {
     @Test
     void getCategoryByIdTest() throws Exception {
         CategoryDto categoryDto = createCategoryDto();
-        when(carService.findCategory(anyInt())).thenReturn(categoryDto);
+        when(carService.getCategoryById(anyInt())).thenReturn(categoryDto);
 
         mockMvc.perform(get("/api/v1/car/category/id/" + anyInt()))
             .andExpect(status().isOk())
@@ -71,7 +71,7 @@ class CarControllerTest {
     @Test
     void getAllCategoriesTest() throws Exception {
         CategoryDto categoryDto = createCategoryDto();
-        when(carService.findAllCategories()).thenReturn(List.of(categoryDto));
+        when(carService.getAllCategories()).thenReturn(List.of(categoryDto));
 
         mockMvc.perform(get("/api/v1/car/category"))
             .andExpect(status().isOk())
@@ -82,9 +82,9 @@ class CarControllerTest {
     @Test
     void getCarModelByIdTest() throws Exception {
         CarModelDto carModelDto = createCarModelDto();
-        when(carService.findCarModel(anyLong())).thenReturn(carModelDto);
+        when(carService.getCarModelById(anyLong())).thenReturn(carModelDto);
 
-        mockMvc.perform(get("/api/v1/car/car-model/id/" + anyLong()))
+        mockMvc.perform(get("/api/v1/car/model/id/" + anyLong()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(carModelDto.getId()))

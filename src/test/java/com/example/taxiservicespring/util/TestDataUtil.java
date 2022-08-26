@@ -66,8 +66,9 @@ public class TestDataUtil {
     public static final long ORIGIN_ID = 1L;
     public static final long DEST_ID = 4L;
     public static final BigDecimal TOTAL_BILL = BigDecimal.valueOf(100).setScale(2);
-    public static final String DATE_RANGE = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)) + "-"
+    public static final String DATE_RANGE_PARAM = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT)) + "-"
             + LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+    public static final LocalDateTime[] DATE_RANGE = {LocalDate.now().atStartOfDay(), LocalDateTime.now()};
     public static final Map<BigDecimal, BigDecimal> DISCOUNTS = Map.of(
             BigDecimal.valueOf(100), BigDecimal.valueOf(0.02),
             BigDecimal.valueOf(500), BigDecimal.valueOf(0.05),

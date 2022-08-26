@@ -1,13 +1,12 @@
 package com.example.taxiservicespring.controller;
 
-import static com.example.taxiservicespring.util.TestDataUtil.DATE_RANGE;
+import static com.example.taxiservicespring.util.TestDataUtil.DATE_RANGE_PARAM;
 import static com.example.taxiservicespring.util.TestDataUtil.createTripConfirmDto;
 import static com.example.taxiservicespring.util.TestDataUtil.createTripCreateDto;
 import static com.example.taxiservicespring.util.TestDataUtil.createTripDto;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -56,7 +55,7 @@ class TripControllerTest {
     @Test
     void getByIdTest() throws Exception {
         TripDto tripDto = createTripDto();
-        when(tripService.find(anyLong())).thenReturn(tripDto);
+        when(tripService.getById(anyLong())).thenReturn(tripDto);
 
         mockMvc.perform(get("/api/v1/trip/id/" + anyLong()))
             .andExpect(status().isOk())
@@ -97,7 +96,7 @@ class TripControllerTest {
         TripDto tripDto = createTripDto();
         when(tripService.getAllByPersonId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(tripDto)));
 
-        mockMvc.perform(get("/api/v1/trip/person-id/" + tripDto.getPersonId() + "?page=0&size=2&sort=date,desc"))
+        mockMvc.perform(get("/api/v1/trip/person/" + tripDto.getPersonId() + "?page=0&size=2&sort=date,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.totalElements").value(1))
@@ -115,9 +114,9 @@ class TripControllerTest {
     @Test
     void getAllByDateTest() throws Exception {
         TripDto tripDto = createTripDto();
-        when(tripService.getAllByDate(anyString(), any())).thenReturn(new PageImpl<>(List.of(tripDto)));
+        when(tripService.getAllByDate(any(), any())).thenReturn(new PageImpl<>(List.of(tripDto)));
 
-        mockMvc.perform(get("/api/v1/trip/date/" + DATE_RANGE + "?page=0&size=2&sort=date,desc"))
+        mockMvc.perform(get("/api/v1/trip/date/" + DATE_RANGE_PARAM + "?page=0&size=2&sort=date,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.totalElements").value(1))
@@ -135,9 +134,9 @@ class TripControllerTest {
     @Test
     void getAllByPersonIdAndDateTest() throws Exception {
         TripDto tripDto = createTripDto();
-        when(tripService.getAllByPersonIdAndDate(anyLong(), anyString(), any())).thenReturn(new PageImpl<>(List.of(tripDto)));
+        when(tripService.getAllByPersonIdAndDate(anyLong(), any(), any())).thenReturn(new PageImpl<>(List.of(tripDto)));
 
-        mockMvc.perform(get("/api/v1/trip/" + tripDto.getPersonId() + "/" + DATE_RANGE + "?page=0&size=2&sort=date,desc"))
+        mockMvc.perform(get("/api/v1/trip/" + tripDto.getPersonId() + "/" + DATE_RANGE_PARAM + "?page=0&size=2&sort=date,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.totalElements").value(1))
@@ -340,7 +339,7 @@ class TripControllerTest {
     void updateStatusTest() throws Exception {
         TripDto tripDto = createTripDto();
         tripDto.setStatus(TripStatus.ACCEPTED);
-        when(tripService.updateStatus(anyLong(), anyString())).thenReturn(tripDto);
+        when(tripService.updateStatus(anyLong(), any())).thenReturn(tripDto);
 
         mockMvc.perform(put("/api/v1/trip/status/1/accepted"))
             .andExpect(status().isOk())
