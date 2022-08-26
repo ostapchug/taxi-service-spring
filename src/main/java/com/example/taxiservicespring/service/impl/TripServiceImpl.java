@@ -114,7 +114,7 @@ public class TripServiceImpl implements TripService {
                     .stream()
                     .map(car -> CarMapper.INSTANCE.mapCarDto(car))
                     .collect(Collectors.toList());
-            } else if (tripCreateDto.isIgnoreCategory()) {
+        } else if (tripCreateDto.isIgnoreCategory()) {
             Car car = carRepository.findByCapacity(tripCreateDto.getCapacity());
             category = categoryRepository.findById(car.getCategoryId());
             cars.add(CarMapper.INSTANCE.mapCarDto(car));
@@ -139,18 +139,7 @@ public class TripServiceImpl implements TripService {
             }
             cars.add(car);
         }
-        Category category = categoryRepository.findById(tripConfirmDto.getCategoryId());
-        BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
-        BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
-        BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
-        BigDecimal total = price.subtract(discount);
-        Trip trip = Trip.builder()
-                .personId(tripConfirmDto.getPersonId())
-                .originId(tripConfirmDto.getOriginId())
-                .destinationId(tripConfirmDto.getDestinationId())
-                .distance(distance)
-                .bill(total)
-                .build();
+        Trip trip = createTrip(tripConfirmDto);
         trip = tripRepository.create(trip, cars);
         return TripMapper.INSTANCE.mapTripDto(trip);
     }
@@ -162,6 +151,49 @@ public class TripServiceImpl implements TripService {
         return TripMapper.INSTANCE.mapTripDto(trip);
     }
 
+    private TripConfirmDto createTripConfirmDto(TripCreateDto tripCreateDto, Category category, List<CarDto> cars) {
+        BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
+        BigDecimal price = getPrice(category.getPrice(), distance, cars.size());
+        BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
+        BigDecimal bill = price.subtract(discount);
+        LocalTime waitTime = getWaitTime(tripCreateDto.getOriginId(), cars);
+        return TripConfirmDto.builder()
+                .personId(tripCreateDto.getPersonId())
+                .originId(tripCreateDto.getOriginId())
+                .destinationId(tripCreateDto.getDestinationId())
+                .categoryId(tripCreateDto.getCategoryId())
+                .distance(distance)
+                .price(price).discount(discount)
+                .total(bill)
+                .waitTime(waitTime)
+                .cars(cars)
+                .build();
+    }
+
+    private Trip createTrip(TripConfirmDto tripConfirmDto) {
+        Category category = categoryRepository.findById(tripConfirmDto.getCategoryId());
+        BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
+        BigDecimal price = getPrice(category.getPrice(), distance, tripConfirmDto.getCars().size());
+        BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
+        BigDecimal bill = price.subtract(discount);
+        return Trip.builder()
+                .personId(tripConfirmDto.getPersonId())
+                .originId(tripConfirmDto.getOriginId())
+                .destinationId(tripConfirmDto.getDestinationId())
+                .distance(distance)
+                .bill(bill)
+                .build();
+    }
+
+    private BigDecimal getDistance(long originId, long destinationId) {
+        log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
+        Location origin = locationRepository.findById(originId);
+        Location destination = locationRepository.findById(destinationId);
+        BigDecimal distance = DistanceCalculator.getDistance(origin.getLatitude(), destination.getLatitude(),
+                origin.getLongitude(), destination.getLongitude());
+        return distance.setScale(SCALE, RoundingMode.HALF_UP);
+    }
+
     private BigDecimal getDistanceForTrip(long originId, long destinationId) {
         BigDecimal distance = getDistance(originId, destinationId);
 
@@ -171,39 +203,10 @@ public class TripServiceImpl implements TripService {
         return distance;
     }
 
-    private TripConfirmDto createTripConfirmDto(TripCreateDto tripCreateDto, Category category, List<CarDto> cars) {
-        BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
-        BigDecimal price = getPrice(category.getPrice(), distance).multiply(BigDecimal.valueOf(cars.size()));
-        BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
-        BigDecimal total = price.subtract(discount);
-        LocalTime waitTime = getWaitTime(tripCreateDto.getOriginId(), cars);
-        return TripConfirmDto.builder()
-                .personId(tripCreateDto.getPersonId())
-                .originId(tripCreateDto.getOriginId())
-                .destinationId(tripCreateDto.getDestinationId())
-                .categoryId(tripCreateDto.getCategoryId())
-                .distance(distance)
-                .price(price).discount(discount)
-                .total(total)
-                .waitTime(waitTime)
-                .cars(cars)
-                .build();
-    }
-
-    private BigDecimal getDistance(long originId, long destinationId) {
-        log.info("find distance beetween locations with id's {} and {}", originId, destinationId);
-        Location origin = locationRepository.findById(originId);
-        Location destination = locationRepository.findById(destinationId);
-        BigDecimal lat1 = origin.getLatitude();
-        BigDecimal lat2 = destination.getLatitude();
-        BigDecimal lon1 = origin.getLongitude();
-        BigDecimal lon2 = destination.getLongitude();
-        BigDecimal distance = DistanceCalculator.getDistance(lat1, lat2, lon1, lon2);
-        return distance.setScale(SCALE, RoundingMode.HALF_UP);
-    }
-
-    private BigDecimal getPrice(BigDecimal categoryPrice, BigDecimal distance) {
-        return categoryPrice.multiply(distance).setScale(SCALE, RoundingMode.HALF_UP);
+    private BigDecimal getPrice(BigDecimal categoryPrice, BigDecimal distance, int carCount) {
+        return categoryPrice.multiply(distance)
+                .multiply(BigDecimal.valueOf(carCount))
+                .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     private BigDecimal getDiscount(long personId, BigDecimal bill) {
