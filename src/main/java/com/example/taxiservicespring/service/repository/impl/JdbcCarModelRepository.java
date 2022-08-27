@@ -19,7 +19,7 @@ public class JdbcCarModelRepository implements CarModelRepository {
     public Optional<CarModel> findById(long id) {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM car_model WHERE id = ?",
-                (rs, rowNum) ->  Optional.of(
+                (rs, rowNum) -> Optional.of(
                         new CarModel(
                                 rs.getLong("id"),
                                 rs.getString("brand"),
@@ -29,7 +29,6 @@ public class JdbcCarModelRepository implements CarModelRepository {
                                 rs.getInt("seat_count")
                                 )
                         ),
-                id
-                );
+                id);
     }
 }
