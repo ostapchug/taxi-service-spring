@@ -19,5 +19,4 @@ public class StringToLocalDateTimeConverter implements Converter<String, LocalDa
     result[1] = LocalDate.parse(range[1], formatter).atStartOfDay();
     return result;
   }
-
 }

@@ -194,7 +194,7 @@ public class TripServiceImpl implements TripService {
         BigDecimal distance = getDistanceForTrip(tripCreateDto.getOriginId(), tripCreateDto.getDestinationId());
         BigDecimal price = getPrice(category.getId(), distance, cars.size());
         BigDecimal discount = getDiscount(tripCreateDto.getPersonId(), price);
-        BigDecimal total = price.subtract(discount);
+        BigDecimal bill = price.subtract(discount);
         LocalTime waitTime = getWaitTime(tripCreateDto.getOriginId(), cars);
         return TripConfirmDto.builder()
                 .personId(tripCreateDto.getPersonId())
@@ -202,8 +202,9 @@ public class TripServiceImpl implements TripService {
                 .destinationId(tripCreateDto.getDestinationId())
                 .categoryId(tripCreateDto.getCategoryId())
                 .distance(distance)
-                .price(price).discount(discount)
-                .total(total)
+                .price(price)
+                .discount(discount)
+                .total(bill)
                 .waitTime(waitTime)
                 .cars(cars)
                 .build();
@@ -217,13 +218,13 @@ public class TripServiceImpl implements TripService {
         BigDecimal distance = getDistanceForTrip(tripConfirmDto.getOriginId(), tripConfirmDto.getDestinationId());
         BigDecimal price = getPrice(category.getId(), distance, tripConfirmDto.getCars().size());
         BigDecimal discount = getDiscount(tripConfirmDto.getPersonId(), price);
-        BigDecimal total = price.subtract(discount);
+        BigDecimal bill = price.subtract(discount);
         return Trip.builder()
                 .person(person)
                 .origin(origin)
                 .destination(destination)
                 .distance(distance)
-                .bill(total)
+                .bill(bill)
                 .date(LocalDateTime.now())
                 .build();
     }
