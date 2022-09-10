@@ -8,7 +8,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -155,7 +154,7 @@ public class TripServiceImpl implements TripService {
                 throw new DataProcessingException("Car doesn't belong to category");
             }
 
-            if (!car.getStatus().equals(CarStatus.READY)) {
+            if (car.getStatus() != CarStatus.READY) {
                 throw new DataProcessingException("Can't create new trip, car is busy");
             }
             car.setStatus(CarStatus.BUSY);
@@ -174,19 +173,15 @@ public class TripServiceImpl implements TripService {
         Trip trip = tripRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new EntityNotFoundException("Trip is not found!"));
         TripStatus currentStatus = trip.getStatus();
-        if (currentStatus == TripStatus.NEW || currentStatus == TripStatus.ACCEPTED) {
-            trip.setStatus(status);
 
-            if (status == TripStatus.COMPLETED || status == TripStatus.CANCELLED) {
-                Set<Car> cars = trip.getCars();
-                for (Car car : cars) {
-                    car.setStatus(CarStatus.READY);
-                }
-            }
-        } else {
+        if (currentStatus == TripStatus.COMPLETED || currentStatus == TripStatus.CANCELLED) {
             throw new DataProcessingException("Can't change status for trip that already done");
         }
-        trip = tripRepository.save(trip);
+        trip.setStatus(status);
+
+        if (status == TripStatus.COMPLETED || status == TripStatus.CANCELLED) {
+            trip.getCars().forEach(car -> car.setStatus(CarStatus.READY));
+        }
         return tripMapper.mapTripDto(trip);
     }
 
