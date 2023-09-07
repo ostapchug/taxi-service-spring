@@ -1,9 +1,10 @@
 package com.example.taxiservicespring.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.example.taxiservicespring.controller.dto.CarDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.example.taxiservicespring.controller.dto.TripConfirmDto;
 import com.example.taxiservicespring.controller.dto.TripCreateDto;
 import com.example.taxiservicespring.controller.dto.TripDto;
@@ -13,15 +14,13 @@ public interface TripService {
 
     TripDto getById(long id);
 
-    List<TripDto> getAll();
+    Page<TripDto> getAll(Pageable pageable);
 
-    List<TripDto> getAllByPersonId(long personId);
+    Page<TripDto> getAllByPersonId(long personId, Pageable pageable);
 
-    List<TripDto> getAllByDate(LocalDateTime[] dateRange);
+    Page<TripDto> getAllByDate(LocalDateTime[] dateRange, Pageable pageable);
 
-    List<TripDto> getAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange);
-
-    List<CarDto> getCarsByTripId(long id);
+    Page<TripDto> getAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange, Pageable pageable);
 
     TripConfirmDto create(TripCreateDto tripCreateDto);
 

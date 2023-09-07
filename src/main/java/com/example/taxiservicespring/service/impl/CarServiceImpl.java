@@ -9,6 +9,7 @@ import com.example.taxiservicespring.controller.dto.CarDto;
 import com.example.taxiservicespring.controller.dto.CarModelDto;
 import com.example.taxiservicespring.controller.dto.CategoryDto;
 import com.example.taxiservicespring.service.CarService;
+import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.mapper.CarMapper;
 import com.example.taxiservicespring.service.mapper.CarModelMapper;
 import com.example.taxiservicespring.service.mapper.CategoryMapper;
@@ -33,21 +34,23 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarDto getById(long id) {
         log.info("get car by id {}", id);
-        Car car = carRepository.findById(id);
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
         return CarMapper.INSTANCE.mapCarDto(car);
     }
 
     @Override
     public CategoryDto getCategoryById(int id) {
         log.info("get category by id {}", id);
-        Category category = categoryRepository.findById(id);
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category is not found!"));
         return CategoryMapper.INSTANCE.mapCategoryDto(category);
     }
 
     @Override
     public List<CategoryDto> getAllCategories() {
         log.info("get all categories");
-        return categoryRepository.findAll()
+        return categoryRepository.findAllCategories()
                 .stream()
                 .map(category -> CategoryMapper.INSTANCE.mapCategoryDto(category))
                 .collect(Collectors.toList());
@@ -56,7 +59,8 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarModelDto getCarModelById(long id) {
         log.info("get car model by id {}", id);
-        CarModel carModel = carModelRepository.findById(id);
+        CarModel carModel = carModelRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Car model is not found!"));
         return CarModelMapper.INSTANCE.mapCarModelDto(carModel);
     }
 }

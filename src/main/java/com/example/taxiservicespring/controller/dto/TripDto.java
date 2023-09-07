@@ -2,6 +2,7 @@ package com.example.taxiservicespring.controller.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import com.example.taxiservicespring.service.model.TripStatus;
 
@@ -17,4 +18,5 @@ public class TripDto {
     private LocalDateTime date;
     private BigDecimal bill;
     private TripStatus status;
+    private Set<CarDto> cars;
 }

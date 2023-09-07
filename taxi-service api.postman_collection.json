@@ -61,16 +61,15 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "",
-								"value": "",
+								"key": "Accept-Language",
+								"value": "en",
 								"type": "default",
 								"disabled": true
 							},
 							{
-								"key": "",
-								"value": "",
-								"type": "default",
-								"disabled": true
+								"key": "Accept-Language",
+								"value": "uk",
+								"type": "default"
 							}
 						],
 						"url": {
@@ -98,16 +97,15 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "",
-								"value": "",
+								"key": "Accept-Language",
+								"value": "en",
 								"type": "default",
 								"disabled": true
 							},
 							{
-								"key": "",
-								"value": "",
-								"type": "default",
-								"disabled": true
+								"key": "Accept-Language",
+								"value": "uk",
+								"type": "default"
 							}
 						],
 						"url": {
@@ -360,35 +358,12 @@
 					"response": []
 				},
 				{
-					"name": "get cars by trip id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/car/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"trip",
-								"car",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "get all  trips",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip",
+							"raw": "http://localhost:8080/api/v1/trip?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -398,6 +373,20 @@
 								"api",
 								"v1",
 								"trip"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "date,desc"
+								}
 							]
 						}
 					},
@@ -409,7 +398,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/person/1",
+							"raw": "http://localhost:8080/api/v1/trip/person/1?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -421,6 +410,20 @@
 								"trip",
 								"person",
 								"1"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "date,desc"
+								}
 							]
 						}
 					},
@@ -432,7 +435,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/date/01.07.22-30.08.22",
+							"raw": "http://localhost:8080/api/v1/trip/date/01.07.22-30.08.22?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -444,6 +447,20 @@
 								"trip",
 								"date",
 								"01.07.22-30.08.22"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "date,desc"
+								}
 							]
 						}
 					},
@@ -455,7 +472,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/1/01.07.22-30.08.22",
+							"raw": "http://localhost:8080/api/v1/trip/1/01.07.22-30.08.22?page=0&size=2&sort=date,desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -467,6 +484,20 @@
 								"trip",
 								"1",
 								"01.07.22-30.08.22"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "date,desc"
+								}
 							]
 						}
 					},
@@ -491,7 +522,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": \"1\",\r\n    \"originId\": \"2\",\r\n    \"destinationId\": \"3\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
+							"raw": "{\r\n    \"personId\": \"1\",\r\n    \"originId\": \"2\",\r\n    \"destinationId\": \"4\",\r\n    \"categoryId\": \"1\",\r\n    \"capacity\": \"1\",\r\n    \"multipleCars\": false,\r\n    \"ignoreCategory\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -533,7 +564,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"personId\": 1,\r\n    \"originId\": 2,\r\n    \"destinationId\": 3,\r\n    \"categoryId\": 1,\r\n    \"distance\": 2.07,\r\n    \"price\": 51.75,\r\n    \"discount\": 0.00,\r\n    \"total\": 51.75,\r\n    \"waitTime\": \"00:03:00\",\r\n    \"cars\": [\r\n        {\r\n            \"id\": 1,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"status\": \"READY\"\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"personId\": 1,\r\n    \"originId\": 2,\r\n    \"destinationId\": 4,\r\n    \"categoryId\": 1,\r\n    \"distance\": 1.29,\r\n    \"price\": 32.25,\r\n    \"discount\": 0.65,\r\n    \"total\": 31.60,\r\n    \"waitTime\": \"00:01:00\",\r\n    \"cars\": [\r\n        {\r\n            \"id\": 1,\r\n            \"regNumber\": \"AA1234TV\",\r\n            \"modelId\": 1,\r\n            \"categoryId\": 1,\r\n            \"locationId\": 1,\r\n            \"status\": \"READY\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -563,7 +594,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/trip/status/1/accepted",
+							"raw": "http://localhost:8080/api/v1/trip/status/1/completed",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -575,7 +606,7 @@
 								"trip",
 								"status",
 								"1",
-								"accepted"
+								"completed"
 							]
 						}
 					},

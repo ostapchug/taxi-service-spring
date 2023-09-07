@@ -4,8 +4,11 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -21,31 +24,26 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Person {
+public class CategoryTranslation {
 
     @Id
     @GeneratedValue
-    private long id;
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @NaturalId
-    @Column(length = 10)
-    private String phone;
-
-    @Column(length = 100, nullable = false)
-    private String password;
-
     @Column(length = 50)
     private String name;
 
-    @Column(length = 50)
-    private String surname;
-
-    @Column(name = "role_id", nullable = false)
-    private Role role = Role.CLIENT;
+    @Column(name = "language_id", nullable = false)
+    private Language language;
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPhone());
+        return Objects.hash(getName());
     }
 
     @Override
@@ -55,6 +53,6 @@ public class Person {
         if (getClass() != obj.getClass())
             return false;
         Person other = (Person) obj;
-        return Objects.equals(getPhone(), other.getPhone());
+        return Objects.equals(getName(), other.getName());
     }
 }

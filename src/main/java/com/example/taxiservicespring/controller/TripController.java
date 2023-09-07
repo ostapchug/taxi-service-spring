@@ -1,12 +1,12 @@
 package com.example.taxiservicespring.controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.taxiservicespring.api.TripApi;
-import com.example.taxiservicespring.controller.dto.CarDto;
 import com.example.taxiservicespring.controller.dto.TripConfirmDto;
 import com.example.taxiservicespring.controller.dto.TripCreateDto;
 import com.example.taxiservicespring.controller.dto.TripDto;
@@ -28,34 +28,28 @@ public class TripController implements TripApi {
     }
 
     @Override
-    public List<TripDto> getAll() {
+    public Page<TripDto> getAll(Pageable pageable) {
         log.info("request list of all trips");
-        return tripService.getAll();
+        return tripService.getAll(pageable);
     }
 
     @Override
-    public List<TripDto> getAllByPersonId(long personId) {
+    public Page<TripDto> getAllByPersonId(long personId, Pageable pageable) {
         log.info("request list of trips filtered by person id {}", personId);
-        return tripService.getAllByPersonId(personId);
+        return tripService.getAllByPersonId(personId, pageable);
     }
 
     @Override
-    public List<TripDto> getAllByDate(LocalDateTime[] dateRange) {
+    public Page<TripDto> getAllByDate(LocalDateTime[] dateRange, Pageable pageable) {
         log.info("request list of trips filtered by date range {} - {}", dateRange[0], dateRange[1]);
-        return tripService.getAllByDate(dateRange);
+        return tripService.getAllByDate(dateRange, pageable);
     }
 
     @Override
-    public List<TripDto> getAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange) {
+    public Page<TripDto> getAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange, Pageable pageable) {
         log.info("request list of trips filtered by person id {} and date range {} - {}",
                 personId, dateRange[0], dateRange[1]);
-        return tripService.getAllByPersonIdAndDate(personId, dateRange);
-    }
-
-    @Override
-    public List<CarDto> getCarsByTripId(long id) {
-        log.info("request cars by trip id {}", id);
-        return tripService.getCarsByTripId(id);
+        return tripService.getAllByPersonIdAndDate(personId, dateRange, pageable);
     }
 
     @Override

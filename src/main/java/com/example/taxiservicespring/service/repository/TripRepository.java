@@ -2,29 +2,35 @@ package com.example.taxiservicespring.service.repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
 
-import com.example.taxiservicespring.service.model.Car;
+import javax.persistence.LockModeType;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 import com.example.taxiservicespring.service.model.Trip;
 import com.example.taxiservicespring.service.model.TripStatus;
 
-public interface TripRepository {
+@Repository
+public interface TripRepository extends JpaRepository<Trip, Long> {
 
-    Trip findById(long id);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT t FROM Trip t WHERE t.id = ?1")
+    Optional<Trip> findByIdForUpdate(long id);
 
-    List<Trip> findAll();
+    Page<Trip> findAllByPersonId(long personId, Pageable pageable);
 
-    List<Trip> findAllByPersonId(long personId);
+    Page<Trip> findAllByDateBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
-    List<Trip> findAllByDate(LocalDateTime[] dateRange);
+    Page<Trip> findAllByPersonIdAndDateBetween(long personId, LocalDateTime startDate, LocalDateTime endDate,
+            Pageable pageable);
 
-    List<Trip> findAllByPersonIdAndDate(long personId, LocalDateTime[] dateRange);
-
-    List<Car> findCarsByTripId(long id);
-
-    Trip create(Trip trip, List<Car> cars);
-
-    Trip updateStatus(long id, TripStatus status);
-
-    BigDecimal getTotalBill(long personId, TripStatus status);
+    @Query("SELECT SUM(t.bill) FROM Trip t WHERE t.person.id = :personId AND t.status = :status")
+    Optional<BigDecimal> getTotalBill(@Param("personId") long personId, @Param("status") TripStatus status);
 }

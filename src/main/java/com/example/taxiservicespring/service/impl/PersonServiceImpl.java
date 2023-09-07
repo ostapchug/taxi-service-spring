@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.taxiservicespring.controller.dto.PersonDto;
 import com.example.taxiservicespring.service.PersonService;
+import com.example.taxiservicespring.service.exception.EntityNotFoundException;
 import com.example.taxiservicespring.service.mapper.PersonMapper;
 import com.example.taxiservicespring.service.model.Person;
 import com.example.taxiservicespring.service.repository.PersonRepository;
@@ -23,14 +24,16 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonDto getById(long id) {
         log.info("get person by id {}", id);
-        Person person = personRepository.findById(id);
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
         return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
     public PersonDto getByPhone(String phone) {
         log.info("get person by phone {}", phone);
-        Person person = personRepository.findByPhone(phone);
+        Person person = personRepository.findByPhone(phone)
+                .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
         return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
@@ -47,7 +50,7 @@ public class PersonServiceImpl implements PersonService {
     public PersonDto create(PersonDto personDto) {
         log.info("create person with phone {}", personDto.getPhone());
         Person person = PersonMapper.INSTANCE.mapPerson(personDto);
-        person = personRepository.create(person);
+        person = personRepository.save(person);
         return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
@@ -55,13 +58,19 @@ public class PersonServiceImpl implements PersonService {
     public PersonDto update(String phone, PersonDto personDto) {
         log.info("update person with phone {}", phone);
         Person person = PersonMapper.INSTANCE.mapPerson(personDto);
-        person = personRepository.update(phone, person);
+        Person dbPerson = personRepository.findByPhone(phone)
+                .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
+        dbPerson.setName(person.getName());
+        dbPerson.setSurname(person.getSurname());
+        person = personRepository.save(dbPerson);
         return PersonMapper.INSTANCE.mapPersonDto(person);
     }
 
     @Override
     public void delete(String phone) {
         log.info("delete person with phone {}", phone);
-        personRepository.delete(phone);
+        Person person = personRepository.findByPhone(phone)
+                .orElseThrow(() -> new EntityNotFoundException("Person is not found!"));
+        personRepository.delete(person);
     }
 }
