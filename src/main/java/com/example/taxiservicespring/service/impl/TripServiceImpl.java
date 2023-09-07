@@ -126,13 +126,13 @@ public class TripServiceImpl implements TripService {
         if (tripCreateDto.isMultipleCars()) {
             cars = getMultipleCars(tripCreateDto.getCategoryId(), tripCreateDto.getCapacity());
         } else if (tripCreateDto.isIgnoreCategory()) {
-            Car car = carRepository.findByStatusAndCapacity(CarStatus.READY, tripCreateDto.getCapacity())
+            Car car = carRepository.findByStatusAndCapacity(CarStatus.READY.ordinal(), tripCreateDto.getCapacity())
                     .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
             category = categoryRepository.getReferenceById(car.getCategory().getId());
             cars.add(CarMapper.INSTANCE.mapCarDto(car));
         } else {
             Car car = carRepository.findByCategoryIdAndStatusAndCapacity(
-                    tripCreateDto.getCategoryId(), CarStatus.READY, tripCreateDto.getCapacity())
+                    tripCreateDto.getCategoryId(), CarStatus.READY.ordinal(), tripCreateDto.getCapacity())
                     .orElseThrow(() -> new EntityNotFoundException("Car is not found!"));
             cars.add(CarMapper.INSTANCE.mapCarDto(car));
         }

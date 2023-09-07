@@ -20,11 +20,11 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query("SELECT c FROM Car c WHERE c.id = ?1")
     Optional<Car> findByIdForUpdate(long id);
 
-    Optional<Car> findByCategoryIdAndStatusAndCapacity(int categoryId, CarStatus status, int capacity);
+    Optional<Car> findByCategoryIdAndStatusAndCapacity(int categoryId, int statusId, int capacity);
 
     @Query(value = "SELECT * FROM car c INNER JOIN car_model cm ON c.model_id = cm.id WHERE "
             + "c.status_id = ?1 AND cm.seat_count >= ?2 ORDER BY cm.seat_count LIMIT 1", nativeQuery = true)
-    Optional<Car> findByStatusAndCapacity(CarStatus status, int capacity);
+    Optional<Car> findByStatusAndCapacity(int statusId, int capacity);
 
     List<Car> findAllByCategoryIdAndStatus(int categoryId, CarStatus status);
 }

@@ -19,7 +19,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "brand", "name", "color", "year" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "brand", "name", "color", "cm_year" }) })
 public class CarModel {
 
     @Id
@@ -35,6 +35,7 @@ public class CarModel {
     @Column(length = 50)
     private String color;
 
+    @Column(name = "cm_year")
     private int year;
     private int seatCount;
 
