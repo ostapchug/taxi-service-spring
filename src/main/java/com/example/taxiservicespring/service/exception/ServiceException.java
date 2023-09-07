@@ -1,7 +1,6 @@
 package com.example.taxiservicespring.service.exception;
 
 import com.example.taxiservicespring.service.model.ErrorType;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
