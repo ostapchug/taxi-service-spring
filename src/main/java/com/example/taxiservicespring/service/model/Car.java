@@ -4,8 +4,6 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,12 +14,14 @@ import javax.persistence.NamedNativeQuery;
 import org.hibernate.annotations.NaturalId;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @ToString
@@ -55,8 +55,8 @@ public class Car {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
+    @Builder.Default
     @Column(name = "status_id", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
     private CarStatus status = CarStatus.READY;
 
     @Override

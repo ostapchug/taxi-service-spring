@@ -16,12 +16,14 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.NaturalId;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @ToString
@@ -41,6 +43,7 @@ public class Category {
     @Column(nullable = false, precision = 6, scale = 2)
     private BigDecimal price;
 
+    @Builder.Default
     @ToString.Exclude
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryTranslation> translations = new ArrayList<>();

@@ -24,6 +24,7 @@ VALUES
 (10, 5, 'Преміум', 1);
 
 INSERT INTO `car_model` (`id`,`brand`, `name`, `color`, `cm_year`, `seat_count`)
+
 VALUES
 (1, 'Ford' ,'Focus', 'Blue', 2012, 3),
 (2, 'Ford' ,'Focus', 'White', 2015, 3),

@@ -10,12 +10,14 @@ import javax.persistence.Id;
 import org.hibernate.annotations.NaturalId;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @ToString
@@ -40,6 +42,7 @@ public class Person {
     @Column(length = 50)
     private String surname;
 
+    @Builder.Default
     @Column(name = "role_id", nullable = false)
     private Role role = Role.CLIENT;
 

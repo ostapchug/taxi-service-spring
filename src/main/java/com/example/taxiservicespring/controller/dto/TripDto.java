@@ -6,9 +6,11 @@ import java.util.Set;
 
 import com.example.taxiservicespring.service.model.TripStatus;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class TripDto {
     private long id;
     private long personId;
