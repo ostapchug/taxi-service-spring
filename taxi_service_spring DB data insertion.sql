@@ -2,6 +2,7 @@ INSERT INTO `person` (`id`, `phone`, `password`, `name`, `surname`, `role_id`)
 VALUES
 (1 ,'0123456789', 'Admin#00', 'John', 'Doe', 1);
 
+<<<<<<< HEAD
 INSERT INTO `category_translation` (`id`, `category_id`, `name`, `language_id`)
 VALUES
 (1, 1, 'Economy', 0),
@@ -24,6 +25,30 @@ VALUES
 (5, 'Premium', 70);
 
 INSERT INTO `car_model` (`id`,`brand`, `name`, `color`, `year`, `seat_count`)
+=======
+INSERT INTO `category` (`id`, `name`, `price`)
+VALUES
+(1, 'Economy', 25),
+(2, 'Standard', 40),
+(3, 'Comfort', 50),
+(4, 'Business', 60),
+(5, 'Premium', 70);
+
+INSERT INTO `category_translation` (`id`, `category_id`, `name`, `language_id`)
+VALUES
+(1, 1, 'Economy', 0),
+(2, 2, 'Standard', 0),
+(3, 3, 'Comfort', 0),
+(4, 4, 'Business', 0),
+(5, 5, 'Premium', 0),
+(6, 1, 'Економ', 1),
+(7, 2, 'Стандарт', 1),
+(8, 3, 'Комфорт', 1),
+(9, 4, 'Бізнес', 1),
+(10, 5, 'Преміум', 1);
+
+INSERT INTO `car_model` (`id`,`brand`, `name`, `color`, `cm_year`, `seat_count`)
+>>>>>>> branch 'main' of git@github.com:ostapchug/taxi-service-spring.git
 VALUES
 (1, 'Ford' ,'Focus', 'Blue', 2012, 3),
 (2, 'Ford' ,'Focus', 'White', 2015, 3),
