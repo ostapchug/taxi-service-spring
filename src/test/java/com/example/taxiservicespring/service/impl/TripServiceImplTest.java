@@ -123,7 +123,7 @@ class TripServiceImplTest {
         Car car = createCar();
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.of(category));
-        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), any(), anyInt())).thenReturn(Optional.of(car));
+        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), anyInt(), anyInt())).thenReturn(Optional.of(car));
         when(locationRepository.findById(ORIGIN_ID)).thenReturn(Optional.of(createOrigin()));
         when(locationRepository.findById(DEST_ID)).thenReturn(Optional.of(createDestination()));
         when(tripRepository.getTotalBill(anyLong(), any())).thenReturn(Optional.of(TOTAL_BILL));
@@ -141,7 +141,7 @@ class TripServiceImplTest {
         Car car = createCar();
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.empty());
-        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), any(), anyInt())).thenReturn(Optional.of(car));
+        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), anyInt(), anyInt())).thenReturn(Optional.of(car));
         when(locationRepository.findById(ORIGIN_ID)).thenReturn(Optional.of(createOrigin()));
         when(locationRepository.findById(DEST_ID)).thenReturn(Optional.of(createDestination()));
 
@@ -153,7 +153,7 @@ class TripServiceImplTest {
         TripCreateDto tripCreateDto = createTripCreateDto();
         Category category = createCategory();
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
-        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), any(), anyInt())).thenReturn(Optional.empty());
+        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), anyInt(), anyInt())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> tripService.create(tripCreateDto));
     }
@@ -164,7 +164,7 @@ class TripServiceImplTest {
         Category category = createCategory();
         Car car = createCar();
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
-        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), any(), anyInt())).thenReturn(Optional.of(car));
+        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), anyInt(), anyInt())).thenReturn(Optional.of(car));
         when(locationRepository.findById(ORIGIN_ID)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> tripService.create(tripCreateDto));
@@ -176,7 +176,7 @@ class TripServiceImplTest {
         Category category = createCategory();
         Car car = createCar();
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
-        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), any(), anyInt())).thenReturn(Optional.of(car));
+        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), anyInt(), anyInt())).thenReturn(Optional.of(car));
         when(locationRepository.findById(ORIGIN_ID)).thenReturn(Optional.of(createOrigin()));
         when(locationRepository.findById(DEST_ID)).thenReturn(Optional.empty());
 
@@ -189,7 +189,7 @@ class TripServiceImplTest {
         Category category = createCategory();
         Car car = createCar();
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
-        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), any(), anyInt())).thenReturn(Optional.of(car));
+        when(carRepository.findByCategoryIdAndStatusAndCapacity(anyInt(), anyInt(), anyInt())).thenReturn(Optional.of(car));
         when(locationRepository.findById(ORIGIN_ID)).thenReturn(Optional.of(createOrigin()));
         when(locationRepository.findById(DEST_ID)).thenReturn(Optional.of(createOrigin()));
 
@@ -268,7 +268,7 @@ class TripServiceImplTest {
         Car car = createCar();
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
         when(categoryRepository.findById(anyInt())).thenReturn(Optional.of(category));
-        when(carRepository.findByStatusAndCapacity(any(), anyInt())).thenReturn(Optional.of(car));
+        when(carRepository.findByStatusAndCapacity(anyInt(), anyInt())).thenReturn(Optional.of(car));
         when(locationRepository.findById(ORIGIN_ID)).thenReturn(Optional.of(createOrigin()));
         when(locationRepository.findById(DEST_ID)).thenReturn(Optional.of(createDestination()));
         when(tripRepository.getTotalBill(anyLong(), any())).thenReturn(Optional.of(TOTAL_BILL));
@@ -285,7 +285,7 @@ class TripServiceImplTest {
         tripCreateDto.setIgnoreCategory(true);
         Category category = createCategory();
         when(categoryRepository.getReferenceById(anyInt())).thenReturn(category);
-        when(carRepository.findByStatusAndCapacity(any(), anyInt())).thenReturn(Optional.empty());
+        when(carRepository.findByStatusAndCapacity(anyInt(), anyInt())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> tripService.create(tripCreateDto));
     }
