@@ -5,9 +5,9 @@
 ## Functionality
 
 - Create new users
-- Update and Delete created user acounts
+- Update and Delete created accounts
 - Create new trips
-- Manage trips states
+- Manage trip statuses
 
 ## Requirements
 
