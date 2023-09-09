@@ -1,25 +1,35 @@
-# :taxi: Служба Таксі
+## :taxi: Taxi Service
 
-1. Існують ролі: ***«Клієнт», «Аміністратор»***.
+### REST API designed to provide taxi booking services.
 
-2. Клієнт реєструється в системі та має можливість створювати замовлення на таксі, вказуючи адресу відправлення, адресу призначення, кількість пасажирів та категорію авто.
+## Functionality
 
-3. Служба таксі містить автопарк з водіями. Автомобіль має характеристики по місткості, категорії і може бути доступний: ***«до замовлення», «знаходиться в рейсі» 
-або бути неактивним (знаходиться в автопарку без водія)***.
+- Create new users
+- Update and Delete created user acounts
+- Create new trips
+- Manage trips states
 
-4. Система розраховує вартість поїздки в залежності від відстані та призначає відповідне авто серед доступних.
+## Requirements
 
-5. Якщо відповідних авто немає —  клієнту може бути запропоновано скасувати замовлення або скористатися альтернативним рішенням:
-   - авто з потрібною кількістю місць, але іншої категорії;
-   - декілька автомобілів обраної категорії для забезпечення необхідної місткості.
+- Java version 11
+- Maven
+- MySQL Server
 
-6. Система підтримує програму лояльності - розраховується знижка в залежності від  витраченої суми.
-Після підтвердження замовлення клієнтом, система повідомляє час очікування.
+## Summary
 
-7. Адміністратор системи може переглядати статистику замовлень, сортувати:
-   - за датою оформлення замовлення;
-   - за вартістю замовлення
-
-8. та фільтрувати замовлення:
-   - за клієнтами;
-   - за певними датами.
+- Migrated functionality related to core business logic of [Servlet-based application](https://github.com/ostapchug/taxi-service) to newly created Spring MVC project
+- Added logging to all layers of the application
+- Used MapStruct to map from business classes to DTO and vice versa
+- Added basic validation to DTO classes
+- Implemented custom, common and unified error handling functionality using Spring MVC components
+- Added the Spring Boot Actuator and configured the ‘/info’ endpoint
+- Extended RESTful endpoints by Swagger Documentation
+- Created custom validation annotations using ConstraintValidator
+- Added multilingual support for validation exception messages
+- Integrated application with MySQL relational database using Spring Data JPA
+- Added JPA entity mapping
+- Added transactions
+- Covered all business logic with the unit tests using JUnit 5, Mockito, Hamcrest Matchers
+- Covered all APIs using MockMvc
+- Implemented integration tests that run against the fully configured application with a temporary in-memory database using TestRestTemplate
+- Extended application with the mutation tests and made sure that all of the created mutations were killed
